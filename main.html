@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VetoProtec — Dispositifs médicaux vétérinaires</title>
+  <meta name="description" content="VetoProtec conçoit des dispositifs médicaux vétérinaires pour des pratiques plus sûres, plus simples et plus efficaces." />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a33;
+      --text:#eaf0ff;
+      --muted:#b9c6e6;
+      --accent:#7dd3fc;
+      --accent2:#a7f3d0;
+      --border:rgba(255,255,255,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% 0%, #14224a 0%, var(--bg) 55%) fixed;
+      color:var(--text);
+      line-height:1.45;
+    }
+    a{color:inherit}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    header{
+      position:sticky; top:0;
+      backdrop-filter: blur(10px);
+      background: rgba(11,18,32,.55);
+      border-bottom:1px solid var(--border);
+      z-index:20;
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:700}
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 40px rgba(125,211,252,.15);
+    }
+    .navlinks{display:flex; gap:14px; flex-wrap:wrap}
+    .navlinks a{opacity:.9; text-decoration:none; font-size:14px}
+    .navlinks a:hover{opacity:1; text-decoration:underline}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:10px 14px; border-radius:12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+    }
+    .btn.primary{
+      border:none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#062033;
+    }
+    .hero{padding:64px 0 24px}
+    .hero-grid{display:grid;grid-template-columns: 1.2fr .8fr; gap:22px; align-items:stretch}
+    .h-title{font-size:44px; line-height:1.05; margin:0 0 14px}
+    .h-sub{color:var(--muted); font-size:16px; margin:0 0 22px; max-width:54ch}
+    .pillrow{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 0}
+    .pill{
+      font-size:12px; color:var(--muted);
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      padding:7px 10px; border-radius:999px;
+    }
+    .card{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+    .mock{
+      height:100%;
+      min-height:240px;
+      border-radius:16px;
+      border:1px dashed rgba(255,255,255,.22);
+      background:
+        linear-gradient(180deg, rgba(125,211,252,.16), rgba(167,243,208,.06)),
+        radial-gradient(600px 220px at 70% 30%, rgba(125,211,252,.25), transparent 55%);
+      display:flex; align-items:center; justify-content:center;
+      color: rgba(234,240,255,.78);
+      text-align:center;
+      padding:18px;
+    }
+    section{padding:34px 0}
+    .section-title{font-size:22px;margin:0 0 14px}
+    .section-sub{color:var(--muted); margin:0 0 18px; max-width:70ch}
+    .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+    .grid2{display:grid; grid-template-columns: repeat(2, 1fr); gap:14px}
+    .kpi{font-size:14px;color:var(--muted);margin:8px 0 0}
+    .product h3{margin:0 0 8px}
+    .product ul{margin:10px 0 0; padding-left:18px; color:var(--muted)}
+    .product li{margin:6px 0}
+    .cta{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;
+    }
+    .faq details{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px 14px;
+      background: rgba(255,255,255,.03);
+      margin-bottom:10px;
+    }
+    .faq summary{cursor:pointer; font-weight:650}
+    footer{
+      padding:26px 0 40px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:13px;
+    }
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr}
+      .h-title{font-size:36px}
+      .grid3,.grid2{grid-template-columns:1fr}
+      .nav{flex-wrap:wrap}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav">
+      <a class="brand" href="#top">
+        <div class="logo" aria-hidden="true"></div>
+        <span>VetoProtec</span>
+      </a>
+      <nav class="navlinks" aria-label="Navigation">
+        <a href="#produits">Produits</a>
+        <a href="#commande">Commander</a>
+        <a href="#apropos">À propos</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn primary" href="#contact">Demander une démo</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="container hero">
+    <div class="hero-grid">
+      <div class="card">
+        <h1 class="h-title">Des dispositifs médicaux vétérinaires<br/>pensés pour le terrain.</h1>
+        <p class="h-sub">
+          VetoProtec accompagne les équipes vétérinaires avec des solutions pratiques pour
+          gagner en sécurité, en confort et en efficacité au quotidien.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#produits">Voir les produits</a>
+          <a class="btn" href="#commande">Comment commander</a>
+        </div>
+        <div class="pillrow" aria-label="Bénéfices">
+          <span class="pill">Sécurité & fiabilité</span>
+          <span class="pill">Gain de temps</span>
+          <span class="pill">Radioprotection</span>
+          <span class="pill">Confort équipe / animal</span>
+        </div>
+        <p class="kpi">📦 Distribution possible via centrales vétérinaires (selon référencement).</p>
+      </div>
+
+      <div class="card">
+        <div class="mock">
+          <div>
+            <strong>Zone visuel / vidéo</strong><br/>
+            Ajoute ici une photo “en situation” (radiologie / table / bloc) ou un extrait de Reel.
+            <br/><br/>
+            <span style="opacity:.8;font-size:13px">Format recommandé : 1200×1200 ou 1600×1200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section id="produits">
+    <div class="container">
+      <h2 class="section-title">Produits</h2>
+      <p class="section-sub">
+        Deux dispositifs phares pour améliorer la contention et la sécurité lors d’actes courants
+        (radiologie, petites interventions, anesthésie…).
+      </p>
+
+      <div class="grid2">
+        <div class="card product">
+          <h3>Pet Holder</h3>
+          <p style="color:var(--muted);margin:0">
+            Ventouses + liens réutilisables pour stabiliser un animal sédaté sur une table lisse.
+          </p>
+          <ul>
+            <li>Surfaces compatibles : verre, métal, plastique, acier inoxydable (surfaces lisses non poreuses).</li>
+            <li>Diamètre : 82,6 mm • Force de maintien annoncée : 5 à 10 kg / ventouse (sur surface lisse).</li>
+            <li>Indications : radiologie, petites interventions, contention douce sous sédation.</li>
+            <li>Recommandation : utilisation uniquement sur animal sédaté.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn" href="#contact">Recevoir la fiche produit</a>
+            <a class="btn primary" href="#commande">Commander</a>
+          </div>
+          <p class="kpi">Infos techniques basées sur une fiche produit distributeur.</p>
+        </div>
+
+        <div class="card product">
+          <h3>Pet Anesth</h3>
+          <p style="color:var(--muted);margin:0">
+            Accessoire visant un maintien fiable et un usage simple pour des anesthésies plus sûres.
+          </p>
+          <ul>
+            <li>Objectif : plus de sécurité, plus de confort, plus d’efficacité au quotidien.</li>
+            <li>Conçu pour limiter les montages “de fortune” et sécuriser la procédure.</li>
+            <li>À compléter : photos, dimensions, compatibilités, entretien.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn" href="#contact">Demander une démo</a>
+            <a class="btn primary" href="#contact">Être recontacté</a>
+          </div>
+          <p class="kpi">Remplis les détails produits dès que tu as la fiche technique.</p>
+        </div>
+      </div>
+
+      <p style="color:var(--muted);margin-top:14px">
+        *Si tu veux, je peux aussi te rédiger des fiches produits plus “commerciales” + SEO.
+      </p>
+    </div>
+  </section>
+
+  <section id="commande">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Comment commander</h2>
+        <p class="section-sub">
+          Selon les référencements, les dispositifs peuvent être disponibles via des centrales vétérinaires
+          (ex. annonces de référencement et présence chez certains distributeurs).  
+        </p>
+        <div class="grid3">
+          <div class="card">
+            <strong>1) Via votre centrale</strong>
+            <p style="color:var(--muted);margin:8px 0 0">Recherchez VetoProtec / Pet Holder / Pet Anesth dans votre catalogue.</p>
+          </div>
+          <div class="card">
+            <strong>2) Besoin d’une info ?</strong>
+            <p style="color:var(--muted);margin:8px 0 0">On vous indique le bon canal (référence produit, dispo, démo).</p>
+          </div>
+          <div class="card">
+            <strong>3) Démo / accompagnement</strong>
+            <p style="color:var(--muted);margin:8px 0 0">Présentation rapide + conseils de mise en place.</p>
+          </div>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#contact">Contacter VetoProtec</a>
+          <a class="btn" href="#faq">Voir la FAQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apropos">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">À propos</h2>
+        <p class="section-sub">
+          VetoProtec développe des dispositifs conçus à partir des besoins du terrain,
+          avec un objectif simple : rendre certains gestes plus sûrs et plus faciles pour les équipes.
+        </p>
+        <div class="pillrow">
+          <span class="pill">Innovation pratique</span>
+          <span class="pill">Pensé pour les équipes</span>
+          <span class="pill">Usage quotidien</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <p class="section-sub">Tu peux adapter ces questions selon tes retours clients.</p>
+
+      <details>
+        <summary>Sur quelles surfaces le Pet Holder fonctionne-t-il ?</summary>
+        <p style="color:var(--muted);margin:10px 0 0">
+          Sur des surfaces lisses non poreuses (ex. verre, métal, plastique, inox). L’adhérence dépend
+          de la propreté et de la planéité de la surface.
+        </p>
+      </details>
+
+      <details>
+        <summary>Peut-on l’utiliser sur un animal non sédaté ?</summary>
+        <p style="color:var(--muted);margin:10px 0 0">
+          Recommandation : non. L’usage est prévu sur animal sédaté pour éviter des mouvements soudains.
+        </p>
+      </details>
+
+      <details>
+        <summary>Comment obtenir une fiche technique / une démo ?</summary>
+        <p style="color:var(--muted);margin:10px 0 0">
+          Via le formulaire de contact : précisez votre structure et votre besoin (radiologie, anesthésie…).
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-sub">
+          Dis-moi comment tu préfères : formulaire (avec envoi email), bouton WhatsApp, ou juste une adresse email.
+        </p>
+
+        <!-- Formulaire “statique” : à connecter ensuite (Formspree, Netlify Forms, etc.) -->
+        <form>
+          <div class="grid2">
+            <div>
+              <label>Nom / Structure<br/>
+                <input style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text)" />
+              </label>
+            </div>
+            <div>
+              <label>Email<br/>
+                <input type="email" style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text)" />
+              </label>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <label>Message<br/>
+              <textarea rows="5" style="width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text)"></textarea>
+            </label>
+          </div>
+          <div class="cta">
+            <button class="btn primary" type="button">Envoyer (à connecter)</button>
+            <a class="btn" href="#">Instagram</a>
+            <a class="btn" href="#">LinkedIn</a>
+          </div>
+          <p class="kpi">Astuce : pour un vrai envoi sans backend, utilise Formspree / Netlify Forms.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a href="#" style="text-decoration:none">Mentions légales</a>
+        <a href="#" style="text-decoration:none">Confidentialité</a>
+        <a href="#" style="text-decoration:none">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("y").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
