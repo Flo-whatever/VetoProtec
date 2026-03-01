@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conditions Générales de Vente — VetoProtec</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fdf6f0;
+      --card:#fff8f5;
+      --text:#2d1a2e;
+      --muted:#8a6a7a;
+      --accent:#c084c8;
+      --accent2:#f472b6;
+      --rose-light:#fce7f3;
+      --beige:#f5e6d8;
+      --border:rgba(192,132,200,.22);
+      --border2:rgba(244,114,182,.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:var(--accent)}
+    a:hover{color:var(--accent2)}
+    .container{max-width:800px;margin:0 auto;padding:0 24px}
+    header{
+      position:sticky;top:0;
+      backdrop-filter:blur(14px);
+      background:rgba(253,246,240,.75);
+      border-bottom:1px solid var(--border);
+      z-index:20;
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-family:'DM Serif Display',serif;font-size:18px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 18px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:rgba(192,132,200,.08);
+      text-decoration:none;font-weight:600;font-size:14px;
+      transition:background .18s, transform .12s;
+      color:var(--text);
+    }
+    .btn:hover{background:rgba(192,132,200,.16);transform:translateY(-1px)}
+    main{padding:56px 0 80px}
+    .page-title{
+      font-family:'DM Serif Display',serif;
+      font-size:38px;line-height:1.1;margin:0 0 8px;font-weight:400;
+      background:linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-date{color:var(--muted);font-size:13px;margin:0 0 40px}
+    .card{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:20px;
+      padding:28px 32px;
+      box-shadow:0 4px 24px rgba(192,132,200,.1);
+      margin-bottom:20px;
+    }
+    h2{
+      font-family:'DM Serif Display',serif;
+      font-size:20px;font-weight:400;
+      margin:0 0 14px;
+      color:var(--text);
+      padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    h3{font-size:15px;font-weight:600;margin:16px 0 8px}
+    p{margin:0 0 12px;color:var(--text);font-weight:300}
+    p:last-child{margin:0}
+    ul{margin:0 0 12px;padding-left:20px;color:var(--text);font-weight:300}
+    ul li{margin:5px 0}
+    .highlight{
+      background:var(--rose-light);
+      border:1px solid var(--border2);
+      border-radius:12px;
+      padding:12px 16px;
+      font-size:14px;
+      margin:14px 0;
+    }
+    footer{
+      padding:28px 0 40px;
+      border-top:1px solid var(--border);
+      color:var(--muted);font-size:13px;
+    }
+    @media(max-width:600px){
+      .page-title{font-size:28px}
+      .card{padding:20px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container" style="max-width:1100px">
+    <div class="nav">
+      <a class="brand" href="/">
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="44" style="object-fit:contain" />
+      </a>
+      <a class="btn" href="/">← Retour au site</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <h1 class="page-title">Conditions Générales de Vente</h1>
+    <p class="page-date">En vigueur au 1er mars 2026</p>
+
+    <div class="card">
+      <h2>Article 1 — Objet et champ d'application</h2>
+      <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre la société <strong>VETO PROTEC</strong> (SAS au capital de 1 000 €, SIREN 934 604 067, dont le siège social est situé 28 rue de la Division Leclerc, 91160 Saulx-les-Chartreux) et toute personne physique ou morale souhaitant acquérir ses produits.</p>
+      <p>Toute commande implique l'acceptation pleine et entière des présentes CGV.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 2 — Produits</h2>
+      <p>VETO PROTEC commercialise des équipements vétérinaires, notamment :</p>
+      <ul>
+        <li><strong>Pet Holder</strong> — système de ventouses pour la stabilisation d'animaux sédatés sur table lisse (radiologie, petites interventions).</li>
+        <li><strong>Pet Anesth</strong> — accessoire de maintien pour anesthésies vétérinaires.</li>
+      </ul>
+      <p>Les caractéristiques essentielles des produits sont décrites sur le site <strong>www.vetoprotec.fr</strong>. VETO PROTEC se réserve le droit de modifier à tout moment la composition de son catalogue.</p>
+      <div class="highlight">
+        ⚠️ Les produits sont destinés à un usage professionnel vétérinaire. Le Pet Holder est conçu pour être utilisé exclusivement sur des animaux sédatés.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Article 3 — Prix</h2>
+      <p>Les prix sont indiqués en euros (€) hors taxes (HT). La TVA applicable sera précisée lors de la confirmation de commande.</p>
+      <p>VETO PROTEC se réserve le droit de modifier ses prix à tout moment. Les produits sont facturés sur la base des tarifs en vigueur au moment de la validation de la commande.</p>
+      <p>Pour toute demande de devis, contactez-nous à <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 4 — Commandes</h2>
+      <p>Les commandes s'effectuent :</p>
+      <ul>
+        <li>Via le formulaire de contact du site <strong>www.vetoprotec.fr</strong></li>
+        <li>Par email à <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a></li>
+        <li>Via les centrales vétérinaires référencées le cas échéant</li>
+      </ul>
+      <p>Toute commande est confirmée par un accusé de réception par email de la part de VETO PROTEC. La vente n'est définitive qu'à réception du paiement intégral.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 5 — Paiement</h2>
+      <p>Le règlement s'effectue selon les modalités précisées lors de la confirmation de commande (virement bancaire, carte bancaire ou autre moyen convenu). Tout retard de paiement entraîne l'application de pénalités conformément à la législation en vigueur.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 6 — Livraison</h2>
+      <h3>Délais</h3>
+      <p>Les délais de livraison sont communiqués lors de la confirmation de commande. VETO PROTEC s'engage à expédier les produits dans les meilleurs délais après réception du paiement.</p>
+      <h3>Frais</h3>
+      <p>Les frais de livraison sont indiqués avant validation de la commande. Ils varient selon le mode d'expédition et la destination.</p>
+      <h3>Réception</h3>
+      <p>À réception du colis, l'acheteur est tenu de vérifier l'état des produits. Toute anomalie (colis endommagé, produit manquant ou défectueux) doit être signalée dans les 48 heures suivant la réception à <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 7 — Droit de rétractation</h2>
+      <p>Conformément aux articles L.221-18 et suivants du Code de la consommation, le client particulier (non professionnel) dispose d'un délai de <strong>14 jours calendaires</strong> à compter de la réception du produit pour exercer son droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalités.</p>
+      <p>Pour exercer ce droit, contactez VETO PROTEC par email à <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a> avant l'expiration du délai. Les frais de retour sont à la charge du client.</p>
+      <div class="highlight">
+        ℹ️ Le droit de rétractation ne s'applique pas aux professionnels passant commande dans le cadre de leur activité.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Article 8 — Garanties</h2>
+      <p>Les produits bénéficient de la garantie légale de conformité (articles L.217-4 et suivants du Code de la consommation) et de la garantie légale contre les vices cachés (articles 1641 et suivants du Code civil).</p>
+      <p>En cas de défaut de conformité constaté, contactez <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a> en précisant la nature du problème et en joignant des photos si possible.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 9 — Responsabilité</h2>
+      <p>VETO PROTEC ne saurait être tenue responsable des dommages résultant d'une utilisation non conforme de ses produits, notamment l'utilisation du Pet Holder sur un animal non sédaté ou sur des surfaces incompatibles.</p>
+      <p>La responsabilité de VETO PROTEC est limitée au montant de la commande concernée.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 10 — Données personnelles</h2>
+      <p>Les données collectées lors des commandes sont nécessaires au traitement et au suivi de votre commande. Elles sont conservées conformément à la réglementation RGPD. Pour exercer vos droits, contactez <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 11 — Droit applicable et litiges</h2>
+      <p>Les présentes CGV sont soumises au droit français. En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux compétents du ressort du siège social de VETO PROTEC seront saisis.</p>
+      <p>Conformément à l'article L.612-1 du Code de la consommation, le client consommateur peut recourir gratuitement à un médiateur de la consommation.</p>
+    </div>
+
+    <div class="card">
+      <h2>Article 12 — Contact</h2>
+      <p>Pour toute question relative aux présentes CGV :<br/>
+      <strong>VETO PROTEC</strong><br/>
+      28 rue de la Division Leclerc, 91160 Saulx-les-Chartreux<br/>
+      <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a></p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container" style="max-width:1100px">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/mentions-legales.html" style="text-decoration:none">Mentions légales</a>
+        <a href="/confidentialite.html" style="text-decoration:none">Confidentialité</a>
+        <a href="/cgv.html" style="text-decoration:none">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
