@@ -46,7 +46,6 @@
       padding:14px 0; gap:16px;
     }
     .brand{display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:700; font-family:'DM Serif Display',serif; font-size:18px; letter-spacing:.01em}
-
     .navlinks{display:flex; gap:16px; flex-wrap:wrap}
     .navlinks a{opacity:.8; text-decoration:none; font-size:14px; font-weight:500}
     .navlinks a:hover{opacity:1; color:var(--accent2)}
@@ -89,21 +88,80 @@
       padding:22px;
       box-shadow: 0 4px 24px rgba(192,132,200,.1), 0 1px 4px rgba(192,132,200,.06);
     }
-    .mock{
-      height:100%; min-height:240px;
-      border-radius:16px;
-      border:2px dashed rgba(192,132,200,.35);
-      background:
-        linear-gradient(160deg, var(--rose-light) 0%, var(--accent3) 100%),
-        radial-gradient(500px 200px at 60% 30%, rgba(244,114,182,.2), transparent 60%);
+
+    /* ── CARROUSEL ── */
+    .carousel-wrap{
+      border:1px solid var(--border);
+      border-radius:20px;
+      overflow:hidden;
+      position:relative;
+      min-height:260px;
+      box-shadow: 0 4px 24px rgba(192,132,200,.1);
+    }
+    .carousel-track{
+      display:flex;
+      height:100%;
+      min-height:260px;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .carousel-slide{
+      min-width:100%;
+      min-height:260px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:10px;
+      font-weight:600;
+      font-size:15px;
+      color:var(--muted);
+      text-align:center;
+      padding:28px;
+    }
+    .carousel-slide:nth-child(1){ background: linear-gradient(140deg, #fce7f3, #e9d5ff); }
+    .carousel-slide:nth-child(2){ background: linear-gradient(140deg, #f5e6d8, #fce7f3); }
+    .carousel-slide:nth-child(3){ background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
+    .carousel-slide:nth-child(4){ background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
+
+    /* Pour les vraies images, utilise ce style sur la slide :
+       <div class="carousel-slide" style="padding:0">
+         <img src="/photo1.jpg" alt="..." style="width:100%;height:100%;object-fit:cover">
+       </div>
+    */
+
+    .slide-icon{ font-size:36px; }
+    .slide-label{ font-size:13px; opacity:.7; font-weight:400; }
+
+    .carousel-btn{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:38px; height:38px; border-radius:50%;
+      border:none; cursor:pointer;
+      background: rgba(255,255,255,.88);
+      backdrop-filter:blur(6px);
+      box-shadow: 0 2px 12px rgba(192,132,200,.3);
       display:flex; align-items:center; justify-content:center;
-      color: var(--muted); text-align:center; padding:22px;
+      font-size:18px; color:var(--text);
+      transition: background .15s, transform .15s;
+      z-index:2;
     }
+    .carousel-btn:hover{ background:#fff; transform:translateY(-50%) scale(1.1); }
+    .carousel-btn.prev{ left:12px; }
+    .carousel-btn.next{ right:12px; }
+
+    .carousel-dots{
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      display:flex; gap:7px; z-index:2;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: rgba(192,132,200,.35);
+      border:none; cursor:pointer; padding:0;
+      transition: background .2s, transform .2s;
+    }
+    .dot.active{ background: var(--accent2); transform: scale(1.35); }
+
     section{padding:36px 0}
-    .section-title{
-      font-family:'DM Serif Display',serif;
-      font-size:26px; margin:0 0 10px; font-weight:400;
-    }
+    .section-title{ font-family:'DM Serif Display',serif; font-size:26px; margin:0 0 10px; font-weight:400; }
     .section-sub{color:var(--muted); margin:0 0 20px; max-width:70ch; font-weight:300}
     .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
     .grid2{display:grid; grid-template-columns: repeat(2, 1fr); gap:16px}
@@ -113,12 +171,9 @@
     .product li{margin:6px 0; line-height:1.4}
     .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
     .faq details{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px 18px;
-      background: rgba(232,209,255,.12);
-      margin-bottom:10px;
-      transition: background .18s;
+      border:1px solid var(--border); border-radius:16px;
+      padding:14px 18px; background: rgba(232,209,255,.12);
+      margin-bottom:10px; transition: background .18s;
     }
     .faq details[open]{background: rgba(232,209,255,.25)}
     .faq summary{cursor:pointer; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center}
@@ -134,11 +189,7 @@
     }
     input:focus, textarea:focus{border-color:var(--accent)}
     label{font-size:14px; font-weight:500; color:var(--muted)}
-    footer{
-      padding:28px 0 44px;
-      border-top:1px solid var(--border);
-      color:var(--muted); font-size:13px;
-    }
+    footer{ padding:28px 0 44px; border-top:1px solid var(--border); color:var(--muted); font-size:13px; }
     @media (max-width: 900px){
       .hero-grid{grid-template-columns:1fr}
       .h-title{font-size:34px}
@@ -153,7 +204,7 @@
   <div class="container">
     <div class="nav">
       <a class="brand" href="#top">
-        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="44" style="object-fit:contain" />
       </a>
       <nav class="navlinks" aria-label="Navigation">
         <a href="#produits">Produits</a>
@@ -169,10 +220,11 @@
 <main id="top">
   <div class="container hero">
     <div class="hero-grid">
+
       <div class="card">
         <h1 class="h-title">Des équipements vétérinaires<br/>pensés pour le terrain.</h1>
         <p class="h-sub">
-          Des solutions conçues pour les vétérinaires afin d’améliorer la sécurité, le confort et l’efficacité au quotidien
+          Des solutions conçues pour les vétérinaires afin d'améliorer la sécurité, le confort et l'efficacité au quotidien
         </p>
         <div class="cta">
           <a class="btn primary" href="#produits">Voir les produits</a>
@@ -184,19 +236,36 @@
           <span class="pill">Radioprotection</span>
           <span class="pill">Confort équipe / animal</span>
         </div>
-
       </div>
 
-      <div class="card">
-        <div class="mock">
-          <div>
-            <strong>Zone visuel / vidéo</strong><br/>
-            Ajoute ici une photo "en situation" (radiologie / table / bloc) ou un extrait de Reel.
-            <br/><br/>
-            <span style="font-size:13px;opacity:.75">Format recommandé : 1200×1200 ou 1600×1200</span>
+      <!-- ✅ CARROUSEL — remplace les slides par de vraies images quand tu les as -->
+      <div class="carousel-wrap" id="carousel">
+        <div class="carousel-track" id="carouselTrack">
+
+          <div class="carousel-slide" style="padding:0">
+            <img src="/PetHolderMixed.png" alt="Pet Holder"
+            style="width:100%;height:100%;object-fit:cover" />
           </div>
+
+          <div class="carousel-slide" style="padding:0">
+            <img src="/PetAnesth.jpg" alt="PetAnesth"
+            style="width:100%;height:100%;object-fit:cover" />
+          </div>
+
+          <div class="carousel-slide" style="padding:0">
+            <img src="/PetAnesth2.jpg" alt="PetAnesth"
+            style="width:100%;height:100%;object-fit:cover" />
+          </div>
+
+          
+
         </div>
+
+        <button class="carousel-btn prev" id="prevBtn" aria-label="Image précédente">‹</button>
+        <button class="carousel-btn next" id="nextBtn" aria-label="Image suivante">›</button>
+        <div class="carousel-dots" id="carouselDots"></div>
       </div>
+
     </div>
   </div>
 
@@ -210,33 +279,25 @@
       <div class="grid2">
         <div class="card product">
           <h3>PetHolder</h3>
-          <p style="color:var(--muted);margin:0;font-weight:300">
-            Ventouses pour stabiliser un animal sédaté sur une table lisse.
-          </p>
+          <p style="color:var(--muted);margin:0;font-weight:300">Ventouses pour stabiliser un animal sédaté sur une table lisse.</p>
           <ul>
             <li>Surfaces compatibles : verre, métal, plastique, acier inoxydable (surfaces lisses non poreuses).</li>
             <li>Diamètre : 82,6 mm • Force de maintien annoncée : 5 à 10 kg / ventouse (sur surface lisse).</li>
             <li>Indications : radiologie, petites interventions, contention douce sous sédation.</li>
             <li>Recommandation : utilisation uniquement sur animal sédaté.</li>
           </ul>
-          <div class="cta">
-            <a class="btn primary" href="#commande">Commander</a>
-          </div>
+          <div class="cta"><a class="btn primary" href="#commande">Commander</a></div>
         </div>
 
         <div class="card product">
           <h3>PetAnesth</h3>
-          <p style="color:var(--muted);margin:0;font-weight:300">
-            Accessoire visant un maintien fiable et un usage simple pour des anesthésies plus sûres.
-          </p>
+          <p style="color:var(--muted);margin:0;font-weight:300">Accessoire visant un maintien fiable et un usage simple pour des anesthésies plus sûres.</p>
           <ul>
             <li>Objectif : plus de sécurité, plus de confort, plus d'efficacité au quotidien.</li>
             <li>Conçu pour limiter les montages "de fortune" et sécuriser la procédure.</li>
-            <li>Support de fixation compatible tables jusqu’à 5 cm d’épaisseur.</li>
+            <li>Support de fixation compatible tables jusqu'à 5 cm d'épaisseur.</li>
           </ul>
-          <div class="cta">
-            <a class="btn primary" href="#commande">Commander</a>
-          </div>
+          <div class="cta"><a class="btn primary" href="#commande">Commander</a></div>
         </div>
       </div>
     </div>
@@ -285,10 +346,10 @@
       <details>
         <summary>Peut-on l'utiliser sur un animal non sédaté ?</summary>
         <p>Recommandation : non. L'usage est prévu sur animal sédaté pour éviter des mouvements soudains.</p>
-      </details>    
+      </details>
       <details>
-        <summary>Quelle est l’épaisseur maximale de la table sur laquelle le PetAnesth peut être fixé ?</summary>
-        <p>La pince s’ouvre jusqu’à 5 cm d’épaisseur. Il est toutefois possible de demander un adaptateur pour les tables plus épaisses.</p>
+        <summary>Quelle est l'épaisseur maximale de la table sur laquelle le PetAnesth peut être fixé ?</summary>
+        <p>La pince s'ouvre jusqu'à 5 cm d'épaisseur. Il est toutefois possible de demander un adaptateur pour les tables plus épaisses.</p>
       </details>
       <details>
         <summary>Comment obtenir une fiche technique ?</summary>
@@ -302,7 +363,6 @@
       <div class="card">
         <h2 class="section-title">Contact</h2>
         <p class="section-sub">Une question ou un devis ? On vous répond rapidement.</p>
-
         <form id="contactForm">
           <div class="grid2">
             <div>
@@ -329,7 +389,6 @@
             <a class="btn" href="https://www.facebook.com/people/Veto-Protec/61567468355158/">Facebook</a>
           </div>
         </form>
-
       </div>
     </div>
   </section>
@@ -349,15 +408,62 @@
   </div>
 </footer>
 
-<!-- ✅ Un seul bloc script, proprement placé avant </body> -->
 <script>
-  // Année footer
+  // ── Année footer
   document.getElementById("y").textContent = new Date().getFullYear();
 
-  // Formulaire de contact
+  // ── Carrousel
+  const track  = document.getElementById("carouselTrack");
+  const slides = track.querySelectorAll(".carousel-slide");
+  const dotsEl = document.getElementById("carouselDots");
+  const total  = slides.length;
+  let current  = 0;
+  let timer;
+
+  // Générer les points
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dot.setAttribute("aria-label", "Image " + (i + 1));
+    dot.addEventListener("click", () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsEl.querySelectorAll(".dot").forEach((d, i) =>
+      d.classList.toggle("active", i === current)
+    );
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 4000);
+  }
+
+  document.getElementById("prevBtn").addEventListener("click", () => goTo(current - 1));
+  document.getElementById("nextBtn").addEventListener("click", () => goTo(current + 1));
+
+  // Pause au survol
+  const carousel = document.getElementById("carousel");
+  carousel.addEventListener("mouseenter", () => clearInterval(timer));
+  carousel.addEventListener("mouseleave", resetTimer);
+
+  // Swipe tactile mobile
+  let startX = 0;
+  carousel.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+  carousel.addEventListener("touchend", e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+  });
+
+  resetTimer();
+
+  // ── Formulaire de contact
   document.getElementById("contactForm").addEventListener("submit", async function(e) {
     e.preventDefault();
-
     const btn      = document.getElementById("submitBtn");
     const feedback = document.getElementById("formFeedback");
     const nom      = document.getElementById("nom").value.trim();
@@ -374,9 +480,7 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nom, email, message }),
       });
-
       const data = await res.json();
-
       if (res.ok) {
         feedback.textContent = "✅ Message envoyé ! On vous répond très vite.";
         feedback.style.background = "#f0fdf4";
