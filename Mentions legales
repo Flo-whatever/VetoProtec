@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mentions légales — VetoProtec</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fdf6f0;
+      --card:#fff8f5;
+      --text:#2d1a2e;
+      --muted:#8a6a7a;
+      --accent:#c084c8;
+      --accent2:#f472b6;
+      --rose-light:#fce7f3;
+      --beige:#f5e6d8;
+      --border:rgba(192,132,200,.22);
+      --border2:rgba(244,114,182,.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:var(--accent)}
+    a:hover{color:var(--accent2)}
+    .container{max-width:800px;margin:0 auto;padding:0 24px}
+    header{
+      position:sticky; top:0;
+      backdrop-filter:blur(14px);
+      background:rgba(253,246,240,.75);
+      border-bottom:1px solid var(--border);
+      z-index:20;
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-family:'DM Serif Display',serif;font-size:18px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 18px;border-radius:999px;
+      border:1.5px solid var(--border);
+      background:rgba(192,132,200,.08);
+      text-decoration:none;font-weight:600;font-size:14px;
+      transition:background .18s, transform .12s;
+      color:var(--text);
+    }
+    .btn:hover{background:rgba(192,132,200,.16);transform:translateY(-1px)}
+    main{padding:56px 0 80px}
+    .page-title{
+      font-family:'DM Serif Display',serif;
+      font-size:38px;line-height:1.1;margin:0 0 8px;font-weight:400;
+      background:linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-date{color:var(--muted);font-size:13px;margin:0 0 40px}
+    .card{
+      border:1px solid var(--border);
+      background:var(--card);
+      border-radius:20px;
+      padding:28px 32px;
+      box-shadow:0 4px 24px rgba(192,132,200,.1);
+      margin-bottom:20px;
+    }
+    h2{
+      font-family:'DM Serif Display',serif;
+      font-size:20px;font-weight:400;
+      margin:0 0 14px;
+      color:var(--text);
+      padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    p{margin:0 0 12px;color:var(--text);font-weight:300}
+    p:last-child{margin:0}
+    .info-grid{display:grid;grid-template-columns:180px 1fr;gap:6px 16px;font-size:14px}
+    .info-grid dt{color:var(--muted);font-weight:500}
+    .info-grid dd{margin:0;font-weight:300}
+    footer{
+      padding:28px 0 40px;
+      border-top:1px solid var(--border);
+      color:var(--muted);font-size:13px;
+    }
+    @media(max-width:600px){
+      .page-title{font-size:28px}
+      .card{padding:20px}
+      .info-grid{grid-template-columns:1fr}
+      .info-grid dt{margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container" style="max-width:1100px">
+    <div class="nav">
+      <a class="brand" href="/">
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="44" style="object-fit:contain" />
+      </a>
+      <a class="btn" href="/">← Retour au site</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <h1 class="page-title">Mentions légales</h1>
+    <p class="page-date">En vigueur au 1er mars 2026</p>
+
+    <div class="card">
+      <h2>Éditeur du site</h2>
+      <dl class="info-grid">
+        <dt>Dénomination sociale</dt>
+        <dd>VETO PROTEC</dd>
+        <dt>Forme juridique</dt>
+        <dd>SAS — Société par actions simplifiée</dd>
+        <dt>Capital social</dt>
+        <dd>1 000,00 €</dd>
+        <dt>SIREN</dt>
+        <dd>934 604 067</dd>
+        <dt>SIRET (siège)</dt>
+        <dd>934 604 067 00017</dd>
+        <dt>N° TVA intracommunautaire</dt>
+        <dd>FR53 934 604 067</dd>
+        <dt>Code NAF / APE</dt>
+        <dd>47.91B — Vente à distance sur catalogue spécialisé</dd>
+        <dt>Date de création</dt>
+        <dd>22 octobre 2024</dd>
+        <dt>Siège social</dt>
+        <dd>28 rue de la Division Leclerc, 91160 Saulx-les-Chartreux</dd>
+        <dt>Email</dt>
+        <dd><a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a></dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h2>Responsable de publication</h2>
+      <p>Dr Derrien, en qualité de dirigeant de la société VETO PROTEC.</p>
+      <p>Contact : <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Hébergement</h2>
+      <dl class="info-grid">
+        <dt>Hébergeur</dt>
+        <dd>Vercel Inc.</dd>
+        <dt>Adresse</dt>
+        <dd>440 N Barranca Ave #4133, Covina, CA 91723, États-Unis</dd>
+        <dt>Site web</dt>
+        <dd><a href="https://vercel.com" target="_blank" rel="noopener">vercel.com</a></dd>
+      </dl>
+    </div>
+
+    <div class="card">
+      <h2>Propriété intellectuelle</h2>
+      <p>L'ensemble des contenus présents sur le site <strong>www.vetoprotec.fr</strong> (textes, images, logos, graphismes) est la propriété exclusive de VETO PROTEC ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p>
+      <p>Toute reproduction, représentation, modification ou exploitation de tout ou partie des contenus du site, sans autorisation préalable écrite de VETO PROTEC, est strictement interdite.</p>
+    </div>
+
+    <div class="card">
+      <h2>Protection des données personnelles</h2>
+      <p>Les informations collectées via le formulaire de contact (nom, adresse email, message) sont utilisées exclusivement pour répondre à vos demandes. Elles ne sont ni cédées, ni vendues à des tiers.</p>
+      <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition aux données vous concernant.</p>
+      <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:drderrien@vetoprotec.fr">drderrien@vetoprotec.fr</a></p>
+    </div>
+
+    <div class="card">
+      <h2>Cookies</h2>
+      <p>Le site <strong>www.vetoprotec.fr</strong> n'utilise pas de cookies de tracking ou publicitaires. Aucune donnée de navigation n'est collectée à des fins commerciales.</p>
+    </div>
+
+    <div class="card">
+      <h2>Limitation de responsabilité</h2>
+      <p>VETO PROTEC s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site. Toutefois, elle ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations mises à disposition.</p>
+      <p>VETO PROTEC décline toute responsabilité pour tout dommage résultant d'une intrusion frauduleuse d'un tiers ayant entraîné une modification des informations mises à disposition sur le site.</p>
+    </div>
+
+    <div class="card">
+      <h2>Droit applicable</h2>
+      <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container" style="max-width:1100px">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/mentions-legales.html" style="text-decoration:none">Mentions légales</a>
+        <a href="/confidentialite.html" style="text-decoration:none">Confidentialité</a>
+        <a href="/cgv.html" style="text-decoration:none">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+</body>
+</html>
