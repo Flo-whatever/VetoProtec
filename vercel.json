@@ -1,5 +1,25 @@
 {
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept-language", "value": "(?!fr).*" }],
+      "destination": "/en/",
+      "permanent": false
+    },
+    {
+      "source": "/petholder.html",
+      "has": [{ "type": "header", "key": "accept-language", "value": "(?!fr).*" }],
+      "destination": "/en/petholder.html",
+      "permanent": false
+    },
+    {
+      "source": "/petanesth.html",
+      "has": [{ "type": "header", "key": "accept-language", "value": "(?!fr).*" }],
+      "destination": "/en/petanesth.html",
+      "permanent": false
+    }
   ]
 }
