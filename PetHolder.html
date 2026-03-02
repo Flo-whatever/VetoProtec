@@ -6,248 +6,25 @@
   <title>PetHolder — Système de contention par ventouses — VetoProtec</title>
   <meta name="description" content="PetHolder : dispositif de contention par ventouses pour animaux sédatés. Stabilisation fiable lors des examens radiologiques et interventions vétérinaires." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
   <style>
-    :root{
-      --bg:#fdf6f0;
-      --card:#fff8f5;
-      --text:#2d1a2e;
-      --muted:#8a6a7a;
-      --accent:#c084c8;
-      --accent2:#f472b6;
-      --accent3:#e9d5ff;
-      --rose-light:#fce7f3;
-      --beige:#f5e6d8;
-      --border:rgba(192,132,200,.22);
-      --border2:rgba(244,114,182,.18);
+    /* ── Styles spécifiques PetHolder ── */
+    .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
+
+    .product-title {
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08));
+    }
+
+    body {
       background:
         radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
         radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    a{color:var(--accent); text-decoration:none}
-    a:hover{color:var(--accent2)}
-
-    /* ── HEADER ── */
-    header{
-      position:sticky; top:0;
-      backdrop-filter:blur(14px);
-      background:rgba(253,246,240,.78);
-      border-bottom:1px solid var(--border);
-      z-index:20;
-    }
-    .nav{
-      max-width:1100px; margin:0 auto; padding:0 24px;
-      display:flex; align-items:center; justify-content:space-between;
-      height:64px; gap:16px;
-    }
-    .brand img{height:44px; object-fit:contain; display:block}
-    .nav-right{display:flex; align-items:center; gap:10px}
-    .btn{
-      display:inline-flex; align-items:center; gap:6px;
-      padding:9px 18px; border-radius:999px;
-      border:1.5px solid var(--border);
-      background:rgba(192,132,200,.08);
-      font-family:inherit; font-weight:600; font-size:14px;
-      color:var(--text); cursor:pointer;
-      transition:background .18s, transform .12s;
-      text-decoration:none;
-    }
-    .btn:hover{background:rgba(192,132,200,.18); transform:translateY(-1px); color:var(--text)}
-    .btn.primary{
-      border:none;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#fff;
-      box-shadow:0 6px 20px rgba(244,114,182,.28);
-    }
-    .btn.primary:hover{box-shadow:0 10px 28px rgba(244,114,182,.4); transform:translateY(-2px); color:#fff}
-
-    /* ── HERO PRODUIT ── */
-    .product-hero{
-      max-width:1100px; margin:0 auto; padding:64px 24px 48px;
-      display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;
-    }
-    .product-img-wrap{
-      border-radius:24px; overflow:hidden;
-      border:1px solid var(--border);
-      background:linear-gradient(160deg, var(--rose-light), var(--accent3));
-      box-shadow:0 20px 60px rgba(192,132,200,.18);
-      aspect-ratio:4/3;
-      display:flex; align-items:center; justify-content:center;
-      position:relative;
-    }
-    .product-img-wrap img{
-      width:100%; height:100%; object-fit:contain;
-    }
-    .product-img-placeholder{
-      color:var(--muted); text-align:center; padding:32px; font-size:14px;
-    }
-    .badge{
-      display:inline-flex; align-items:center; gap:6px;
-      background:var(--rose-light); border:1px solid var(--border2);
-      border-radius:999px; padding:5px 12px;
-      font-size:12px; font-weight:600; color:var(--accent2);
-      margin-bottom:16px;
-    }
-    .product-title{
-      font-family:'DM Serif Display', serif;
-      font-size:52px; line-height:1;
-      margin-bottom:6px;
-      background:linear-gradient(135deg, var(--text) 30%, var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    }
-    .product-tagline{
-      font-size:17px; color:var(--muted); font-weight:300;
-      margin-bottom:20px; max-width:44ch;
-    }
-    .product-desc{
-      font-size:15px; color:var(--text); font-weight:300;
-      line-height:1.7; margin-bottom:28px; max-width:50ch;
-    }
-    .hero-cta{display:flex; gap:10px; flex-wrap:wrap}
-    .warning-badge{
-      display:inline-flex; align-items:center; gap:8px;
-      margin-top:18px;
-      background:rgba(244,114,182,.1);
-      border:1px solid rgba(244,114,182,.3);
-      border-radius:12px; padding:10px 14px;
-      font-size:13px; font-weight:500; color:#9d3772;
-    }
-
-    /* ── SECTIONS ── */
-    .container{max-width:1100px; margin:0 auto; padding:0 24px}
-    section{padding:40px 0}
-
-    .section-label{
-      font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
-      color:var(--accent); margin-bottom:8px;
-    }
-    .section-title{
-      font-family:'DM Serif Display', serif;
-      font-size:28px; font-weight:400; margin-bottom:10px;
-    }
-    .section-sub{color:var(--muted); font-weight:300; margin-bottom:28px; max-width:60ch}
-
-    .card{
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:20px;
-      padding:24px 28px;
-      box-shadow:0 4px 24px rgba(192,132,200,.08);
-    }
-
-    /* Bénéfices */
-    .benefits-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-    .benefit-card{
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 2px 12px rgba(192,132,200,.07);
-      transition:transform .18s, box-shadow .18s;
-    }
-    .benefit-card:hover{transform:translateY(-3px); box-shadow:0 8px 28px rgba(192,132,200,.14)}
-    .benefit-icon{
-      width:40px; height:40px; border-radius:12px;
-      background:linear-gradient(135deg, var(--accent3), var(--rose-light));
-      display:flex; align-items:center; justify-content:center;
-      font-size:20px; margin-bottom:12px;
-    }
-    .benefit-title{font-weight:600; font-size:14px; margin-bottom:4px}
-    .benefit-desc{font-size:13px; color:var(--muted); font-weight:300; line-height:1.5}
-
-    /* Indications */
-    .indications-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-    .indication-card{
-      border:1px solid var(--border2);
-      background:linear-gradient(140deg, var(--rose-light), rgba(233,213,255,.4));
-      border-radius:18px; padding:20px;
-    }
-    .indication-card .ic-icon{font-size:26px; margin-bottom:10px}
-    .indication-card .ic-title{font-weight:600; font-size:14px; margin-bottom:4px}
-    .indication-card .ic-desc{font-size:13px; color:var(--muted); font-weight:300; line-height:1.4}
-
-    /* Specs */
-    .specs-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-    .spec-group{
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:18px; padding:20px 24px;
-    }
-    .spec-group h3{
-      font-family:'DM Serif Display', serif;
-      font-size:16px; font-weight:400;
-      margin-bottom:14px; padding-bottom:10px;
-      border-bottom:1px solid var(--border);
-      display:flex; align-items:center; gap:8px;
-    }
-    .spec-row{
-      display:flex; justify-content:space-between; align-items:baseline;
-      padding:7px 0; border-bottom:1px solid rgba(192,132,200,.1);
-      font-size:14px;
-    }
-    .spec-row:last-child{border:none; padding-bottom:0}
-    .spec-key{color:var(--muted); font-weight:400}
-    .spec-val{font-weight:500; text-align:right; max-width:55%}
-
-    /* Entretien */
-    .entretien-list{list-style:none; display:flex; flex-direction:column; gap:10px}
-    .entretien-list li{
-      display:flex; align-items:flex-start; gap:12px;
-      font-size:14px; font-weight:300;
-    }
-    .entretien-list li::before{
-      content:''; flex-shrink:0;
-      width:22px; height:22px; border-radius:50%;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      display:flex; align-items:center; justify-content:center;
-      margin-top:1px;
-    }
-    .step-num{
-      flex-shrink:0; width:22px; height:22px; border-radius:50%;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#fff; font-size:11px; font-weight:700;
-      display:flex; align-items:center; justify-content:center;
-      margin-top:2px;
-    }
-
-    /* CTA bottom */
-    .cta-section{
-      background:linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08));
-      border:1px solid var(--border);
-      border-radius:24px; padding:48px;
-      text-align:center; margin:40px 0 60px;
-    }
-    .cta-title{
-      font-family:'DM Serif Display', serif;
-      font-size:32px; font-weight:400; margin-bottom:10px;
-    }
-    .cta-sub{color:var(--muted); font-weight:300; margin-bottom:28px; font-size:16px}
-    .cta-btns{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
-
-    /* Footer */
-    footer{
-      padding:28px 0 40px;
-      border-top:1px solid var(--border);
-      color:var(--muted); font-size:13px;
-    }
-
-    /* Animations */
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    .product-hero > *{animation:fadeUp .5s ease both}
-    .product-hero > *:nth-child(2){animation-delay:.12s}
-
-    @media(max-width:900px){
-      .product-hero{grid-template-columns:1fr; gap:32px; padding:40px 24px 32px}
-      .product-title{font-size:38px}
-      .benefits-grid,.indications-grid{grid-template-columns:1fr}
-      .specs-grid{grid-template-columns:1fr}
-      .cta-section{padding:32px 20px}
     }
   </style>
 </head>
@@ -256,26 +33,25 @@
 <header>
   <div class="nav">
     <a class="brand" href="/">
-      <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+      <img src="/LogoVPWoBG.png" alt="VetoProtec" />
     </a>
     <div class="nav-right">
       <a class="btn" href="/#produits">← Produits</a>
-      <a class="btn" href="/en/" style="font-size:13px">🌐 EN</a>
+      <a class="btn" href="/en/petholder.html" style="font-size:13px">🌐 EN</a>
     </div>
   </div>
 </header>
 
 <main>
 
-  <!-- ── HERO ── -->
-  <div class="product-hero">
+  <div class="product-hero fade-up">
 
     <div class="product-img-wrap">
       <img src="/PetHolderMixed.png" alt="PetHolder en situation clinique" />
     </div>
 
-    <div>
-      <div class="badge">🐾 Équipement vétérinaire professionnel</div>
+    <div class="fade-up--delay">
+      <div class="badge badge--rose">🐾 Équipement vétérinaire professionnel</div>
       <h1 class="product-title">PetHolder</h1>
       <p class="product-tagline">Système de contention par ventouses pour animaux sédatés</p>
       <p class="product-desc">
@@ -286,81 +62,40 @@
         <a class="btn primary" href="/#contact">Commander</a>
         <a class="btn" href="/#contact">Recevoir la fiche technique</a>
       </div>
-      <div class="warning-badge">
-        ⚠️ Utilisation exclusivement sur animaux sédatés
-      </div>
+      <div class="warning-badge">⚠️ Utilisation exclusivement sur animaux sédatés</div>
     </div>
 
   </div>
 
-  <!-- ── BÉNÉFICES ── -->
   <section>
     <div class="container">
       <p class="section-label">Pourquoi PetHolder ?</p>
       <h2 class="section-title">Des bénéfices concrets au quotidien</h2>
       <p class="section-sub">Conçu à partir des besoins du terrain pour simplifier les gestes et améliorer les conditions de travail.</p>
       <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-icon">🔒</div>
-          <div class="benefit-title">Stabilisation efficace</div>
-          <div class="benefit-desc">Maintien fiable de l'animal sédaté en position stable tout au long de l'examen.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">☢️</div>
-          <div class="benefit-title">Radioprotection</div>
-          <div class="benefit-desc">Réduit les manipulations pendant les examens radiologiques — l'assistant peut s'éloigner.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">⚡</div>
-          <div class="benefit-title">Mise en place rapide</div>
-          <div class="benefit-desc">Installation intuitive en quelques secondes, sans outillage spécifique.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">💪</div>
-          <div class="benefit-title">Adhérence forte</div>
-          <div class="benefit-desc">5 à 10 kg de force de maintien par ventouse sur surfaces lisses et non poreuses.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">🛡️</div>
-          <div class="benefit-title">Sécurisation des actes</div>
-          <div class="benefit-desc">Limite les risques liés aux mouvements inattendus lors des petites interventions.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon">🏥</div>
-          <div class="benefit-title">Confort en clinique</div>
-          <div class="benefit-desc">Améliore les conditions de travail et réduit la fatigue de l'équipe soignante.</div>
-        </div>
+        <div class="benefit-card"><div class="benefit-icon">🔒</div><div class="benefit-title">Stabilisation efficace</div><div class="benefit-desc">Maintien fiable de l'animal sédaté en position stable tout au long de l'examen.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">☢️</div><div class="benefit-title">Radioprotection</div><div class="benefit-desc">Réduit les manipulations pendant les examens radiologiques — l'assistant peut s'éloigner.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">⚡</div><div class="benefit-title">Mise en place rapide</div><div class="benefit-desc">Installation intuitive en quelques secondes, sans outillage spécifique.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">💪</div><div class="benefit-title">Adhérence forte</div><div class="benefit-desc">5 à 10 kg de force de maintien par ventouse sur surfaces lisses et non poreuses.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🛡️</div><div class="benefit-title">Sécurisation des actes</div><div class="benefit-desc">Limite les risques liés aux mouvements inattendus lors des petites interventions.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🏥</div><div class="benefit-title">Confort en clinique</div><div class="benefit-desc">Améliore les conditions de travail et réduit la fatigue de l'équipe soignante.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ── INDICATIONS ── -->
   <section>
     <div class="container">
       <p class="section-label">Utilisations</p>
       <h2 class="section-title">Particulièrement adapté pour</h2>
       <p class="section-sub">PetHolder s'intègre facilement dans les protocoles courants de la clinique vétérinaire.</p>
       <div class="indications-grid">
-        <div class="indication-card">
-          <div class="ic-icon">🩻</div>
-          <div class="ic-title">Examens radiologiques</div>
-          <div class="ic-desc">Permet à l'assistant de s'éloigner de la zone d'exposition — réduction significative de l'irradiation.</div>
-        </div>
-        <div class="indication-card">
-          <div class="ic-icon">🔪</div>
-          <div class="ic-title">Petites interventions chirurgicales</div>
-          <div class="ic-desc">Maintien stable de l'animal pendant les actes de chirurgie légère sous sédation.</div>
-        </div>
-        <div class="indication-card">
-          <div class="ic-icon">🐕</div>
-          <div class="ic-title">Médecine générale sous sédation</div>
-          <div class="ic-desc">Extraction de corps étranger, exploration du conduit auditif, soins courants…</div>
-        </div>
+        <div class="indication-card"><div class="ic-icon">🩻</div><div class="ic-title">Examens radiologiques</div><div class="ic-desc">Permet à l'assistant de s'éloigner de la zone d'exposition — réduction significative de l'irradiation.</div></div>
+        <div class="indication-card"><div class="ic-icon">🔪</div><div class="ic-title">Petites interventions chirurgicales</div><div class="ic-desc">Maintien stable de l'animal pendant les actes de chirurgie légère sous sédation.</div></div>
+        <div class="indication-card"><div class="ic-icon">🐕</div><div class="ic-title">Médecine générale sous sédation</div><div class="ic-desc">Extraction de corps étranger, exploration du conduit auditif, soins courants…</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ── SPECS ── -->
   <section>
     <div class="container">
       <p class="section-label">Fiche technique</p>
@@ -369,75 +104,34 @@
 
         <div class="spec-group">
           <h3>🔩 Ventouses</h3>
-          <div class="spec-row">
-            <span class="spec-key">Matériau</span>
-            <span class="spec-val">Caoutchouc haute adhérence</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Diamètre</span>
-            <span class="spec-val">82,6 mm</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Force de maintien</span>
-            <span class="spec-val">5 à 10 kg / ventouse</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Type de force</span>
-            <span class="spec-val">Cisaillement sur surface lisse</span>
-          </div>
+          <div class="spec-row"><span class="spec-key">Matériau</span><span class="spec-val">Caoutchouc haute adhérence</span></div>
+          <div class="spec-row"><span class="spec-key">Diamètre</span><span class="spec-val">82,6 mm</span></div>
+          <div class="spec-row"><span class="spec-key">Force de maintien</span><span class="spec-val">5 à 10 kg / ventouse</span></div>
+          <div class="spec-row"><span class="spec-key">Type de force</span><span class="spec-val">Cisaillement sur surface lisse</span></div>
         </div>
 
         <div class="spec-group">
           <h3>🧱 Compatibilité surfaces</h3>
-          <div class="spec-row">
-            <span class="spec-key">Verre</span>
-            <span class="spec-val">✅ Compatible</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Métal / Inox</span>
-            <span class="spec-val">✅ Compatible</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Plastique lisse</span>
-            <span class="spec-val">✅ Compatible</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Surfaces poreuses</span>
-            <span class="spec-val">❌ Non compatible</span>
-          </div>
+          <div class="spec-row"><span class="spec-key">Verre</span><span class="spec-val">✅ Compatible</span></div>
+          <div class="spec-row"><span class="spec-key">Métal / Inox</span><span class="spec-val">✅ Compatible</span></div>
+          <div class="spec-row"><span class="spec-key">Plastique lisse</span><span class="spec-val">✅ Compatible</span></div>
+          <div class="spec-row"><span class="spec-key">Surfaces poreuses</span><span class="spec-val">❌ Non compatible</span></div>
         </div>
 
         <div class="spec-group">
           <h3>🖨️ Structure & accessoires</h3>
-          <div class="spec-row">
-            <span class="spec-key">Capsule</span>
-            <span class="spec-val">Filament PLA standard 1,75 mm</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-key">Usage</span>
-            <span class="spec-val">Professionnel vétérinaire</span>
-          </div>
+          <div class="spec-row"><span class="spec-key">Capsule</span><span class="spec-val">Filament PLA standard 1,75 mm</span></div>
+          <div class="spec-row"><span class="spec-key">Sangles</span><span class="spec-val">Coton — incluses</span></div>
+          <div class="spec-row"><span class="spec-key">Usage</span><span class="spec-val">Professionnel vétérinaire</span></div>
         </div>
 
         <div class="spec-group">
           <h3>🧹 Entretien</h3>
           <ul class="entretien-list">
-            <li>
-              <span class="step-num">1</span>
-              Nettoyage à l'eau tiède savonneuse après chaque utilisation
-            </li>
-            <li>
-              <span class="step-num">2</span>
-              Séchage complet avant réutilisation
-            </li>
-            <li>
-              <span class="step-num">3</span>
-              Inspection régulière de l'état des ventouses recommandée
-            </li>
-            <li>
-              <span class="step-num">4</span>
-              Ne pas exposer à des températures supérieures à 70°C
-            </li>
+            <li><span class="step-num--sm">1</span>Nettoyage à l'eau tiède savonneuse après chaque utilisation</li>
+            <li><span class="step-num--sm">2</span>Séchage complet avant réutilisation</li>
+            <li><span class="step-num--sm">3</span>Inspection régulière de l'état des ventouses recommandée</li>
+            <li><span class="step-num--sm">4</span>Ne pas exposer à des températures supérieures à 70°C</li>
           </ul>
         </div>
 
@@ -445,7 +139,6 @@
     </div>
   </section>
 
-  <!-- ── CTA ── -->
   <div class="container">
     <div class="cta-section">
       <h2 class="cta-title">Intéressé par PetHolder ?</h2>
@@ -461,9 +154,9 @@
 
 <footer>
   <div class="container">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div class="footer-inner">
       <div>© <span id="y"></span> VetoProtec</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap">
+      <div class="footer-links">
         <a href="/mentions-legales.html">Mentions légales</a>
         <a href="/cgv.html">CGV</a>
       </div>
