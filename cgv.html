@@ -5,97 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Conditions Générales de Vente — VetoProtec</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
   <style>
-    :root{
-      --bg:#fdf6f0;
-      --card:#fff8f5;
-      --text:#2d1a2e;
-      --muted:#8a6a7a;
-      --accent:#c084c8;
-      --accent2:#f472b6;
-      --rose-light:#fce7f3;
-      --beige:#f5e6d8;
-      --border:rgba(192,132,200,.22);
-      --border2:rgba(244,114,182,.18);
+    /* ── Styles spécifiques CGV / pages légales ── */
+    .container { max-width: 800px; }
+
+    main { padding: 56px 0 80px; }
+
+    .page-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px; line-height: 1.1; margin: 0 0 8px; font-weight: 400;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;
-      background:
-        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
-        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
-        var(--bg);
-      color:var(--text);
-      line-height:1.6;
+    .page-date { color: var(--muted); font-size: 13px; margin: 0 0 40px; }
+
+    .card { padding: 28px 32px; margin-bottom: 20px; }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px; font-weight: 400;
+      margin: 0 0 14px; color: var(--text);
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
     }
-    a{color:var(--accent)}
-    a:hover{color:var(--accent2)}
-    .container{max-width:800px;margin:0 auto;padding:0 24px}
-    header{
-      position:sticky;top:0;
-      backdrop-filter:blur(14px);
-      background:rgba(253,246,240,.75);
-      border-bottom:1px solid var(--border);
-      z-index:20;
-    }
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
-    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-family:'DM Serif Display',serif;font-size:18px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:10px 18px;border-radius:999px;
-      border:1.5px solid var(--border);
-      background:rgba(192,132,200,.08);
-      text-decoration:none;font-weight:600;font-size:14px;
-      transition:background .18s, transform .12s;
-      color:var(--text);
-    }
-    .btn:hover{background:rgba(192,132,200,.16);transform:translateY(-1px)}
-    main{padding:56px 0 80px}
-    .page-title{
-      font-family:'DM Serif Display',serif;
-      font-size:38px;line-height:1.1;margin:0 0 8px;font-weight:400;
-      background:linear-gradient(135deg, var(--text) 40%, var(--accent));
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    }
-    .page-date{color:var(--muted);font-size:13px;margin:0 0 40px}
-    .card{
-      border:1px solid var(--border);
-      background:var(--card);
-      border-radius:20px;
-      padding:28px 32px;
-      box-shadow:0 4px 24px rgba(192,132,200,.1);
-      margin-bottom:20px;
-    }
-    h2{
-      font-family:'DM Serif Display',serif;
-      font-size:20px;font-weight:400;
-      margin:0 0 14px;
-      color:var(--text);
-      padding-bottom:10px;
-      border-bottom:1px solid var(--border);
-    }
-    h3{font-size:15px;font-weight:600;margin:16px 0 8px}
-    p{margin:0 0 12px;color:var(--text);font-weight:300}
-    p:last-child{margin:0}
-    ul{margin:0 0 12px;padding-left:20px;color:var(--text);font-weight:300}
-    ul li{margin:5px 0}
-    .highlight{
-      background:var(--rose-light);
-      border:1px solid var(--border2);
-      border-radius:12px;
-      padding:12px 16px;
-      font-size:14px;
-      margin:14px 0;
-    }
-    footer{
-      padding:28px 0 40px;
-      border-top:1px solid var(--border);
-      color:var(--muted);font-size:13px;
-    }
-    @media(max-width:600px){
-      .page-title{font-size:28px}
-      .card{padding:20px}
+    h3 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; }
+    p { margin: 0 0 12px; color: var(--text); font-weight: 300; }
+    p:last-child { margin: 0; }
+    ul { margin: 0 0 12px; padding-left: 20px; color: var(--text); font-weight: 300; }
+    ul li { margin: 5px 0; }
+
+    /* Nav légale */
+    header .nav { height: auto; padding: 14px 0; }
+    header .container { max-width: 1100px; }
+    .brand img { height: 44px; }
+
+    @media (max-width: 600px) {
+      .page-title { font-size: 28px; }
+      .card { padding: 20px; }
     }
   </style>
 </head>
@@ -105,7 +51,7 @@
   <div class="container" style="max-width:1100px">
     <div class="nav">
       <a class="brand" href="/">
-        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="44" style="object-fit:contain" />
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" style="object-fit:contain" />
       </a>
       <a class="btn" href="/">← Retour au site</a>
     </div>
@@ -214,11 +160,11 @@
 
 <footer>
   <div class="container" style="max-width:1100px">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div class="footer-inner">
       <div>© <span id="y"></span> VetoProtec</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap">
-        <a href="/mentions-legales.html" style="text-decoration:none">Mentions légales</a>
-        <a href="/cgv.html" style="text-decoration:none">CGV</a>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgv.html">CGV</a>
       </div>
     </div>
   </div>
