@@ -6,183 +6,79 @@
   <title>VetoProtec — Veterinary Equipment</title>
   <meta name="description" content="VetoProtec designs veterinary equipment for safer, simpler and more efficient practices." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
   <style>
-    :root{
-      --bg:#fdf6f0;
-      --bg2:#f9eef4;
-      --card:#fff8f5;
-      --text:#2d1a2e;
-      --muted:#8a6a7a;
-      --accent:#c084c8;
-      --accent2:#f472b6;
-      --accent3:#e9d5ff;
-      --rose-light:#fce7f3;
-      --beige:#f5e6d8;
-      --border:rgba(192,132,200,.22);
-      --border2:rgba(244,114,182,.18);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-      background:
-        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
-        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
-        var(--bg);
-      color:var(--text);
-      line-height:1.5;
-    }
-    a{color:inherit}
-    .container{max-width:1100px;margin:0 auto;padding:0 24px}
-    header{
-      position:sticky; top:0;
-      backdrop-filter: blur(14px);
-      background: rgba(253,246,240,.75);
-      border-bottom:1px solid var(--border);
-      z-index:20;
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0; gap:16px;
-    }
-    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:700; font-family:'DM Serif Display',serif; font-size:18px; letter-spacing:.01em}
-    .navlinks{display:flex; gap:16px; flex-wrap:wrap}
-    .navlinks a{opacity:.8; text-decoration:none; font-size:14px; font-weight:500}
-    .navlinks a:hover{opacity:1; color:var(--accent2)}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:10px 18px; border-radius:999px;
-      border:1.5px solid var(--border);
-      background: rgba(192,132,200,.08);
-      text-decoration:none; font-weight:600; font-size:14px;
-      transition: background .18s, border-color .18s, transform .12s;
-    }
-    .btn:hover{background:rgba(192,132,200,.16); transform:translateY(-1px)}
-    .btn.primary{
-      border:none;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#fff;
-      box-shadow: 0 6px 20px rgba(244,114,182,.28);
-    }
-    .btn.primary:hover{box-shadow: 0 10px 28px rgba(244,114,182,.40); transform:translateY(-2px)}
-    .hero{padding:72px 0 28px}
-    .hero-grid{display:grid;grid-template-columns: 1.2fr .8fr; gap:24px; align-items:stretch}
-    .h-title{
-      font-family:'DM Serif Display',serif;
-      font-size:46px; line-height:1.05; margin:0 0 16px;
+    /* ── Styles spécifiques en/index ── */
+    .hero { padding: 72px 0 28px; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: stretch; }
+
+    .h-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 46px; line-height: 1.05; margin: 0 0 16px;
       background: linear-gradient(135deg, var(--text) 40%, var(--accent));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .h-sub{color:var(--muted); font-size:16px; margin:0 0 24px; max-width:54ch; font-weight:300}
-    .pillrow{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 0}
-    .pill{
-      font-size:12px; color:var(--muted);
-      border:1px solid var(--border2);
-      background: var(--rose-light);
-      padding:6px 12px; border-radius:999px; font-weight:500;
-    }
-    .card{
-      border:1px solid var(--border);
-      background: var(--card);
-      border-radius:20px;
-      padding:22px;
-      box-shadow: 0 4px 24px rgba(192,132,200,.1), 0 1px 4px rgba(192,132,200,.06);
-    }
-    .carousel-wrap{
-      border:1px solid var(--border);
-      border-radius:20px;
-      overflow:hidden;
-      position:relative;
-      min-height:260px;
+    .h-sub { color: var(--muted); font-size: 16px; margin: 0 0 24px; max-width: 54ch; font-weight: 300; }
+    .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+    .product h3 { margin: 0 0 8px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; }
+    .product ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-weight: 300; }
+    .product li { margin: 6px 0; line-height: 1.4; }
+
+    /* Carrousel */
+    .carousel-wrap {
+      border: 1px solid var(--border); border-radius: 20px;
+      overflow: hidden; position: relative; min-height: 260px;
       box-shadow: 0 4px 24px rgba(192,132,200,.1);
     }
-    .carousel-track{
-      display:flex;
-      height:100%;
-      min-height:260px;
+    .carousel-track {
+      display: flex; height: 100%; min-height: 260px;
       transition: transform .45s cubic-bezier(.4,0,.2,1);
     }
-    .carousel-slide{
-      min-width:100%;
-      min-height:260px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap:10px;
-      font-weight:600;
-      font-size:15px;
-      color:var(--muted);
-      text-align:center;
-      padding:28px;
+    .carousel-slide {
+      min-width: 100%; min-height: 260px;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px;
+      font-weight: 600; font-size: 15px; color: var(--muted);
+      text-align: center; padding: 28px;
     }
-    .carousel-slide:nth-child(1){ background: linear-gradient(140deg, #fce7f3, #e9d5ff); }
-    .carousel-slide:nth-child(2){ background: linear-gradient(140deg, #f5e6d8, #fce7f3); }
-    .carousel-slide:nth-child(3){ background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
-    .carousel-slide:nth-child(4){ background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
-    .slide-icon{ font-size:36px; }
-    .slide-label{ font-size:13px; opacity:.7; font-weight:400; }
-    .carousel-btn{
-      position:absolute; top:50%; transform:translateY(-50%);
-      width:38px; height:38px; border-radius:50%;
-      border:none; cursor:pointer;
-      background: rgba(255,255,255,.88);
-      backdrop-filter:blur(6px);
+    .carousel-slide:nth-child(1) { background: linear-gradient(140deg, #fce7f3, #e9d5ff); }
+    .carousel-slide:nth-child(2) { background: linear-gradient(140deg, #f5e6d8, #fce7f3); }
+    .carousel-slide:nth-child(3) { background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
+    .carousel-slide:nth-child(4) { background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 38px; height: 38px; border-radius: 50%;
+      border: none; cursor: pointer;
+      background: rgba(255,255,255,.88); backdrop-filter: blur(6px);
       box-shadow: 0 2px 12px rgba(192,132,200,.3);
-      display:flex; align-items:center; justify-content:center;
-      font-size:18px; color:var(--text);
-      transition: background .15s, transform .15s;
-      z-index:2;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--text);
+      transition: background .15s, transform .15s; z-index: 2;
     }
-    .carousel-btn:hover{ background:#fff; transform:translateY(-50%) scale(1.1); }
-    .carousel-btn.prev{ left:12px; }
-    .carousel-btn.next{ right:12px; }
-    .carousel-dots{
-      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
-      display:flex; gap:7px; z-index:2;
+    .carousel-btn:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
+    .carousel-btn.prev { left: 12px; }
+    .carousel-btn.next { right: 12px; }
+    .carousel-dots {
+      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 7px; z-index: 2;
     }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
       background: rgba(192,132,200,.35);
-      border:none; cursor:pointer; padding:0;
+      border: none; cursor: pointer; padding: 0;
       transition: background .2s, transform .2s;
     }
-    .dot.active{ background: var(--accent2); transform: scale(1.35); }
-    section{padding:36px 0}
-    .section-title{ font-family:'DM Serif Display',serif; font-size:26px; margin:0 0 10px; font-weight:400; }
-    .section-sub{color:var(--muted); margin:0 0 20px; max-width:70ch; font-weight:300}
-    .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
-    .grid2{display:grid; grid-template-columns: repeat(2, 1fr); gap:16px}
-    .kpi{font-size:13px; color:var(--muted); margin:10px 0 0}
-    .product h3{margin:0 0 8px; font-family:'DM Serif Display',serif; font-size:20px; font-weight:400}
-    .product ul{margin:10px 0 0; padding-left:18px; color:var(--muted); font-weight:300}
-    .product li{margin:6px 0; line-height:1.4}
-    .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
-    .faq details{
-      border:1px solid var(--border); border-radius:16px;
-      padding:14px 18px; background: rgba(232,209,255,.12);
-      margin-bottom:10px; transition: background .18s;
-    }
-    .faq details[open]{background: rgba(232,209,255,.25)}
-    .faq summary{cursor:pointer; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center}
-    .faq summary::after{content:'＋'; font-size:18px; color:var(--accent); transition:transform .2s}
-    .faq details[open] summary::after{transform:rotate(45deg)}
-    .faq p{color:var(--muted); margin:10px 0 0; font-weight:300}
-    input, textarea{
-      width:100%; margin-top:6px; padding:11px 14px;
-      border-radius:14px; border:1.5px solid var(--border);
-      background: var(--beige); color:var(--text);
-      font-family:inherit; font-size:14px;
-      outline:none; transition:border-color .18s;
-    }
-    input:focus, textarea:focus{border-color:var(--accent)}
-    label{font-size:14px; font-weight:500; color:var(--muted)}
-    footer{ padding:28px 0 44px; border-top:1px solid var(--border); color:var(--muted); font-size:13px; }
-    @media (max-width: 900px){
-      .hero-grid{grid-template-columns:1fr}
-      .h-title{font-size:34px}
-      .grid3,.grid2{grid-template-columns:1fr}
-      .nav{flex-wrap:wrap}
+    .dot.active { background: var(--accent2); transform: scale(1.35); }
+
+    /* Nav home */
+    header .nav { height: auto; padding: 14px 0; }
+    .brand { font-weight: 700; font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: .01em; color: inherit; }
+    .brand img { height: 80px; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .h-title { font-size: 34px; }
     }
   </style>
 </head>
@@ -192,7 +88,7 @@
   <div class="container">
     <div class="nav">
       <a class="brand" href="/en/">
-        <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" />
       </a>
       <nav class="navlinks" aria-label="Navigation">
         <a href="#products">Products</a>
@@ -212,9 +108,7 @@
 
       <div class="card">
         <h1 class="h-title">Veterinary equipment<br/>built for the field.</h1>
-        <p class="h-sub">
-          Solutions designed for veterinary teams to improve safety, comfort and efficiency every day.
-        </p>
+        <p class="h-sub">Solutions designed for veterinary teams to improve safety, comfort and efficiency every day.</p>
         <div class="cta">
           <a class="btn primary" href="#products">View products</a>
           <a class="btn" href="#order">How to order</a>
@@ -229,24 +123,16 @@
 
       <div class="carousel-wrap" id="carousel">
         <div class="carousel-track" id="carouselTrack">
-
           <div class="carousel-slide" style="padding:0">
-            <img src="/PetHolderMixed.png" alt="Pet Holder"
-            style="width:100%;height:100%;object-fit:contain;background:#f5e6d8">
+            <img src="/PetHolderMixed.png" alt="Pet Holder" style="width:100%;height:100%;object-fit:contain;background:#f5e6d8">
           </div>
-
           <div class="carousel-slide" style="padding:0">
-            <img src="/PetAnesth.jpg" alt="PetAnesth"
-            style="width:100%;height:100%;object-fit:cover" />
+            <img src="/PetAnesth.jpg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
           </div>
-
           <div class="carousel-slide" style="padding:0">
-            <img src="/PetAnesth2.jpg" alt="PetAnesth"
-            style="width:100%;height:100%;object-fit:cover" />
+            <img src="/PetAnesth2.jpg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
           </div>
-
         </div>
-
         <button class="carousel-btn prev" id="prevBtn" aria-label="Previous image">‹</button>
         <button class="carousel-btn next" id="nextBtn" aria-label="Next image">›</button>
         <div class="carousel-dots" id="carouselDots"></div>
@@ -258,10 +144,7 @@
   <section id="products">
     <div class="container">
       <h2 class="section-title">Products</h2>
-      <p class="section-sub">
-        Two flagship devices to improve restraint and safety during routine procedures
-        (radiology, minor surgeries, anaesthesia…).
-      </p>
+      <p class="section-sub">Two flagship devices to improve restraint and safety during routine procedures (radiology, minor surgeries, anaesthesia…).</p>
       <div class="grid2">
         <div class="card product">
           <h3>PetHolder</h3>
@@ -274,7 +157,6 @@
           </ul>
           <div class="cta"><a class="btn primary" href="/en/PetHolder.html">Product sheet</a></div>
         </div>
-
         <div class="card product">
           <h3>PetAnesth</h3>
           <p style="color:var(--muted);margin:0;font-weight:300">A reliable holding accessory for safer, simpler anaesthesia procedures.</p>
@@ -293,9 +175,7 @@
     <div class="container">
       <div class="card">
         <h2 class="section-title">How to order</h2>
-        <p class="section-sub">
-          To place an order, please contact us directly via the contact form, specifying the product(s) and quantities required.
-        </p>
+        <p class="section-sub">To place an order, please contact us directly via the contact form, specifying the product(s) and quantities required.</p>
         <div class="cta">
           <a class="btn primary" href="#contact">Contact VetoProtec</a>
           <a class="btn" href="#faq">View FAQ</a>
@@ -308,10 +188,7 @@
     <div class="container">
       <div class="card">
         <h2 class="section-title">About</h2>
-        <p class="section-sub">
-          VetoProtec develops equipment designed from real field needs,
-          with one simple goal: making certain procedures safer and easier for veterinary teams.
-        </p>
+        <p class="section-sub">VetoProtec develops equipment designed from real field needs, with one simple goal: making certain procedures safer and easier for veterinary teams.</p>
         <div class="pillrow">
           <span class="pill">Practical innovation</span>
           <span class="pill">Built for teams</span>
@@ -383,11 +260,11 @@
 
 <footer>
   <div class="container">
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div class="footer-inner">
       <div>© <span id="y"></span> VetoProtec</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap">
-        <a href="/mentions-legales.html" style="text-decoration:none;transition:color .15s">Legal notice</a>
-        <a href="/cgv.html" style="text-decoration:none;transition:color .15s">Terms & Conditions</a>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Legal notice</a>
+        <a href="/cgv.html">Terms & Conditions</a>
       </div>
     </div>
   </div>
@@ -400,8 +277,7 @@
   const slides = track.querySelectorAll(".carousel-slide");
   const dotsEl = document.getElementById("carouselDots");
   const total  = slides.length;
-  let current  = 0;
-  let timer;
+  let current  = 0, timer;
 
   slides.forEach((_, i) => {
     const dot = document.createElement("button");
@@ -414,9 +290,7 @@
   function goTo(index) {
     current = (index + total) % total;
     track.style.transform = `translateX(-${current * 100}%)`;
-    dotsEl.querySelectorAll(".dot").forEach((d, i) =>
-      d.classList.toggle("active", i === current)
-    );
+    dotsEl.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === current));
     resetTimer();
   }
 
@@ -462,20 +336,14 @@
       const data = await res.json();
       if (res.ok) {
         feedback.textContent = "✅ Message sent! We'll get back to you soon.";
-        feedback.style.background = "#f0fdf4";
-        feedback.style.color = "#166534";
-        feedback.style.border = "1px solid #bbf7d0";
-        feedback.style.display = "block";
+        feedback.style.cssText = "background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500";
         document.getElementById("contactForm").reset();
       } else {
         throw new Error(data.error || "Unknown error");
       }
     } catch (err) {
       feedback.textContent = "❌ " + (err.message || "Something went wrong. Please try again.");
-      feedback.style.background = "#fef2f2";
-      feedback.style.color = "#991b1b";
-      feedback.style.border = "1px solid #fecaca";
-      feedback.style.display = "block";
+      feedback.style.cssText = "background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500";
     } finally {
       btn.textContent = "Send";
       btn.disabled = false;
