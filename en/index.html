@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* ── Styles spécifiques en/index ── */
     .hero { padding: 72px 0 28px; }
     .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: stretch; }
 
@@ -21,9 +20,28 @@
     .h-sub { color: var(--muted); font-size: 16px; margin: 0 0 24px; max-width: 54ch; font-weight: 300; }
     .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 
-    .product h3 { margin: 0 0 8px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; }
-    .product ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-weight: 300; }
+    /* Product cards with background image */
+    .product { position: relative; overflow: hidden; }
+    .product h3 { margin: 0 0 8px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; position: relative; z-index: 1; }
+    .product ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-weight: 300; position: relative; z-index: 1; }
     .product li { margin: 6px 0; line-height: 1.4; }
+    .product > p { position: relative; z-index: 1; }
+    .product .cta { position: relative; z-index: 1; }
+
+    .product-bg {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      width: 65%;
+      max-width: 260px;
+      height: 90%;
+      object-fit: contain;
+      opacity: 0.1;
+      pointer-events: none;
+      filter: grayscale(20%);
+      transition: opacity 0.3s ease;
+    }
+    .card.product:hover .product-bg { opacity: 0.16; }
 
     /* Carrousel */
     .carousel-wrap {
@@ -71,7 +89,6 @@
     }
     .dot.active { background: var(--accent2); transform: scale(1.35); }
 
-    /* Nav home */
     header .nav { height: auto; padding: 14px 0; }
     .brand { font-weight: 700; font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: .01em; color: inherit; }
     .brand img { height: 80px; }
@@ -146,7 +163,9 @@
       <h2 class="section-title">Products</h2>
       <p class="section-sub">Two flagship devices to improve restraint and safety during routine procedures (radiology, minor surgeries, anaesthesia…).</p>
       <div class="grid2">
+
         <div class="card product">
+          <img src="/petholder_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetHolder</h3>
           <p style="color:var(--muted);margin:0;font-weight:300">Suction cup system to stabilise a sedated animal on a smooth table.</p>
           <ul>
@@ -157,7 +176,9 @@
           </ul>
           <div class="cta"><a class="btn primary" href="/en/PetHolder.html">Product sheet</a></div>
         </div>
+
         <div class="card product">
+          <img src="/petanesth_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetAnesth</h3>
           <p style="color:var(--muted);margin:0;font-weight:300">A reliable holding accessory for safer, simpler anaesthesia procedures.</p>
           <ul>
@@ -167,6 +188,7 @@
           </ul>
           <div class="cta"><a class="btn primary" href="/en/PetAnesth.html">Product sheet</a></div>
         </div>
+
       </div>
     </div>
   </section>
