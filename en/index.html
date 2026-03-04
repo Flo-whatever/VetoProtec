@@ -28,42 +28,50 @@
     .product > p { position: relative; z-index: 1; }
     .product .cta { position: relative; z-index: 1; }
 
-   .product-bg {
-     position: absolute;
-     bottom: -20px;
-     right: -20px;
-     width: 80%;
-     max-width: 340px;
-     height: 105%;
-     object-fit: contain;
-     opacity: 0.1;
-     pointer-events: none;
-     filter: grayscale(20%);
-     transition: opacity 0.3s ease;
-       }
+    .product-bg {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 80%;
+      max-width: 340px;
+      height: 105%;
+      object-fit: contain;
+      opacity: 0.1;
+      pointer-events: none;
+      filter: grayscale(20%);
+      transition: opacity 0.3s ease;
+    }
     .card.product:hover .product-bg { opacity: 0.16; }
 
-    /* Carrousel */
+    /* Carrousel — fixed height */
     .carousel-wrap {
       border: 1px solid var(--border); border-radius: 20px;
-      overflow: hidden; position: relative; min-height: 260px;
+      overflow: hidden; position: relative;
+      height: 360px;
       box-shadow: 0 4px 24px rgba(192,132,200,.1);
     }
     .carousel-track {
-      display: flex; height: 100%; min-height: 260px;
+      display: flex; height: 100%;
       transition: transform .45s cubic-bezier(.4,0,.2,1);
     }
     .carousel-slide {
-      min-width: 100%; min-height: 260px;
+      min-width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 10px;
       font-weight: 600; font-size: 15px; color: var(--muted);
-      text-align: center; padding: 28px;
+      text-align: center; overflow: hidden;
     }
     .carousel-slide:nth-child(1) { background: linear-gradient(140deg, #fce7f3, #e9d5ff); }
     .carousel-slide:nth-child(2) { background: linear-gradient(140deg, #f5e6d8, #fce7f3); }
     .carousel-slide:nth-child(3) { background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
     .carousel-slide:nth-child(4) { background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
+    .carousel-slide:nth-child(5) { background: linear-gradient(140deg, #e9d5ff, #fce7f3); }
+    .carousel-slide:nth-child(6) { background: linear-gradient(140deg, #f5e6d8, #e9d5ff); }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       width: 38px; height: 38px; border-radius: 50%;
@@ -96,6 +104,7 @@
     @media (max-width: 900px) {
       .hero-grid { grid-template-columns: 1fr; }
       .h-title { font-size: 34px; }
+      .carousel-wrap { height: 260px; }
     }
   </style>
 </head>
@@ -140,23 +149,23 @@
 
       <div class="carousel-wrap" id="carousel">
         <div class="carousel-track" id="carouselTrack">
-          <div class="carousel-slide" style="padding:0">
-            <img src="/PetHolderMixed.png" alt="Pet Holder" style="width:100%;height:100%;object-fit:contain;background:#f5e6d8">
+          <div class="carousel-slide">
+            <img src="/PetHolderMixed.png" alt="Pet Holder" />
           </div>
-          <div class="carousel-slide" style="padding:0">
-            <img src="/PetAnesth.jpg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
+          <div class="carousel-slide">
+            <img src="/PetAnesth.jpg" alt="PetAnesth" />
           </div>
-          <div class="carousel-slide" style="padding:0">
-            <img src="/PetAnesth2.jpg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
+          <div class="carousel-slide">
+            <img src="/PetAnesth2.jpg" alt="PetAnesth" />
           </div>
-          <div class="carousel-slide" style="padding:0">
-            <img src="/PetAnesth3.jpeg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
+          <div class="carousel-slide">
+            <img src="/PetAnesth3.jpeg" alt="PetAnesth" />
           </div>
-          <div class="carousel-slide" style="padding:0">
-            <img src="/NAC1.jpeg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
+          <div class="carousel-slide">
+            <img src="/NAC1.jpeg" alt="NAC" />
           </div>
-          <div class="carousel-slide" style="padding:0">
-            <img src="/NAC2.jpeg" alt="PetAnesth" style="width:100%;height:100%;object-fit:cover" />
+          <div class="carousel-slide">
+            <img src="/NAC2.jpeg" alt="NAC" />
           </div>
         </div>
         <button class="carousel-btn prev" id="prevBtn" aria-label="Previous image">‹</button>
