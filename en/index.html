@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VetoProtec — Veterinary Equipment</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="description" content="VetoProtec designs veterinary equipment for safer, simpler and more efficient practices." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
@@ -60,6 +60,7 @@
       transition: transform .45s cubic-bezier(.4,0,.2,1);
     }
     .carousel-slide {
+      position: relative;
       min-width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 10px;
@@ -156,21 +157,23 @@
         <div class="carousel-track" id="carouselTrack">
           <div class="carousel-slide">
             <img src="/PetHolderMixed.png" alt="Pet Holder" />
+            <span class="carousel-label">PetHolder</span>
           </div>
           <div class="carousel-slide">
             <img src="/PetAnesth.jpg" alt="PetAnesth" />
+            <span class="carousel-label">PetAnesth</span>
           </div>
           <div class="carousel-slide">
             <img src="/PetAnesth2.jpg" alt="PetAnesth" />
+            <span class="carousel-label">PetAnesth & PetHolder</span>
           </div>
           <div class="carousel-slide">
             <img src="/PetAnesth3.jpeg" alt="PetAnesth" />
+            <span class="carousel-label">PetAnesth</span>
           </div>
           <div class="carousel-slide">
-            <img src="/NAC1.jpeg" alt="NAC" />
-          </div>
-          <div class="carousel-slide">
-            <img src="/NAC2.jpeg" alt="NAC" />
+            <img src="/mixed.png" alt="NAC" />
+            <span class="carousel-label">PetHolder</span>
           </div>
         </div>
         <button class="carousel-btn prev" id="prevBtn" aria-label="Previous image">‹</button>
@@ -190,12 +193,14 @@
         <div class="card product">
           <img src="/petholder_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetHolder</h3>
-          <p style="color:var(--muted);margin:0;font-weight:300">Suction cup system to stabilise a sedated animal on a smooth table.</p>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
+          Suction cup system to stabilise sedated animals during veterinary examinations and procedures.</p>
+          <p style="color:var(--muted);margin:0;font-weight:300">Designed to hold the animal in position during examinations or minor procedures, PetHolder improves safety and reduces handling by staff.</p>
           <ul>
-            <li>Compatible surfaces: glass, metal, plastic, stainless steel (smooth non-porous surfaces).</li>
-            <li>Diameter: 82.6 mm • Holding force: 5 to 10 kg / cup (shear force on smooth surface).</li>
-            <li>Indications: radiology, minor procedures, gentle restraint under sedation.</li>
-            <li>Recommendation: use only on sedated animals.</li>
+            <li>Gentle and effective stabilisation of animals under sedation.</li>
+            <li>Ideal for radiology, minor procedures and certain examinations.</li>
+            <li>Strong adhesion on smooth surfaces: glass, metal, plastic, stainless steel.</li>
+            <li>Holding force up to 5–10 kg per suction cup on smooth surfaces.</li>
           </ul>
           <div class="cta"><a class="btn primary" href="/en/PetHolder.html">Product sheet</a></div>
         </div>
@@ -203,11 +208,14 @@
         <div class="card product">
           <img src="/petanesth_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetAnesth</h3>
-          <p style="color:var(--muted);margin:0;font-weight:300">A reliable holding accessory for safer, simpler anaesthesia procedures.</p>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
+          Anaesthesia circuit support for veterinary use.</p>
+          <p style="color:var(--muted);margin:0;font-weight:300">Designed to stabilise the breathing circuit and secure anaesthetic procedures in the operating room.</p>
           <ul>
-            <li>Goal: more safety, more comfort, more efficiency every day.</li>
-            <li>Designed to eliminate improvised setups and secure the procedure.</li>
-            <li>Clamp compatible with tables up to 5 cm thick.</li>
+            <li>Improves anaesthetic safety by reducing traction on the endotracheal tube.</li>
+            <li>Optimises operating room ergonomics and clears the surgical field.</li>
+            <li>Eliminates improvised setups and standardises circuit placement.</li>
+            <li>Quick attachment to veterinary tables (compatible up to 5 cm thickness).</li>
           </ul>
           <div class="cta"><a class="btn primary" href="/en/PetAnesth.html">Product sheet</a></div>
         </div>
@@ -266,16 +274,12 @@
         <p>On smooth, non-porous surfaces (e.g. glass, metal, plastic, stainless steel). Adhesion depends on the cleanliness and flatness of the surface.</p>
       </details>
       <details>
-        <summary>Can it be used on a non-sedated animal?</summary>
+        <summary>Can the PetHolder be used on a non-sedated animal?</summary>
         <p>No. The device is intended for use on sedated animals only, to avoid sudden movements.</p>
       </details>
       <details>
         <summary>What is the maximum table thickness for the PetAnesth clamp?</summary>
         <p>The clamp opens up to 5 cm. An adapter can be requested for thicker tables.</p>
-      </details>
-      <details>
-        <summary>How can I get a technical datasheet?</summary>
-        <p>Via the contact form — please specify your clinic and your need (radiology, anaesthesia…).</p>
       </details>
     </div>
   </section>
