@@ -12,8 +12,8 @@
   <meta name="description" content="PetHolder : dispositif de contention par ventouses pour animaux sédatés. Stabilisation fiable lors des examens radiologiques et interventions vétérinaires." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
-    /* ── Styles spécifiques PetHolder ── */
     .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
 
     .product-title {
@@ -30,6 +30,18 @@
         radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
         radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
+    }
+
+    .model-section {
+      margin: 24px 0 0;
+    }
+    .model-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
     }
   </style>
 </head>
@@ -63,6 +75,20 @@
         PetHolder est un dispositif de contention conçu pour maintenir les animaux sédatés en position stable sur surface lisse, lors d'examens radiologiques, de petites interventions chirurgicales ou d'actes de médecine générale.<br/><br/>
         Grâce à ses ventouses haute adhérence, il assure une fixation fiable tout en garantissant la sécurité de l'animal et du personnel soignant.
       </p>
+
+      <!-- Modèle 3D interactif -->
+      <div class="model-section">
+        <model-viewer
+          src="/petholder.glb"
+          alt="PetHolder modèle 3D interactif"
+          auto-rotate
+          camera-controls
+          shadow-intensity="1"
+          style="width:100%; height:340px; border-radius:16px; background: linear-gradient(160deg, #fce7f3, #e9d5ff);"
+        ></model-viewer>
+        <p class="model-label">↺ Tournez le modèle à la souris ou au doigt</p>
+      </div>
+
       <div class="hero-cta">
         <a class="btn primary" href="/#contact">Commander</a>
       </div>
