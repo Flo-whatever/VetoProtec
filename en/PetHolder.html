@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PetHolder — Suction Cup Restraint System — VetoProtec</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="description" content="PetHolder: suction cup restraint device for sedated animals. Reliable stabilisation during radiological examinations and veterinary procedures." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
-    /* ── Styles spécifiques EN/PetHolder ── */
     .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
 
     .product-title {
@@ -23,6 +23,67 @@
 
     .cta-section {
       background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08));
+    }
+
+    body {
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
+        var(--bg);
+    }
+
+    .model-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Hero layout ── */
+    .product-hero {
+      display: block !important;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .hero-text {
+      margin-bottom: 32px;
+    }
+
+    .hero-visuals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .hero-visuals .product-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .hero-visuals .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-3d {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+      .hero-visuals {
+        grid-template-columns: 1fr;
+      }
+      .hero-visuals .product-img-wrap {
+        height: 260px;
+      }
     }
   </style>
 </head>
@@ -42,24 +103,39 @@
 
 <main>
 
-  <div class="product-hero">
+  <div class="product-hero fade-up">
 
-    <div class="product-img-wrap">
-      <img src="/PetHolderMixed.png" alt="PetHolder in clinical use" />
-    </div>
-
-    <div>
+    <!-- Text full width on top -->
+    <div class="hero-text fade-up--delay">
       <div class="badge badge--rose">🐾 Professional veterinary equipment</div>
       <h1 class="product-title">PetHolder</h1>
       <p class="product-tagline">Suction cup restraint system for sedated animals</p>
       <p class="product-desc">
-        PetHolder is a restraint device designed to keep sedated animals in a stable position on a smooth surface during radiological examinations, minor surgical procedures or general veterinary care.<br/><br/>
+        PetHolder is a restraint device designed to keep sedated animals in a stable position on a smooth surface during radiological examinations, minor surgical procedures or general veterinary care.
         Its high-adhesion suction cups provide reliable fixation while ensuring the safety of both the animal and the care team.
       </p>
       <div class="hero-cta">
         <a class="btn primary" href="/en/#contact">Order</a>
       </div>
       <div class="warning-badge">⚠️ For use on sedated animals only</div>
+    </div>
+
+    <!-- Photo + 3D side by side -->
+    <div class="hero-visuals">
+      <div class="product-img-wrap">
+        <img src="/PetHolderMixed.png" alt="PetHolder in clinical use" />
+      </div>
+      <div class="hero-3d">
+        <model-viewer
+          src="/petholder.glb"
+          alt="PetHolder interactive 3D model"
+          auto-rotate
+          camera-controls
+          shadow-intensity="1"
+          style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #fce7f3, #e9d5ff);"
+        ></model-viewer>
+        <p class="model-label">↺ Rotate the model with mouse or finger</p>
+      </div>
     </div>
 
   </div>
