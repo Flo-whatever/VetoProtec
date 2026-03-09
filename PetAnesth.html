@@ -12,18 +12,14 @@
   <meta name="description" content="PetAnesth : dispositif de maintien pour circuits d'anesthésie vétérinaire. Sécurisez vos procédures et stabilisez vos circuits au bloc opératoire." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
-    /* ── Styles spécifiques PetAnesth ── */
     body {
       background:
         radial-gradient(900px 600px at 20% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
         radial-gradient(600px 400px at 100% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
     }
-
-    /* Image à droite */
-    .product-hero .text-col { order: 1; }
-    .product-hero .img-col  { order: 2; }
 
     .product-img-wrap { background: linear-gradient(160deg, var(--accent3), var(--beige)); }
 
@@ -34,6 +30,61 @@
 
     .cta-section {
       background: linear-gradient(135deg, rgba(233,213,255,.25), rgba(244,114,182,.08));
+    }
+
+    .model-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Hero layout ── */
+    .product-hero {
+      display: block !important;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .hero-text {
+      margin-bottom: 32px;
+    }
+
+    .hero-visuals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .hero-visuals .product-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .hero-visuals .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: var(--beige);
+    }
+
+    .hero-3d {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+      .hero-visuals {
+        grid-template-columns: 1fr;
+      }
+      .hero-visuals .product-img-wrap {
+        height: 260px;
+      }
     }
   </style>
 </head>
@@ -53,9 +104,10 @@
 
 <main>
 
-  <div class="product-hero">
+  <div class="product-hero fade-up">
 
-    <div class="text-col">
+    <!-- Texte pleine largeur en haut -->
+    <div class="hero-text fade-up--delay">
       <div class="badge badge--violet">🩺 Équipement bloc opératoire vétérinaire</div>
       <h1 class="product-title">PetAnesth</h1>
       <p class="product-tagline">Dispositif de maintien pour circuits d'anesthésie vétérinaire</p>
@@ -68,9 +120,21 @@
       </div>
     </div>
 
-    <div class="img-col">
+    <!-- Photo + 3D côte à côte -->
+    <div class="hero-visuals">
       <div class="product-img-wrap">
-        <img src="/PetAnesth.jpg" alt="PetAnesth en examen" style="width:100%;height:100%;object-fit:contain;background:var(--beige)" />
+        <img src="/PetAnesth.jpg" alt="PetAnesth en examen" />
+      </div>
+      <div class="hero-3d">
+        <model-viewer
+          src="/PetAnesth.glb"
+          alt="PetAnesth modèle 3D interactif"
+          auto-rotate
+          camera-controls
+          shadow-intensity="1"
+          style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #e9d5ff, #f5e6d8);"
+        ></model-viewer>
+        <p class="model-label">↺ Tournez le modèle à la souris ou au doigt</p>
       </div>
     </div>
 
