@@ -32,9 +32,6 @@
         var(--bg);
     }
 
-    .model-section {
-      margin: 24px 0 0;
-    }
     .model-label {
       font-size: 12px;
       font-weight: 500;
@@ -42,6 +39,51 @@
       text-align: center;
       margin-top: 8px;
       letter-spacing: 0.05em;
+    }
+
+    /* ── Nouveau layout hero ── */
+    .product-hero {
+      display: block !important;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .hero-text {
+      margin-bottom: 32px;
+    }
+
+    .hero-visuals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .hero-visuals .product-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .hero-visuals .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-3d {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+      .hero-visuals {
+        grid-template-columns: 1fr;
+      }
+      .hero-visuals .product-img-wrap {
+        height: 260px;
+      }
     }
   </style>
 </head>
@@ -63,36 +105,37 @@
 
   <div class="product-hero fade-up">
 
-    <div class="product-img-wrap">
-      <img src="/PetHolderMixed.png" alt="PetHolder en situation clinique" />
-    </div>
-
-    <div class="fade-up--delay">
+    <!-- Texte pleine largeur en haut -->
+    <div class="hero-text fade-up--delay">
       <div class="badge badge--rose">🐾 Équipement vétérinaire professionnel</div>
       <h1 class="product-title">PetHolder</h1>
       <p class="product-tagline">Système de contention par ventouses pour animaux sédatés</p>
       <p class="product-desc">
-        PetHolder est un dispositif de contention conçu pour maintenir les animaux sédatés en position stable sur surface lisse, lors d'examens radiologiques, de petites interventions chirurgicales ou d'actes de médecine générale.<br/><br/>
+        PetHolder est un dispositif de contention conçu pour maintenir les animaux sédatés en position stable sur surface lisse, lors d'examens radiologiques, de petites interventions chirurgicales ou d'actes de médecine générale.
         Grâce à ses ventouses haute adhérence, il assure une fixation fiable tout en garantissant la sécurité de l'animal et du personnel soignant.
       </p>
-
-      <!-- Modèle 3D interactif -->
-      <div class="model-section">
-        <model-viewer
-          src="/petholder.glb"
-          alt="PetHolder modèle 3D interactif"
-          auto-rotate
-          camera-controls
-          shadow-intensity="1"
-          style="width:100%; height:340px; border-radius:16px; background: linear-gradient(160deg, #fce7f3, #e9d5ff);"
-        ></model-viewer>
-        <p class="model-label">↺ Tournez le modèle à la souris ou au doigt</p>
-      </div>
-
       <div class="hero-cta">
         <a class="btn primary" href="/#contact">Commander</a>
       </div>
       <div class="warning-badge">⚠️ Utilisation exclusivement sur animaux sédatés</div>
+    </div>
+
+    <!-- Photo + 3D côte à côte -->
+    <div class="hero-visuals">
+      <div class="product-img-wrap">
+        <img src="/PetHolderMixed.png" alt="PetHolder en situation clinique" />
+      </div>
+      <div class="hero-3d">
+        <model-viewer
+          src="/models/petholder.glb"
+          alt="PetHolder modèle 3D interactif"
+          auto-rotate
+          camera-controls
+          shadow-intensity="1"
+          style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #fce7f3, #e9d5ff);"
+        ></model-viewer>
+        <p class="model-label">↺ Tournez le modèle à la souris ou au doigt</p>
+      </div>
     </div>
 
   </div>
