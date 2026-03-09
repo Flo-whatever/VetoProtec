@@ -5,25 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PetAnesth — Anaesthesia Circuit Holder — VetoProtec</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
   <meta name="description" content="PetAnesth: anaesthesia circuit holding device for veterinary use. Secure your procedures and stabilise your circuits in the operating room." />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
-    /* ── Styles spécifiques EN/PetAnesth ── */
     body {
       background:
         radial-gradient(900px 600px at 20% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
         radial-gradient(600px 400px at 100% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
     }
-
-    /* Image à droite */
-    .product-hero .text-col { order: 1; }
-    .product-hero .img-col  { order: 2; }
 
     .product-img-wrap { background: linear-gradient(160deg, var(--accent3), var(--beige)); }
 
@@ -34,6 +30,61 @@
 
     .cta-section {
       background: linear-gradient(135deg, rgba(233,213,255,.25), rgba(244,114,182,.08));
+    }
+
+    .model-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Hero layout ── */
+    .product-hero {
+      display: block !important;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .hero-text {
+      margin-bottom: 32px;
+    }
+
+    .hero-visuals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .hero-visuals .product-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .hero-visuals .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: var(--beige);
+    }
+
+    .hero-3d {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 768px) {
+      .hero-visuals {
+        grid-template-columns: 1fr;
+      }
+      .hero-visuals .product-img-wrap {
+        height: 260px;
+      }
     }
   </style>
 </head>
@@ -53,9 +104,10 @@
 
 <main>
 
-  <div class="product-hero">
+  <div class="product-hero fade-up">
 
-    <div class="text-col">
+    <!-- Text full width on top -->
+    <div class="hero-text fade-up--delay">
       <div class="badge badge--violet">🩺 Veterinary operating room equipment</div>
       <h1 class="product-title">PetAnesth</h1>
       <p class="product-tagline">Anaesthesia circuit holding device for veterinary use</p>
@@ -68,9 +120,21 @@
       </div>
     </div>
 
-    <div class="img-col">
+    <!-- Photo + 3D side by side -->
+    <div class="hero-visuals">
       <div class="product-img-wrap">
-        <img src="/PetAnesth.jpg" alt="PetAnesth in use" style="width:100%;height:100%;object-fit:contain;background:var(--beige)" />
+        <img src="/PetAnesth.jpg" alt="PetAnesth in use" />
+      </div>
+      <div class="hero-3d">
+        <model-viewer
+          src="/PetAnesth.glb"
+          alt="PetAnesth interactive 3D model"
+          auto-rotate
+          camera-controls
+          shadow-intensity="1"
+          style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #e9d5ff, #f5e6d8);"
+        ></model-viewer>
+        <p class="model-label">↺ Rotate the model with mouse or finger</p>
       </div>
     </div>
 
