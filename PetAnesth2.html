@@ -118,29 +118,45 @@
       margin-left: 2px;
     }
 
+    /* ── Vue principale : hauteur fixe et explicite, jamais auto ── */
     .main-view {
       flex: 1;
+      /* Hauteur fixée en px ET en hauteur min — Android ne peut pas
+         l'effondrer même si le contenu interne change de display */
+      height: 380px;
+      min-height: 380px;
       position: relative;
       border-radius: 20px;
-      overflow: hidden;
+      /* PAS de overflow:hidden ici — c'était l'autre déclencheur du reflow */
       background: linear-gradient(160deg, var(--accent3, #e9d5ff), var(--beige, #f5efe8));
-      height: 380px;
-      display: flex; align-items: center; justify-content: center;
     }
 
+    /* ── Slides : toutes positionnées en absolute dans .main-view ──
+       On ne touche JAMAIS à display — on joue uniquement sur
+       opacity + pointer-events, ce qui ne déclenche aucun reflow     */
     .main-slide {
-      display: none;
-      width: 100%; height: 100%;
-      align-items: center; justify-content: center;
-      position: relative;
+      position: absolute;
+      inset: 0;
+      display: flex;                 /* toujours flex, jamais changé */
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      border-radius: 20px;
+      overflow: hidden;
     }
-    .main-slide.active { display: flex; }
+    .main-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     .main-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    /* ── YouTube : iframe pré-créée + overlay superposé ── */
+    /* ── YouTube ── */
     .yt-container {
-      position: relative;
-      width: 100%; height: 100%;
+      position: absolute;
+      inset: 0;
     }
     .yt-container iframe {
       position: absolute; inset: 0;
@@ -153,6 +169,12 @@
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       z-index: 2;
+      /* opacity plutôt que display:none pour rester cohérent */
+      transition: opacity 0.15s;
+    }
+    .yt-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
     .yt-overlay img.yt-poster {
       position: absolute; inset: 0;
@@ -191,11 +213,11 @@
       font-size: 12px; font-weight: 500;
       color: #fff; background: rgba(0,0,0,.42);
       border-radius: 20px; padding: 3px 10px;
-      pointer-events: none; z-index: 4;
+      pointer-events: none; z-index: 10;
     }
     .nav-arrows {
       position: absolute; bottom: 12px; right: 12px;
-      display: flex; gap: 6px; z-index: 5;
+      display: flex; gap: 6px; z-index: 10;
     }
     .nav-btn {
       width: 32px; height: 32px;
@@ -226,7 +248,12 @@
         padding-right: 0; padding-bottom: 2px;
       }
       .thumb { flex-shrink: 0; }
-      .main-view { height: 260px; border-radius: 16px; }
+      .main-view {
+        height: 260px;
+        min-height: 260px;
+        border-radius: 16px;
+      }
+      .main-slide { border-radius: 16px; }
     }
   </style>
 </head>
@@ -429,6 +456,9 @@
   // ── Construit les slides ──
   MEDIA.forEach(function (m, i) {
     var slide = document.createElement('div');
+    // Toutes les slides sont position:absolute dans .main-view
+    // La visibilité est gérée UNIQUEMENT via opacity + pointer-events
+    // → aucun reflow, aucun recalcul de layout sur Android
     slide.className = 'main-slide' + (i === 0 ? ' active' : '');
     slide.id = 'pa-slide-' + i;
 
@@ -438,16 +468,19 @@
       img.alt = m.alt;
       slide.appendChild(img);
 
+      if (m.label) {
+        var tag = document.createElement('div');
+        tag.className = 'slide-label';
+        tag.textContent = m.label;
+        slide.appendChild(tag);
+      }
+
     } else if (m.type === 'youtube') {
       var ytWrap = document.createElement('div');
       ytWrap.className = 'yt-container';
       ytWrap.id = 'pa-yt-' + i;
 
-      // ── FIX ANDROID ──────────────────────────────────────────────────────
-      // L'iframe est créée UNE SEULE FOIS dans le DOM, avec src vide.
-      // Au clic on change uniquement son attribut src — aucun nœud ajouté/
-      // supprimé → pas de reflow → le bloc ne disparaît plus sur Android.
-      // ─────────────────────────────────────────────────────────────────────
+      // iframe pré-créée avec src vide — jamais retirée du DOM
       var iframe = document.createElement('iframe');
       iframe.id = 'pa-yt-iframe-' + i;
       iframe.src = '';
@@ -455,7 +488,7 @@
       iframe.allowFullscreen = true;
       ytWrap.appendChild(iframe);
 
-      // Overlay poster + bouton play (par-dessus l'iframe vide)
+      // Overlay poster + bouton play
       var overlay = document.createElement('div');
       overlay.className = 'yt-overlay';
       overlay.id = 'pa-yt-overlay-' + i;
@@ -475,12 +508,12 @@
       ytLbl.textContent = '▶ Lancer la vidéo';
       overlay.appendChild(ytLbl);
 
-      // Clic : active le src, masque l'overlay — sans toucher au DOM
+      // Clic : change le src, masque via classe CSS (opacity, pas display)
       overlay.addEventListener('click', (function(iframeEl, videoId, overlayEl) {
         return function() {
           iframeEl.src = 'https://www.youtube.com/embed/' + videoId
             + '?autoplay=1&rel=0&modestbranding=1';
-          overlayEl.style.display = 'none';
+          overlayEl.classList.add('hidden');
         };
       })(iframe, m.videoId, overlay));
 
@@ -488,24 +521,16 @@
       slide.appendChild(ytWrap);
     }
 
-    if (m.label && m.type === 'image') {
-      var tag = document.createElement('div');
-      tag.className = 'slide-label';
-      tag.textContent = m.label;
-      slide.appendChild(tag);
-    }
-
     mainViewEl.appendChild(slide);
   });
 
-  // Compteur
+  // Compteur et flèches — positionnés dans .main-view (z-index élevé)
   var counter = document.createElement('div');
   counter.className = 'slide-counter';
   counter.id = 'pa-counter';
   counter.textContent = '1 / ' + MEDIA.length;
   mainViewEl.appendChild(counter);
 
-  // Flèches ← →
   var nav = document.createElement('div');
   nav.className = 'nav-arrows';
   ['←', '→'].forEach(function (ch, dir) {
@@ -520,7 +545,7 @@
   });
   mainViewEl.appendChild(nav);
 
-  // ── Construit les miniatures ──
+  // ── Miniatures ──
   MEDIA.forEach(function (m, i) {
     var t = document.createElement('div');
     t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -550,15 +575,16 @@
   function go(idx) {
     var n = ((idx % MEDIA.length) + MEDIA.length) % MEDIA.length;
 
-    // Quand on quitte la slide vidéo : vide le src (stoppe la vidéo)
-    // et réaffiche l'overlay — sans jamais modifier la structure du DOM
+    // Réinitialise la vidéo YouTube en vidant src + réaffichant l'overlay
+    // Tout se fait via attribut src et classe CSS — aucun reflow
     if (MEDIA[current].type === 'youtube') {
       var iframeEl  = document.getElementById('pa-yt-iframe-'  + current);
       var overlayEl = document.getElementById('pa-yt-overlay-' + current);
       if (iframeEl)  iframeEl.src = '';
-      if (overlayEl) overlayEl.style.display = '';
+      if (overlayEl) overlayEl.classList.remove('hidden');
     }
 
+    // Bascule active via classList — opacity change, layout intact
     document.getElementById('pa-slide-' + current).classList.remove('active');
     document.getElementById('pa-thumb-' + current).classList.remove('active');
 
@@ -572,7 +598,7 @@
     document.getElementById('pa-counter').textContent = (current + 1) + ' / ' + MEDIA.length;
   }
 
-  // Navigation clavier ← →
+  // Navigation clavier
   document.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowLeft')  go(current - 1);
     if (e.key === 'ArrowRight') go(current + 1);
