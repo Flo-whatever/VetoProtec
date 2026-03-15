@@ -61,9 +61,9 @@ header {
   box-shadow: 0 2px 8px rgba(192,132,200,.2);
 }
 .nav {
-  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  max-width: 1100px; margin: 0 auto; padding: 12px 24px;
   display: flex; align-items: center; justify-content: space-between;
-  height: 64px; gap: 16px;
+  gap: 16px;
 }
 
 /* Variante nav pour index.html (padding vertical au lieu de height fixe) */
