@@ -42,7 +42,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* ── Hero layout ── */
     .product-hero {
       display: block !important;
       max-width: 960px;
@@ -50,9 +49,7 @@
       padding: 48px 24px 0;
     }
 
-    .hero-text {
-      margin-bottom: 32px;
-    }
+    .hero-text { margin-bottom: 32px; }
 
     .hero-visuals {
       display: grid;
@@ -61,28 +58,15 @@
       align-items: start;
     }
 
-    .hero-3d {
-      display: flex;
-      flex-direction: column;
-    }
+    .hero-3d { display: flex; flex-direction: column; }
 
     @media (max-width: 768px) {
-      .hero-visuals {
-        grid-template-columns: 1fr;
-      }
+      .hero-visuals { grid-template-columns: 1fr; }
     }
 
-    /* ══════════════════════════════════════════
-       GALERIE 
-    ══════════════════════════════════════════ */
+    /* ══ GALERIE ══ */
+    .gallery-wrap { display: flex; gap: 0; width: 100%; }
 
-    .gallery-wrap {
-      display: flex;
-      gap: 0;
-      width: 100%;
-    }
-
-    /* Colonne miniatures */
     .thumb-col {
       display: flex;
       flex-direction: column;
@@ -96,59 +80,35 @@
       scrollbar-color: rgba(0,0,0,.18) transparent;
     }
     .thumb-col::-webkit-scrollbar { width: 3px; }
-    .thumb-col::-webkit-scrollbar-thumb {
-      background: rgba(0,0,0,.18);
-      border-radius: 2px;
-    }
+    .thumb-col::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 2px; }
 
     .thumb {
-      width: 58px;
-      height: 58px;
+      width: 58px; height: 58px;
       border-radius: 8px;
       border: 1.5px solid rgba(0,0,0,.12);
       cursor: pointer;
       overflow: hidden;
       flex-shrink: 0;
       background: var(--beige, #f5efe8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: border-color 0.15s, transform 0.12s;
       position: relative;
     }
-    .thumb:hover {
-      border-color: rgba(0,0,0,.35);
-      transform: scale(1.04);
-    }
-    .thumb.active {
-      border: 2px solid #c8a035;
-      box-shadow: 0 0 0 1px rgba(200,160,53,.25);
-    }
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 6px;
-    }
+    .thumb:hover { border-color: rgba(0,0,0,.35); transform: scale(1.04); }
+    .thumb.active { border: 2px solid #c8a035; box-shadow: 0 0 0 1px rgba(200,160,53,.25); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-    /* Badge play sur miniature vidéo */
     .thumb .play-badge {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: rgba(0,0,0,.32);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       border-radius: 6px;
     }
     .thumb .play-icon {
-      width: 22px;
-      height: 22px;
+      width: 22px; height: 22px;
       background: rgba(255,255,255,.92);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
     .thumb .play-icon::after {
       content: '';
@@ -158,7 +118,6 @@
       margin-left: 2px;
     }
 
-    /* Vue principale */
     .main-view {
       flex: 1;
       position: relative;
@@ -166,77 +125,50 @@
       overflow: hidden;
       background: linear-gradient(160deg, var(--accent3, #e9d5ff), var(--beige, #f5efe8));
       height: 380px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
 
     .main-slide {
       display: none;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
+      width: 100%; height: 100%;
+      align-items: center; justify-content: center;
       position: relative;
     }
     .main-slide.active { display: flex; }
+    .main-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    .main-slide img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
-
-    /* Conteneur iframe YouTube */
+    /* ── YouTube : iframe pré-créée + overlay superposé ── */
     .yt-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       position: relative;
+      width: 100%; height: 100%;
     }
     .yt-container iframe {
-      width: 100%;
-      height: 100%;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
       border: none;
-      border-radius: 0;
+      z-index: 1;
     }
-
-    /* Overlay play YouTube (avant clic) */
     .yt-overlay {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       z-index: 2;
     }
     .yt-overlay img.yt-poster {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
     }
     .yt-play-btn {
-      position: relative;
-      z-index: 3;
-      width: 72px;
-      height: 72px;
+      position: relative; z-index: 3;
+      width: 72px; height: 72px;
       background: rgba(255,255,255,.95);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       transition: transform 0.15s, background 0.15s;
       box-shadow: 0 4px 20px rgba(0,0,0,.18);
     }
-    .yt-overlay:hover .yt-play-btn {
-      transform: scale(1.08);
-      background: #fff;
-    }
+    .yt-overlay:hover .yt-play-btn { transform: scale(1.08); background: #fff; }
     .yt-play-btn::after {
       content: '';
       border-left: 26px solid #1a1a1a;
@@ -245,93 +177,53 @@
       margin-left: 6px;
     }
     .yt-label {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
+      position: absolute; bottom: 16px;
+      left: 50%; transform: translateX(-50%);
       z-index: 3;
-      font-size: 12px;
-      font-weight: 500;
-      color: #fff;
-      background: rgba(0,0,0,.5);
-      border-radius: 20px;
-      padding: 4px 12px;
-      white-space: nowrap;
-      pointer-events: none;
+      font-size: 12px; font-weight: 500;
+      color: #fff; background: rgba(0,0,0,.5);
+      border-radius: 20px; padding: 4px 12px;
+      white-space: nowrap; pointer-events: none;
     }
 
-    /* Compteur slides */
     .slide-counter {
-      position: absolute;
-      bottom: 12px;
-      left: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #fff;
-      background: rgba(0,0,0,.42);
-      border-radius: 20px;
-      padding: 3px 10px;
-      pointer-events: none;
-      z-index: 4;
+      position: absolute; bottom: 12px; left: 12px;
+      font-size: 12px; font-weight: 500;
+      color: #fff; background: rgba(0,0,0,.42);
+      border-radius: 20px; padding: 3px 10px;
+      pointer-events: none; z-index: 4;
     }
-
-    /* Flèches navigation */
     .nav-arrows {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      display: flex;
-      gap: 6px;
-      z-index: 5;
+      position: absolute; bottom: 12px; right: 12px;
+      display: flex; gap: 6px; z-index: 5;
     }
     .nav-btn {
-      width: 32px;
-      height: 32px;
+      width: 32px; height: 32px;
       background: rgba(255,255,255,.88);
       border: 0.5px solid rgba(0,0,0,.15);
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #1a1a1a;
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #1a1a1a;
       transition: background 0.12s, transform 0.1s;
       padding: 0;
     }
     .nav-btn:hover { background: #fff; transform: scale(1.08); }
     .nav-btn:active { transform: scale(0.96); }
 
-    /* Label slide en haut à gauche */
     .slide-label {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      font-size: 11px;
-      font-weight: 500;
-      background: rgba(255,255,255,.82);
-      color: #444;
-      border-radius: 4px;
-      padding: 2px 8px;
-      letter-spacing: 0.03em;
-      pointer-events: none;
-      z-index: 4;
+      position: absolute; top: 12px; left: 12px;
+      font-size: 11px; font-weight: 500;
+      background: rgba(255,255,255,.82); color: #444;
+      border-radius: 4px; padding: 2px 8px;
+      letter-spacing: 0.03em; pointer-events: none; z-index: 4;
     }
 
-    /* Responsive mobile */
     @media (max-width: 600px) {
-      .gallery-wrap {
-        flex-direction: column-reverse;
-        gap: 10px;
-      }
+      .gallery-wrap { flex-direction: column-reverse; gap: 10px; }
       .thumb-col {
-        flex-direction: row;
-        width: 100%;
-        max-height: none;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding-right: 0;
-        padding-bottom: 2px;
+        flex-direction: row; width: 100%;
+        max-height: none; overflow-x: auto; overflow-y: hidden;
+        padding-right: 0; padding-bottom: 2px;
       }
       .thumb { flex-shrink: 0; }
       .main-view { height: 260px; border-radius: 16px; }
@@ -356,7 +248,6 @@
 
   <div class="product-hero fade-up">
 
-    <!-- Texte pleine largeur en haut -->
     <div class="hero-text fade-up--delay">
       <div class="badge badge--violet">🩺 Équipement bloc opératoire vétérinaire</div>
       <h1 class="product-title">PetAnesth</h1>
@@ -370,16 +261,13 @@
       </div>
     </div>
 
-    <!-- Galerie + 3D côte à côte -->
     <div class="hero-visuals">
 
-      <!-- ══ GALERIE  ══ -->
       <div class="gallery-wrap">
         <div class="thumb-col" id="paThumbCol"></div>
         <div class="main-view" id="paMainView"></div>
       </div>
 
-      <!-- ══ MODÈLE 3D ══ -->
       <div class="hero-3d">
         <model-viewer
           src="/PetAnesth.glb"
@@ -497,21 +385,9 @@
 
 <script>document.getElementById("y").textContent = new Date().getFullYear();</script>
 
-<!-- ══════════════════════════════════════════════════════════
-     SCRIPT GALERIE — Configurez vos médias dans MEDIA[]
-══════════════════════════════════════════════════════════ -->
 <script>
 (function () {
 
-  // ─── 📸 CONFIGUREZ VOS MÉDIAS ICI ─────────────────────────────────────────
-  //
-  //  Types disponibles :
-  //    'image'   → src = chemin vers votre image
-  //    'youtube' → videoId = identifiant YouTube (ex: 'dQw4w9WgXcQ')
-  //                poster  = chemin vers une image de couverture
-  //                (astuce : utilisez https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg
-  //                 comme poster pour récupérer la miniature YouTube automatiquement)
-  //
   const MEDIA = [
     {
       type:  'image',
@@ -521,7 +397,7 @@
     },
     {
       type:  'image',
-      src:   '/PetAnesth2.jpg',       
+      src:   '/PetAnesth2.jpg',
       label: 'Vue de 3/4',
       alt:   'Vue de 3/4'
     },
@@ -539,13 +415,12 @@
     },
     {
       type:    'youtube',
-      videoId: 'ljvED-rTRv4',         // ← remplacez par votre ID YouTube
+      videoId: 'ljvED-rTRv4',
       poster:  'https://img.youtube.com/vi/ljvED-rTRv4/hqdefault.jpg',
       label:   'Vidéo démo',
       alt:     'Démonstration PetAnesth'
     },
   ];
-  // ──────────────────────────────────────────────────────────────────────────
 
   var current    = 0;
   var thumbsEl   = document.getElementById('paThumbCol');
@@ -568,7 +443,19 @@
       ytWrap.className = 'yt-container';
       ytWrap.id = 'pa-yt-' + i;
 
-      // Poster + bouton play (affiché avant le clic)
+      // ── FIX ANDROID ──────────────────────────────────────────────────────
+      // L'iframe est créée UNE SEULE FOIS dans le DOM, avec src vide.
+      // Au clic on change uniquement son attribut src — aucun nœud ajouté/
+      // supprimé → pas de reflow → le bloc ne disparaît plus sur Android.
+      // ─────────────────────────────────────────────────────────────────────
+      var iframe = document.createElement('iframe');
+      iframe.id = 'pa-yt-iframe-' + i;
+      iframe.src = '';
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      ytWrap.appendChild(iframe);
+
+      // Overlay poster + bouton play (par-dessus l'iframe vide)
       var overlay = document.createElement('div');
       overlay.className = 'yt-overlay';
       overlay.id = 'pa-yt-overlay-' + i;
@@ -588,22 +475,19 @@
       ytLbl.textContent = '▶ Lancer la vidéo';
       overlay.appendChild(ytLbl);
 
-      // Au clic : charge l'iframe YouTube avec autoplay
-      overlay.addEventListener('click', function () {
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.youtube.com/embed/' + m.videoId
-          + '?autoplay=1&rel=0&modestbranding=1';
-        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-        iframe.allowFullscreen = true;
-        ytWrap.innerHTML = '';
-        ytWrap.appendChild(iframe);
-      });
+      // Clic : active le src, masque l'overlay — sans toucher au DOM
+      overlay.addEventListener('click', (function(iframeEl, videoId, overlayEl) {
+        return function() {
+          iframeEl.src = 'https://www.youtube.com/embed/' + videoId
+            + '?autoplay=1&rel=0&modestbranding=1';
+          overlayEl.style.display = 'none';
+        };
+      })(iframe, m.videoId, overlay));
 
       ytWrap.appendChild(overlay);
       slide.appendChild(ytWrap);
     }
 
-    // Label en surimpression (hors vidéo en lecture)
     if (m.label && m.type === 'image') {
       var tag = document.createElement('div');
       tag.className = 'slide-label';
@@ -649,7 +533,6 @@
     img.alt = m.alt;
     t.appendChild(img);
 
-    // Badge play sur miniature vidéo
     if (m.type === 'youtube') {
       var badge = document.createElement('div');
       badge.className = 'play-badge';
@@ -667,45 +550,13 @@
   function go(idx) {
     var n = ((idx % MEDIA.length) + MEDIA.length) % MEDIA.length;
 
-    // Réinitialise la vidéo YouTube si on quitte sa slide
+    // Quand on quitte la slide vidéo : vide le src (stoppe la vidéo)
+    // et réaffiche l'overlay — sans jamais modifier la structure du DOM
     if (MEDIA[current].type === 'youtube') {
-      var ytWrap = document.getElementById('pa-yt-' + current);
-      if (ytWrap) {
-        // Remet le poster / overlay en place
-        var overlay = document.createElement('div');
-        overlay.className = 'yt-overlay';
-        overlay.id = 'pa-yt-overlay-' + current;
-
-        var m2 = MEDIA[current];
-        var poster2 = document.createElement('img');
-        poster2.src = m2.poster; poster2.alt = m2.alt;
-        poster2.className = 'yt-poster';
-        overlay.appendChild(poster2);
-
-        var playBtn2 = document.createElement('div');
-        playBtn2.className = 'yt-play-btn';
-        overlay.appendChild(playBtn2);
-
-        var ytLbl2 = document.createElement('div');
-        ytLbl2.className = 'yt-label';
-        ytLbl2.textContent = '▶ Lancer la vidéo';
-        overlay.appendChild(ytLbl2);
-
-        overlay.addEventListener('click', (function (videoId, wrap, ov) {
-          return function () {
-            var iframe = document.createElement('iframe');
-            iframe.src = 'https://www.youtube.com/embed/' + videoId
-              + '?autoplay=1&rel=0&modestbranding=1';
-            iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-            iframe.allowFullscreen = true;
-            wrap.innerHTML = '';
-            wrap.appendChild(iframe);
-          };
-        })(m2.videoId, ytWrap, overlay));
-
-        ytWrap.innerHTML = '';
-        ytWrap.appendChild(overlay);
-      }
+      var iframeEl  = document.getElementById('pa-yt-iframe-'  + current);
+      var overlayEl = document.getElementById('pa-yt-overlay-' + current);
+      if (iframeEl)  iframeEl.src = '';
+      if (overlayEl) overlayEl.style.display = '';
     }
 
     document.getElementById('pa-slide-' + current).classList.remove('active');
