@@ -29,10 +29,7 @@ export default async function handler(req, res) {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
 
     const payment = await mollie.payments.create({
-      amount: {
-        currency: 'EUR',
-        value: total.toFixed(2),
-      },
+      amount: { currency: 'EUR', value: total.toFixed(2) },
       description: `VetoProtec — ${description}`,
       redirectUrl: `${baseUrl}/en/confirmation.html`,
       cancelUrl:   `${baseUrl}/en/confirmation.html?status=cancelled`,
@@ -44,7 +41,10 @@ export default async function handler(req, res) {
       },
     });
 
-    res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+    res.status(200).json({
+      checkoutUrl: payment.getCheckoutUrl(),
+      paymentId: payment.id,
+    });
 
   } catch (err) {
     console.error('Mollie error:', err);
