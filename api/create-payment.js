@@ -1,4 +1,5 @@
-import createMollieClient from '@mollie/api-client';
+import pkg from '@mollie/api-client';
+const { createMollieClient } = pkg;
 
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
@@ -17,7 +18,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'No items provided' });
     }
 
-    // Calculate total server-side
     let total = 0;
     const description = items.map(({ productId, quantity }) => {
       const product = PRODUCTS[productId];
@@ -26,15 +26,17 @@ export default async function handler(req, res) {
       return `${product.name} x${quantity}`;
     }).join(', ');
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
+
     const payment = await mollie.payments.create({
       amount: {
         currency: 'EUR',
         value: total.toFixed(2),
       },
       description: `VetoProtec — ${description}`,
-      redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/en/confirmation.html?status=success`,
-      cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/en/confirmation.html?status=cancelled`,
-      webhookUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhook-mollie`,
+      redirectUrl: `${baseUrl}/en/confirmation.html?status=success`,
+      cancelUrl:   `${baseUrl}/en/confirmation.html?status=cancelled`,
+      webhookUrl:  `${baseUrl}/api/webhook-mollie`,
       metadata: {
         customerEmail,
         customerName,
