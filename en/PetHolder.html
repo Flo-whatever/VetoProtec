@@ -15,80 +15,73 @@
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
     .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
-
     .product-title {
       background: linear-gradient(135deg, var(--text) 30%, var(--accent));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-
-    .cta-section {
-      background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08));
-    }
-
+    .cta-section { background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08)); }
     body {
       background:
         radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
         radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
     }
+    .model-label { font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; margin-top: 8px; letter-spacing: 0.05em; }
+    .product-hero { display: block !important; max-width: 960px; margin: 0 auto; padding: 48px 24px 0; }
+    .hero-text { max-width: 960px; margin-bottom: 32px; }
+    .hero-visuals { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
+    .hero-visuals .product-img-wrap { border-radius: 20px; overflow: hidden; height: 380px; }
+    .hero-visuals .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-3d { display: flex; flex-direction: column; }
 
-    .model-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 8px;
-      letter-spacing: 0.05em;
-    }
+    /* ── Price ── */
+    .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
 
-    /* ── Hero layout ── */
-    .product-hero {
-      display: block !important;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 48px 24px 0;
+    /* ── Cart icon ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
     }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
 
-    .hero-text {
-      max-width: 960px;
-      margin-bottom: 32px;
+    /* ── Cart toast ── */
+    .cart-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #166534; color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      z-index: 999;
+      transform: translateY(80px); opacity: 0;
+      transition: transform .3s ease, opacity .3s ease;
+      display: flex; align-items: center; gap: 10px;
     }
-
-    .hero-visuals {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      align-items: start;
-    }
-
-    .hero-visuals .product-img-wrap {
-      border-radius: 20px;
-      overflow: hidden;
-      height: 380px;
-    }
-
-    .hero-visuals .product-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hero-3d {
-      display: flex;
-      flex-direction: column;
-    }
+    .cart-toast.show { transform: translateY(0); opacity: 1; }
+    .cart-toast a { color: #fff; font-weight: 600; text-decoration: underline; }
 
     @media (max-width: 768px) {
-      .hero-visuals {
-        grid-template-columns: 1fr;
-      }
-      .hero-visuals .product-img-wrap {
-        height: 260px;
-      }
+      .hero-visuals { grid-template-columns: 1fr; }
+      .hero-visuals .product-img-wrap { height: 260px; }
     }
   </style>
 </head>
 <body>
+
+<div class="cart-toast" id="cartToast">
+  ✅ Added to cart — <a href="/en/cart.html">View cart</a>
+</div>
 
 <header>
   <div class="nav">
@@ -98,6 +91,10 @@
     <div class="nav-right">
       <a class="btn" href="/en/#products">← Products</a>
       <a class="btn" href="/PetHolder.html" style="font-size:13px">🌐 FR</a>
+      <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
     </div>
   </div>
 </header>
@@ -106,7 +103,6 @@
 
   <div class="product-hero fade-up">
 
-    <!-- Text full width on top -->
     <div class="hero-text fade-up--delay">
       <div class="badge badge--rose">🐾 Professional veterinary equipment</div>
       <h1 class="product-title">PetHolder</h1>
@@ -115,24 +111,24 @@
         PetHolder is a restraint device designed to keep sedated animals in a stable position on a smooth surface during radiological examinations, minor surgical procedures or general veterinary care.
         Its high-adhesion suction cups provide reliable fixation while ensuring the safety of both the animal and the care team.
       </p>
+      <div class="price-tag">55,00 €</div>
+      <div class="price-vat">Excl. VAT — excl. shipping</div>
       <div class="hero-cta">
-        <a class="btn primary" href="/en/#contact">Order</a>
+        <button class="btn primary" onclick="addToCart('petholder')">🛒 Add to cart</button>
+        <a class="btn" href="/en/#contact">Contact us</a>
       </div>
       <div class="warning-badge">⚠️ For use on sedated animals only</div>
     </div>
 
-    <!-- Photo + 3D side by side -->
     <div class="hero-visuals">
       <div class="product-img-wrap">
         <img src="/PetHolderMixed.png" alt="PetHolder in clinical use" />
       </div>
       <div class="hero-3d">
         <model-viewer
-          src="/petholder.glb"
+          src="/models/petholder.glb"
           alt="PetHolder interactive 3D model"
-          auto-rotate
-          camera-controls
-          shadow-intensity="1"
+          auto-rotate camera-controls shadow-intensity="1"
           style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #fce7f3, #e9d5ff);"
         ></model-viewer>
         <p class="model-label">↺ Rotate the model with mouse or finger</p>
@@ -175,7 +171,6 @@
       <p class="section-label">Technical datasheet</p>
       <h2 class="section-title">Technical specifications</h2>
       <div class="specs-grid">
-
         <div class="spec-group">
           <h3>🔩 Suction cups</h3>
           <div class="spec-row"><span class="spec-key">Material</span><span class="spec-val">High-adhesion rubber</span></div>
@@ -183,7 +178,6 @@
           <div class="spec-row"><span class="spec-key">Holding force</span><span class="spec-val">5 to 10 kg / cup</span></div>
           <div class="spec-row"><span class="spec-key">Force type</span><span class="spec-val">Shear force on smooth surface</span></div>
         </div>
-
         <div class="spec-group">
           <h3>🧱 Surface compatibility</h3>
           <div class="spec-row"><span class="spec-key">Glass</span><span class="spec-val">✅ Compatible</span></div>
@@ -191,13 +185,11 @@
           <div class="spec-row"><span class="spec-key">Smooth plastic</span><span class="spec-val">✅ Compatible</span></div>
           <div class="spec-row"><span class="spec-key">Porous surfaces</span><span class="spec-val">❌ Not compatible</span></div>
         </div>
-
         <div class="spec-group">
           <h3>🖨️ Structure & accessories</h3>
           <div class="spec-row"><span class="spec-key">Cap</span><span class="spec-val">Standard 1.75 mm PLA filament</span></div>
           <div class="spec-row"><span class="spec-key">Intended use</span><span class="spec-val">Professional veterinary</span></div>
         </div>
-
         <div class="spec-group">
           <h3>🧹 Care & maintenance</h3>
           <ul class="entretien-list">
@@ -207,7 +199,6 @@
             <li><span class="step-num--sm">4</span>Do not expose to temperatures above 70°C</li>
           </ul>
         </div>
-
       </div>
     </div>
   </section>
@@ -217,7 +208,8 @@
       <h2 class="cta-title">Interested in PetHolder?</h2>
       <p class="cta-sub">Available for bulk orders and partnerships with veterinary purchasing groups.</p>
       <div class="cta-btns">
-        <a class="btn primary" href="/en/#contact">Contact us</a>
+        <button class="btn primary" onclick="addToCart('petholder')">🛒 Add to cart</button>
+        <a class="btn" href="/en/#contact">Contact us</a>
       </div>
     </div>
   </div>
@@ -236,6 +228,37 @@
   </div>
 </footer>
 
-<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+function getCartCount() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  } catch { return 0; }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+  else { badge.classList.remove('visible'); }
+}
+
+function addToCart(productId) {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    cart[productId] = (cart[productId] || 0) + 1;
+    sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  } catch(e) {}
+  updateCartBadge();
+  const toast = document.getElementById('cartToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+updateCartBadge();
+</script>
+
 </body>
 </html>
