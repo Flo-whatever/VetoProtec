@@ -3,6 +3,9 @@ const { createMollieClient } = pkg;
 
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
+// Track already-processed payment IDs to avoid duplicate emails
+const processedPayments = new Set();
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -11,6 +14,12 @@ export default async function handler(req, res) {
     if (!id) return res.status(400).end();
 
     const payment = await mollie.payments.get(id);
+
+    // Skip if already processed
+    if (processedPayments.has(id)) {
+      console.log(`Payment ${id} already processed — skipping`);
+      return res.status(200).end();
+    }
 
     if (payment.status === 'paid') {
       const meta = payment.metadata || {};
@@ -129,7 +138,12 @@ export default async function handler(req, res) {
         }),
       });
 
+      processedPayments.add(id);
       console.log(`Payment ${id} paid — emails sent to ${customerEmail} and drderrien@vetoprotec.fr`);
+    } else {
+      // Mark non-paid statuses as processed too to avoid retries
+      processedPayments.add(id);
+      console.log(`Payment ${id} status: ${payment.status} — no emails sent`);
     }
 
     res.status(200).end();
