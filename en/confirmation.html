@@ -17,21 +17,26 @@
 </head>
 <body>
 <main>
-  <div class="confirm-wrap" id="confirmWrap"></div>
+  <div class="confirm-wrap" id="confirmWrap">
+    <div class="confirm-icon">⏳</div>
+    <p style="color:var(--muted)">Checking payment status…</p>
+  </div>
 </main>
 <script>
 const params = new URLSearchParams(window.location.search);
 const status = params.get('status');
 const el = document.getElementById('confirmWrap');
 
-if (status === 'success') {
+function showSuccess() {
   el.innerHTML = `
     <div class="confirm-icon">✅</div>
     <h1 class="confirm-title">Order confirmed!</h1>
     <p class="confirm-sub">Thank you for your order. You will receive a confirmation email shortly. We will get back to you with shipping details.</p>
     <a class="btn primary" href="/en/">Back to home</a>
   `;
-} else {
+}
+
+function showCancelled() {
   el.innerHTML = `
     <div class="confirm-icon">❌</div>
     <h1 class="confirm-title">Payment cancelled</h1>
@@ -41,6 +46,40 @@ if (status === 'success') {
       <a class="btn" href="/en/#contact">Contact us</a>
     </div>
   `;
+}
+
+function showFailed() {
+  el.innerHTML = `
+    <div class="confirm-icon">⚠️</div>
+    <h1 class="confirm-title">Payment failed</h1>
+    <p class="confirm-sub">Something went wrong with your payment. No charge was made. Please try again or use a different payment method.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn primary" href="/en/cart.html">Try again</a>
+      <a class="btn" href="/en/#contact">Contact us</a>
+    </div>
+  `;
+}
+
+// Handle explicit cancel
+if (status === 'cancelled') {
+  showCancelled();
+} else {
+  // Check real payment status via API
+  const paymentId = params.get('id');
+  if (paymentId) {
+    fetch(`/api/check-payment?id=${paymentId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'paid') showSuccess();
+        else if (data.status === 'canceled' || data.status === 'expired') showCancelled();
+        else showFailed();
+      })
+      .catch(() => showFailed());
+  } else {
+    // No payment ID — Mollie redirects without ?id= in test mode sometimes
+    // Fall back to showing success if no status param
+    showSuccess();
+  }
 }
 </script>
 </body>
