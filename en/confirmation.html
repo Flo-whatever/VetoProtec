@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order confirmation — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body { background: var(--bg); }
+    .confirm-wrap { max-width: 520px; margin: 100px auto; padding: 0 24px; text-align: center; }
+    .confirm-icon { font-size: 64px; margin-bottom: 24px; }
+    .confirm-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 12px; }
+    .confirm-sub { color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 32px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="confirm-wrap" id="confirmWrap"></div>
+</main>
+<script>
+const params = new URLSearchParams(window.location.search);
+const status = params.get('status');
+const el = document.getElementById('confirmWrap');
+
+if (status === 'success') {
+  el.innerHTML = `
+    <div class="confirm-icon">✅</div>
+    <h1 class="confirm-title">Order confirmed!</h1>
+    <p class="confirm-sub">Thank you for your order. You will receive a confirmation email shortly. We will get back to you with shipping details.</p>
+    <a class="btn primary" href="/en/">Back to home</a>
+  `;
+} else {
+  el.innerHTML = `
+    <div class="confirm-icon">❌</div>
+    <h1 class="confirm-title">Payment cancelled</h1>
+    <p class="confirm-sub">Your order was not completed. No charge was made. You can try again or contact us if you need help.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn primary" href="/en/cart.html">Back to cart</a>
+      <a class="btn" href="/en/#contact">Contact us</a>
+    </div>
+  `;
+}
+</script>
+</body>
+</html>
