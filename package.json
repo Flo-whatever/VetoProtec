@@ -1,0 +1,8 @@
+{
+  "name": "vetoprotec",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@mollie/api-client": "^3.7.0"
+  }
+}
