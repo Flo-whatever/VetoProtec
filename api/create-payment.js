@@ -34,7 +34,7 @@ export default async function handler(req, res) {
         value: total.toFixed(2),
       },
       description: `VetoProtec — ${description}`,
-      redirectUrl: `${baseUrl}/en/confirmation.html?status=success`,
+      redirectUrl: `${baseUrl}/en/confirmation.html`,
       cancelUrl:   `${baseUrl}/en/confirmation.html?status=cancelled`,
       webhookUrl:  `${baseUrl}/api/webhook-mollie`,
       metadata: {
