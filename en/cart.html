@@ -222,6 +222,7 @@ async function checkout() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Payment error');
     sessionStorage.removeItem('vp_cart');
+    if (data.paymentId) sessionStorage.setItem('vp_payment_id', data.paymentId);
     window.location.href = data.checkoutUrl;
   } catch (err) {
     feedback.textContent = '❌ ' + (err.message || 'Something went wrong. Please try again.');
