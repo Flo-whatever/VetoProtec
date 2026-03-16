@@ -64,9 +64,10 @@ function showFailed() {
 if (status === 'cancelled') {
   showCancelled();
 } else {
-  // Check real payment status via API
-  const paymentId = params.get('id');
+  // Get payment ID from URL or sessionStorage
+  const paymentId = params.get('id') || sessionStorage.getItem('vp_payment_id');
   if (paymentId) {
+    sessionStorage.removeItem('vp_payment_id');
     fetch(`/api/check-payment?id=${paymentId}`)
       .then(r => r.json())
       .then(data => {
@@ -76,9 +77,7 @@ if (status === 'cancelled') {
       })
       .catch(() => showFailed());
   } else {
-    // No payment ID — Mollie redirects without ?id= in test mode sometimes
-    // Fall back to showing success if no status param
-    showSuccess();
+    showFailed();
   }
 }
 </script>
