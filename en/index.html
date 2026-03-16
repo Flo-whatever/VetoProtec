@@ -25,7 +25,6 @@
     .h-sub { color: var(--muted); font-size: 16px; margin: 0 0 24px; max-width: 54ch; font-weight: 300; }
     .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 
-    /* Product cards with background image */
     .product { position: relative; overflow: hidden; }
     .product h3 { margin: 0 0 8px; font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; position: relative; z-index: 1; }
     .product ul { margin: 10px 0 0; padding-left: 18px; color: var(--muted); font-weight: 300; position: relative; z-index: 1; }
@@ -34,34 +33,21 @@
     .product .cta { position: relative; z-index: 1; }
 
     .product-bg {
-      position: absolute;
-      bottom: -20px;
-      right: -20px;
-      width: 80%;
-      max-width: 340px;
-      height: 105%;
-      object-fit: contain;
-      opacity: 0.1;
-      pointer-events: none;
-      filter: grayscale(20%);
-      transition: opacity 0.3s ease;
+      position: absolute; bottom: -20px; right: -20px;
+      width: 80%; max-width: 340px; height: 105%;
+      object-fit: contain; opacity: 0.1; pointer-events: none;
+      filter: grayscale(20%); transition: opacity 0.3s ease;
     }
     .card.product:hover .product-bg { opacity: 0.16; }
 
-    /* Carrousel — fixed height */
     .carousel-wrap {
       border: 1px solid var(--border); border-radius: 20px;
-      overflow: hidden; position: relative;
-      height: 360px;
+      overflow: hidden; position: relative; height: 360px;
       box-shadow: 0 4px 24px rgba(192,132,200,.1);
     }
-    .carousel-track {
-      display: flex; height: 100%;
-      transition: transform .45s cubic-bezier(.4,0,.2,1);
-    }
+    .carousel-track { display: flex; height: 100%; transition: transform .45s cubic-bezier(.4,0,.2,1); }
     .carousel-slide {
-      position: relative;
-      min-width: 100%; height: 100%;
+      position: relative; min-width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
       flex-direction: column; gap: 10px;
       font-weight: 600; font-size: 15px; color: var(--muted);
@@ -72,21 +58,14 @@
     .carousel-slide:nth-child(3) { background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
     .carousel-slide:nth-child(4) { background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
     .carousel-slide:nth-child(5) { background: linear-gradient(140deg, #e9d5ff, #fce7f3); }
-    .carousel-slide:nth-child(6) { background: linear-gradient(140deg, #f5e6d8, #e9d5ff); }
-    .carousel-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: contain; }
     .carousel-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
-      width: 38px; height: 38px; border-radius: 50%;
-      border: none; cursor: pointer;
+      width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
       background: rgba(255,255,255,.88); backdrop-filter: blur(6px);
       box-shadow: 0 2px 12px rgba(192,132,200,.3);
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; color: var(--text);
-      transition: background .15s, transform .15s; z-index: 2;
+      font-size: 18px; color: var(--text); transition: background .15s, transform .15s; z-index: 2;
     }
     .carousel-btn:hover { background: #fff; transform: translateY(-50%) scale(1.1); }
     .carousel-btn.prev { left: 12px; }
@@ -97,8 +76,7 @@
     }
     .dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: rgba(192,132,200,.35);
-      border: none; cursor: pointer; padding: 0;
+      background: rgba(192,132,200,.35); border: none; cursor: pointer; padding: 0;
       transition: background .2s, transform .2s;
     }
     .dot.active { background: var(--accent2); transform: scale(1.35); }
@@ -106,6 +84,24 @@
     header .nav { height: auto; padding: 14px 0; }
     .brand { font-weight: 700; font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: .01em; color: inherit; }
     .brand img { height: 80px; }
+
+    /* ── Cart icon ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
 
     @media (max-width: 900px) {
       .hero-grid { grid-template-columns: 1fr; }
@@ -129,6 +125,10 @@
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
         <a class="btn" href="/" style="font-size:13px">🌐 FR</a>
+        <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+          🛒
+          <span class="cart-badge" id="cartBadge"></span>
+        </a>
       </nav>
     </div>
   </div>
@@ -193,8 +193,7 @@
         <div class="card product">
           <img src="/petholder_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetHolder</h3>
-          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
-          Suction cup system to stabilise sedated animals during veterinary examinations and procedures.</p>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">Suction cup system to stabilise sedated animals during veterinary examinations and procedures.</p>
           <p style="color:var(--muted);margin:0;font-weight:300">Designed to hold the animal in position during examinations or minor procedures, PetHolder improves safety and reduces handling by staff.</p>
           <ul>
             <li>Gentle and effective stabilisation of animals under sedation.</li>
@@ -208,8 +207,7 @@
         <div class="card product">
           <img src="/petanesth_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetAnesth</h3>
-          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
-          Anaesthesia circuit support for veterinary use.</p>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">Anaesthesia circuit support for veterinary use.</p>
           <p style="color:var(--muted);margin:0;font-weight:300">Designed to stabilise the breathing circuit and secure anaesthetic procedures in the operating room.</p>
           <ul>
             <li>Improves anaesthetic safety by reducing traction on the endotracheal tube.</li>
@@ -242,20 +240,15 @@
       <div class="card">
         <h2 class="section-title">About</h2>
         <p class="section-sub">VetoProtec develops equipment born from the field: designed by veterinarians, tested in routine practice, with one simple goal — making certain procedures safer and easier for veterinary teams.</p>
-
         <div style="display:flex;align-items:center;gap:18px;margin:20px 0 24px;">
           <div style="width:72px;height:72px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--border);">
-            <img
-              src="/drderrien.jpg"
-              alt="Dr Derrien, founder of VetoProtec"
-              style="width:100%;height:100%;object-fit:cover;object-position:center center;transform:scale(1.25);transform-origin:center center;"
-            />
+            <img src="/drderrien.jpg" alt="Dr Derrien, founder of VetoProtec"
+              style="width:100%;height:100%;object-fit:cover;object-position:center center;transform:scale(1.25);transform-origin:center center;" />
           </div>
           <p style="margin:0;color:var(--muted);font-weight:300;font-size:15px;line-height:1.6;">
             A practising veterinarian qualified since 2021, I founded VetoProtec from a simple observation: some everyday procedures lacked the right tools. Every device is designed from clinical experience, tested in real conditions, with one single goal — making the work easier for veterinary teams and improving animal welfare.
           </p>
         </div>
-
         <div class="pillrow">
           <span class="pill">Practical innovation</span>
           <span class="pill">Built for teams</span>
@@ -336,6 +329,19 @@
 <script>
   document.getElementById("y").textContent = new Date().getFullYear();
 
+  // Cart badge
+  function updateCartBadge() {
+    try {
+      const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+      const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      const badge = document.getElementById('cartBadge');
+      if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+      else { badge.classList.remove('visible'); }
+    } catch {}
+  }
+  updateCartBadge();
+
+  // Carousel
   const track  = document.getElementById("carouselTrack");
   const slides = track.querySelectorAll(".carousel-slide");
   const dotsEl = document.getElementById("carouselDots");
@@ -378,6 +384,7 @@
 
   resetTimer();
 
+  // Contact form
   document.getElementById("contactForm").addEventListener("submit", async function(e) {
     e.preventDefault();
     const btn      = document.getElementById("submitBtn");
