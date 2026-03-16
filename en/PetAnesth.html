@@ -21,44 +21,42 @@
         radial-gradient(600px 400px at 100% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
         var(--bg);
     }
-
     .product-title {
       background: linear-gradient(135deg, var(--text) 30%, var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-
-    .cta-section {
-      background: linear-gradient(135deg, rgba(233,213,255,.25), rgba(244,114,182,.08));
-    }
-
-    .model-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 8px;
-      letter-spacing: 0.05em;
-    }
-
-    .product-hero {
-      display: block !important;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 48px 24px 0;
-    }
-
+    .cta-section { background: linear-gradient(135deg, rgba(233,213,255,.25), rgba(244,114,182,.08)); }
+    .model-label { font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; margin-top: 8px; letter-spacing: 0.05em; }
+    .product-hero { display: block !important; max-width: 960px; margin: 0 auto; padding: 48px 24px 0; }
     .hero-text { margin-bottom: 32px; }
-
-    .hero-visuals {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      align-items: start;
-    }
-
+    .hero-visuals { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
     .hero-3d { display: flex; flex-direction: column; }
+    .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+
+    /* ── Cart icon in header ── */
+    .cart-icon-btn {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      display: none;
+    }
+    .cart-badge.visible { display: flex; }
 
     /* ── Cart toast ── */
     .cart-toast {
@@ -75,111 +73,39 @@
     .cart-toast.show { transform: translateY(0); opacity: 1; }
     .cart-toast a { color: #fff; font-weight: 600; text-decoration: underline; }
 
-    /* ── Price tag ── */
-    .price-tag {
-      font-size: 22px; font-weight: 600;
-      color: var(--text); margin: 12px 0 4px;
-    }
-    .price-vat {
-      font-size: 12px; color: var(--muted);
-      font-weight: 300; margin-bottom: 16px;
-    }
-
-    @media (max-width: 768px) {
-      .hero-visuals { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 768px) { .hero-visuals { grid-template-columns: 1fr; } }
 
     /* ══ GALLERY ══ */
     .gallery-wrap { display: flex; gap: 0; width: 100%; }
-    .thumb-col {
-      display: flex; flex-direction: column; gap: 8px;
-      padding-right: 10px; width: 68px; flex-shrink: 0;
-      max-height: 380px; overflow-y: auto;
-      scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.18) transparent;
-    }
+    .thumb-col { display: flex; flex-direction: column; gap: 8px; padding-right: 10px; width: 68px; flex-shrink: 0; max-height: 380px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0,0,0,.18) transparent; }
     .thumb-col::-webkit-scrollbar { width: 3px; }
     .thumb-col::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 2px; }
-    .thumb {
-      width: 58px; height: 58px; border-radius: 8px;
-      border: 1.5px solid rgba(0,0,0,.12); cursor: pointer;
-      overflow: hidden; flex-shrink: 0;
-      background: var(--beige, #f5efe8);
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.15s, transform 0.12s; position: relative;
-    }
+    .thumb { width: 58px; height: 58px; border-radius: 8px; border: 1.5px solid rgba(0,0,0,.12); cursor: pointer; overflow: hidden; flex-shrink: 0; background: var(--beige, #f5efe8); display: flex; align-items: center; justify-content: center; transition: border-color 0.15s, transform 0.12s; position: relative; }
     .thumb:hover { border-color: rgba(0,0,0,.35); transform: scale(1.04); }
     .thumb.active { border: 2px solid #c8a035; box-shadow: 0 0 0 1px rgba(200,160,53,.25); }
     .thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
-    .thumb .play-badge {
-      position: absolute; inset: 0; background: rgba(0,0,0,.32);
-      display: flex; align-items: center; justify-content: center; border-radius: 6px;
-    }
-    .thumb .play-icon {
-      width: 22px; height: 22px; background: rgba(255,255,255,.92);
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    }
-    .thumb .play-icon::after {
-      content: ''; border-left: 8px solid #222;
-      border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px;
-    }
-    .main-view {
-      flex: 1; height: 380px; min-height: 380px; position: relative;
-      border-radius: 20px;
-      background: linear-gradient(160deg, var(--accent3, #e9d5ff), var(--beige, #f5efe8));
-    }
-    .main-slide {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.2s ease; border-radius: 20px; overflow: hidden;
-    }
+    .thumb .play-badge { position: absolute; inset: 0; background: rgba(0,0,0,.32); display: flex; align-items: center; justify-content: center; border-radius: 6px; }
+    .thumb .play-icon { width: 22px; height: 22px; background: rgba(255,255,255,.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .thumb .play-icon::after { content: ''; border-left: 8px solid #222; border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px; }
+    .main-view { flex: 1; height: 380px; min-height: 380px; position: relative; border-radius: 20px; background: linear-gradient(160deg, var(--accent3, #e9d5ff), var(--beige, #f5efe8)); }
+    .main-slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; border-radius: 20px; overflow: hidden; }
     .main-slide.active { opacity: 1; pointer-events: auto; }
     .main-slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
     .yt-container { position: absolute; inset: 0; }
     .yt-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; z-index: 1; }
-    .yt-overlay {
-      position: absolute; inset: 0; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; z-index: 2; transition: opacity 0.15s;
-    }
+    .yt-overlay { position: absolute; inset: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 2; transition: opacity 0.15s; }
     .yt-overlay.hidden { opacity: 0; pointer-events: none; }
     .yt-overlay img.yt-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .yt-play-btn {
-      position: relative; z-index: 3; width: 72px; height: 72px;
-      background: rgba(255,255,255,.95); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.15s, background 0.15s; box-shadow: 0 4px 20px rgba(0,0,0,.18);
-    }
+    .yt-play-btn { position: relative; z-index: 3; width: 72px; height: 72px; background: rgba(255,255,255,.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.15s, background 0.15s; box-shadow: 0 4px 20px rgba(0,0,0,.18); }
     .yt-overlay:hover .yt-play-btn { transform: scale(1.08); background: #fff; }
-    .yt-play-btn::after {
-      content: ''; border-left: 26px solid #1a1a1a;
-      border-top: 15px solid transparent; border-bottom: 15px solid transparent; margin-left: 6px;
-    }
-    .yt-label {
-      position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
-      z-index: 3; font-size: 12px; font-weight: 500;
-      color: #fff; background: rgba(0,0,0,.5); border-radius: 20px; padding: 4px 12px;
-      white-space: nowrap; pointer-events: none;
-    }
-    .slide-counter {
-      position: absolute; bottom: 12px; left: 12px;
-      font-size: 12px; font-weight: 500; color: #fff;
-      background: rgba(0,0,0,.42); border-radius: 20px; padding: 3px 10px;
-      pointer-events: none; z-index: 10;
-    }
+    .yt-play-btn::after { content: ''; border-left: 26px solid #1a1a1a; border-top: 15px solid transparent; border-bottom: 15px solid transparent; margin-left: 6px; }
+    .yt-label { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 3; font-size: 12px; font-weight: 500; color: #fff; background: rgba(0,0,0,.5); border-radius: 20px; padding: 4px 12px; white-space: nowrap; pointer-events: none; }
+    .slide-counter { position: absolute; bottom: 12px; left: 12px; font-size: 12px; font-weight: 500; color: #fff; background: rgba(0,0,0,.42); border-radius: 20px; padding: 3px 10px; pointer-events: none; z-index: 10; }
     .nav-arrows { position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px; z-index: 10; }
-    .nav-btn {
-      width: 32px; height: 32px; background: rgba(255,255,255,.88);
-      border: 0.5px solid rgba(0,0,0,.15); border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; color: #1a1a1a; transition: background 0.12s, transform 0.1s; padding: 0;
-    }
+    .nav-btn { width: 32px; height: 32px; background: rgba(255,255,255,.88); border: 0.5px solid rgba(0,0,0,.15); border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #1a1a1a; transition: background 0.12s, transform 0.1s; padding: 0; }
     .nav-btn:hover { background: #fff; transform: scale(1.08); }
     .nav-btn:active { transform: scale(0.96); }
-    .slide-label {
-      position: absolute; top: 12px; left: 12px;
-      font-size: 11px; font-weight: 500; background: rgba(255,255,255,.82); color: #444;
-      border-radius: 4px; padding: 2px 8px; letter-spacing: 0.03em; pointer-events: none; z-index: 4;
-    }
+    .slide-label { position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 500; background: rgba(255,255,255,.82); color: #444; border-radius: 4px; padding: 2px 8px; letter-spacing: 0.03em; pointer-events: none; z-index: 4; }
     @media (max-width: 600px) {
       .gallery-wrap { flex-direction: column-reverse; gap: 10px; }
       .thumb-col { flex-direction: row; width: 100%; max-height: none; overflow-x: auto; overflow-y: hidden; padding-right: 0; padding-bottom: 2px; }
@@ -197,12 +123,16 @@
 
 <header>
   <div class="nav">
-    <a class="brand" href="/">
+    <a class="brand" href="/en/">
       <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
     </a>
     <div class="nav-right">
       <a class="btn" href="/en/#products">← Products</a>
       <a class="btn" href="/PetAnesth.html" style="font-size:13px">🌐 FR</a>
+      <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
     </div>
   </div>
 </header>
@@ -210,7 +140,6 @@
 <main>
 
   <div class="product-hero fade-up">
-
     <div class="hero-text fade-up--delay">
       <div class="badge badge--violet">🩺 Veterinary operating room equipment</div>
       <h1 class="product-title">PetAnesth</h1>
@@ -228,24 +157,19 @@
     </div>
 
     <div class="hero-visuals">
-
       <div class="gallery-wrap">
         <div class="thumb-col" id="paThumbCol"></div>
         <div class="main-view" id="paMainView"></div>
       </div>
-
       <div class="hero-3d">
         <model-viewer
           src="/PetAnesth.glb"
           alt="PetAnesth interactive 3D model"
-          auto-rotate
-          camera-controls
-          shadow-intensity="1"
+          auto-rotate camera-controls shadow-intensity="1"
           style="width:100%; height:380px; border-radius:20px; background: linear-gradient(160deg, #e9d5ff, #f5e6d8);"
         ></model-viewer>
         <p class="model-label">↺ Rotate the model with mouse or finger</p>
       </div>
-
     </div>
   </div>
 
@@ -353,6 +277,24 @@
 <script>
 document.getElementById("y").textContent = new Date().getFullYear();
 
+function getCartCount() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  } catch { return 0; }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (count > 0) {
+    badge.textContent = count;
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
 function addToCart(productId) {
   try {
     const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
@@ -360,10 +302,15 @@ function addToCart(productId) {
     sessionStorage.setItem('vp_cart', JSON.stringify(cart));
   } catch(e) {}
 
+  updateCartBadge();
+
   const toast = document.getElementById('cartToast');
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
+
+// Init badge on page load
+updateCartBadge();
 </script>
 
 <script>
@@ -373,11 +320,7 @@ function addToCart(productId) {
     { type: 'image', src: '/PetAnesth2.jpg',  label: '3/4 view',    alt: '3/4 view' },
     { type: 'image', src: '/PetAnesth3.jpeg', label: 'Front view',  alt: 'Front view' },
     { type: 'image', src: '/PetAnesth5.png',  label: 'Slot detail', alt: 'Slot detail' },
-    {
-      type: 'youtube', videoId: 'mI3xWe4LJFE',
-      poster: 'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg',
-      label: 'Demo video', alt: 'PetAnesth demonstration'
-    },
+    { type: 'youtube', videoId: 'mI3xWe4LJFE', poster: 'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg', label: 'Demo video', alt: 'PetAnesth demonstration' },
   ];
 
   var current = 0;
@@ -388,53 +331,30 @@ function addToCart(productId) {
     var slide = document.createElement('div');
     slide.className = 'main-slide' + (i === 0 ? ' active' : '');
     slide.id = 'pa-slide-' + i;
-
     if (m.type === 'image') {
-      var img = document.createElement('img');
-      img.src = m.src; img.alt = m.alt;
+      var img = document.createElement('img'); img.src = m.src; img.alt = m.alt;
       slide.appendChild(img);
-      if (m.label) {
-        var tag = document.createElement('div');
-        tag.className = 'slide-label'; tag.textContent = m.label;
-        slide.appendChild(tag);
-      }
+      if (m.label) { var tag = document.createElement('div'); tag.className = 'slide-label'; tag.textContent = m.label; slide.appendChild(tag); }
     } else if (m.type === 'youtube') {
-      var ytWrap = document.createElement('div');
-      ytWrap.className = 'yt-container'; ytWrap.id = 'pa-yt-' + i;
-      var iframe = document.createElement('iframe');
-      iframe.id = 'pa-yt-iframe-' + i; iframe.src = '';
-      iframe.allow = 'autoplay; fullscreen; picture-in-picture'; iframe.allowFullscreen = true;
+      var ytWrap = document.createElement('div'); ytWrap.className = 'yt-container'; ytWrap.id = 'pa-yt-' + i;
+      var iframe = document.createElement('iframe'); iframe.id = 'pa-yt-iframe-' + i; iframe.src = ''; iframe.allow = 'autoplay; fullscreen; picture-in-picture'; iframe.allowFullscreen = true;
       ytWrap.appendChild(iframe);
-      var overlay = document.createElement('div');
-      overlay.className = 'yt-overlay'; overlay.id = 'pa-yt-overlay-' + i;
-      var poster = document.createElement('img');
-      poster.src = m.poster; poster.alt = m.alt; poster.className = 'yt-poster';
-      overlay.appendChild(poster);
-      var playBtn = document.createElement('div'); playBtn.className = 'yt-play-btn';
-      overlay.appendChild(playBtn);
-      var ytLbl = document.createElement('div'); ytLbl.className = 'yt-label'; ytLbl.textContent = '▶ Play video';
-      overlay.appendChild(ytLbl);
+      var overlay = document.createElement('div'); overlay.className = 'yt-overlay'; overlay.id = 'pa-yt-overlay-' + i;
+      var poster = document.createElement('img'); poster.src = m.poster; poster.alt = m.alt; poster.className = 'yt-poster'; overlay.appendChild(poster);
+      var playBtn = document.createElement('div'); playBtn.className = 'yt-play-btn'; overlay.appendChild(playBtn);
+      var ytLbl = document.createElement('div'); ytLbl.className = 'yt-label'; ytLbl.textContent = '▶ Play video'; overlay.appendChild(ytLbl);
       overlay.addEventListener('click', (function(iframeEl, videoId, overlayEl) {
-        return function() {
-          iframeEl.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1';
-          overlayEl.classList.add('hidden');
-        };
+        return function() { iframeEl.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1'; overlayEl.classList.add('hidden'); };
       })(iframe, m.videoId, overlay));
-      ytWrap.appendChild(overlay);
-      slide.appendChild(ytWrap);
+      ytWrap.appendChild(overlay); slide.appendChild(ytWrap);
     }
     mainViewEl.appendChild(slide);
   });
 
-  var counter = document.createElement('div');
-  counter.className = 'slide-counter'; counter.id = 'pa-counter';
-  counter.textContent = '1 / ' + MEDIA.length;
-  mainViewEl.appendChild(counter);
-
+  var counter = document.createElement('div'); counter.className = 'slide-counter'; counter.id = 'pa-counter'; counter.textContent = '1 / ' + MEDIA.length; mainViewEl.appendChild(counter);
   var nav = document.createElement('div'); nav.className = 'nav-arrows';
   ['←', '→'].forEach(function (ch, dir) {
-    var btn = document.createElement('button');
-    btn.className = 'nav-btn'; btn.textContent = ch;
+    var btn = document.createElement('button'); btn.className = 'nav-btn'; btn.textContent = ch;
     btn.setAttribute('aria-label', dir === 0 ? 'Previous' : 'Next');
     btn.addEventListener('click', function () { go(dir === 0 ? current - 1 : current + 1); });
     nav.appendChild(btn);
@@ -442,18 +362,10 @@ function addToCart(productId) {
   mainViewEl.appendChild(nav);
 
   MEDIA.forEach(function (m, i) {
-    var t = document.createElement('div');
-    t.className = 'thumb' + (i === 0 ? ' active' : '');
-    t.id = 'pa-thumb-' + i;
+    var t = document.createElement('div'); t.className = 'thumb' + (i === 0 ? ' active' : ''); t.id = 'pa-thumb-' + i;
     t.setAttribute('role', 'button'); t.setAttribute('aria-label', m.label || m.alt);
-    var img = document.createElement('img');
-    img.src = (m.type === 'youtube') ? m.poster : m.src; img.alt = m.alt;
-    t.appendChild(img);
-    if (m.type === 'youtube') {
-      var badge = document.createElement('div'); badge.className = 'play-badge';
-      var icon = document.createElement('div'); icon.className = 'play-icon';
-      badge.appendChild(icon); t.appendChild(badge);
-    }
+    var img = document.createElement('img'); img.src = (m.type === 'youtube') ? m.poster : m.src; img.alt = m.alt; t.appendChild(img);
+    if (m.type === 'youtube') { var badge = document.createElement('div'); badge.className = 'play-badge'; var icon = document.createElement('div'); icon.className = 'play-icon'; badge.appendChild(icon); t.appendChild(badge); }
     t.addEventListener('click', function () { go(i); });
     thumbsEl.appendChild(t);
   });
@@ -463,8 +375,7 @@ function addToCart(productId) {
     if (MEDIA[current].type === 'youtube') {
       var iframeEl = document.getElementById('pa-yt-iframe-' + current);
       var overlayEl = document.getElementById('pa-yt-overlay-' + current);
-      if (iframeEl) iframeEl.src = '';
-      if (overlayEl) overlayEl.classList.remove('hidden');
+      if (iframeEl) iframeEl.src = ''; if (overlayEl) overlayEl.classList.remove('hidden');
     }
     document.getElementById('pa-slide-' + current).classList.remove('active');
     document.getElementById('pa-thumb-' + current).classList.remove('active');
