@@ -3,7 +3,6 @@ const { createMollieClient } = pkg;
 
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
-// Track already-processed payment IDs to avoid duplicate emails
 const processedPayments = new Set();
 
 export default async function handler(req, res) {
@@ -13,22 +12,28 @@ export default async function handler(req, res) {
     const { id } = req.body;
     if (!id) return res.status(400).end();
 
-    const payment = await mollie.payments.get(id);
+    // Répondre 200 immédiatement — stoppe les retries Mollie
+    res.status(200).end();
 
-    // Skip if already processed
+    // Skip si déjà traité
     if (processedPayments.has(id)) {
       console.log(`Payment ${id} already processed — skipping`);
-      return res.status(200).end();
+      return;
     }
+
+    // Marquer immédiatement avant tout traitement
+    processedPayments.add(id);
+
+    const payment = await mollie.payments.get(id);
 
     if (payment.status === 'paid') {
       const meta = payment.metadata || {};
       const customerName    = meta.customerName    || 'Client';
       const customerEmail   = meta.customerEmail   || '';
-      const shippingAddress = meta.shippingAddress  || 'Not provided';
+      const shippingAddress = meta.shippingAddress || 'Not provided';
       const items           = JSON.parse(meta.items || '[]');
-      const amount        = `${payment.amount.value} ${payment.amount.currency}`;
-      const date          = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const amount          = `${payment.amount.value} ${payment.amount.currency}`;
+      const date            = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
       const PRODUCTS = {
         petholder: { name: 'PetHolder', price: 55.00 },
@@ -138,17 +143,12 @@ export default async function handler(req, res) {
         }),
       });
 
-      processedPayments.add(id);
       console.log(`Payment ${id} paid — emails sent to ${customerEmail} and drderrien@vetoprotec.fr`);
     } else {
-      // Mark non-paid statuses as processed too to avoid retries
-      processedPayments.add(id);
       console.log(`Payment ${id} status: ${payment.status} — no emails sent`);
     }
 
-    res.status(200).end();
   } catch (err) {
     console.error('Webhook error:', err);
-    res.status(500).end();
   }
 }
