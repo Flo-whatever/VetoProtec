@@ -8,22 +8,19 @@ const processedPayments = new Set();
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
+  const { id } = req.body;
+  if (!id) return res.status(400).end();
+
+  // Skip si déjà traité — répondre 200 quand même pour stopper les retries
+  if (processedPayments.has(id)) {
+    console.log(`Payment ${id} already processed — skipping`);
+    return res.status(200).end();
+  }
+
+  // Marquer immédiatement avant tout traitement async
+  processedPayments.add(id);
+
   try {
-    const { id } = req.body;
-    if (!id) return res.status(400).end();
-
-    // Répondre 200 immédiatement — stoppe les retries Mollie
-    res.status(200).end();
-
-    // Skip si déjà traité
-    if (processedPayments.has(id)) {
-      console.log(`Payment ${id} already processed — skipping`);
-      return;
-    }
-
-    // Marquer immédiatement avant tout traitement
-    processedPayments.add(id);
-
     const payment = await mollie.payments.get(id);
 
     if (payment.status === 'paid') {
@@ -148,7 +145,10 @@ export default async function handler(req, res) {
       console.log(`Payment ${id} status: ${payment.status} — no emails sent`);
     }
 
+    res.status(200).end();
+
   } catch (err) {
     console.error('Webhook error:', err);
+    res.status(500).end();
   }
 }
