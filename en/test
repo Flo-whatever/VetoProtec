@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VetoProtec — Innovative Veterinary Devices for Safer Procedures</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="Discover innovative veterinary devices designed by a practicing veterinarian to improve safety, positioning and workflow during anaesthesia, imaging and routine procedures." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    .hero { padding: 72px 0 28px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100%;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent2);
+      background: rgba(255,255,255,.65);
+      width: fit-content;
+    }
+
+    .h-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 50px;
+      line-height: 1.03;
+      margin: 0 0 18px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--text) 45%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .h-sub {
+      color: var(--muted);
+      font-size: 17px;
+      margin: 0 0 24px;
+      max-width: 60ch;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .cta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .mini-proof {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .mini-proof .proof-item {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 14px;
+      background: rgba(255,255,255,.5);
+    }
+
+    .mini-proof .proof-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .mini-proof .proof-item span {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .product {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product h3 {
+      margin: 0 0 8px;
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    .product .product-kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+
+    .product ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    .product li {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .product > p,
+    .product .cta {
+      position: relative;
+      z-index: 1;
+    }
+
+    .product-bg {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 80%;
+      max-width: 340px;
+      height: 105%;
+      object-fit: contain;
+      opacity: 0.08;
+      pointer-events: none;
+      filter: grayscale(20%);
+      transition: opacity 0.3s ease;
+    }
+
+    .card.product:hover .product-bg { opacity: 0.14; }
+
+    .carousel-wrap {
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      height: 420px;
+      box-shadow: 0 8px 30px rgba(192,132,200,.14);
+      background: linear-gradient(140deg, #fcf7fb, #f8f4ff);
+    }
+
+    .carousel-track {
+      display: flex;
+      height: 100%;
+      transition: transform .45s cubic-bezier(.4,0,.2,1);
+    }
+
+    .carousel-slide {
+      position: relative;
+      min-width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--muted);
+      text-align: center;
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .carousel-slide:nth-child(1) { background: linear-gradient(140deg, #fce7f3, #e9d5ff); }
+    .carousel-slide:nth-child(2) { background: linear-gradient(140deg, #f5e6d8, #fce7f3); }
+    .carousel-slide:nth-child(3) { background: linear-gradient(140deg, #e9d5ff, #f5e6d8); }
+    .carousel-slide:nth-child(4) { background: linear-gradient(140deg, #fce7f3, #f5e6d8); }
+    .carousel-slide:nth-child(5) { background: linear-gradient(140deg, #e9d5ff, #fce7f3); }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .carousel-label {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      background: rgba(255,255,255,.85);
+      color: var(--text);
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 2px 12px rgba(192,132,200,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--text);
+      transition: background .15s, transform .15s;
+      z-index: 2;
+    }
+
+    .carousel-btn:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .carousel-btn.prev { left: 12px; }
+    .carousel-btn.next { right: 12px; }
+
+    .carousel-dots {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 2;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(192,132,200,.35);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: background .2s, transform .2s;
+    }
+
+    .dot.active {
+      background: var(--accent2);
+      transform: scale(1.35);
+    }
+
+    .section-soft {
+      padding-top: 6px;
+    }
+
+    .section-split {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .point-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      background: rgba(255,255,255,.5);
+    }
+
+    .point-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .point-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .order-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .order-step {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,.45);
+    }
+
+    .order-step .num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: rgba(192,132,200,.16);
+      color: var(--accent2);
+    }
+
+    .order-step h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .order-step p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    header .nav {
+      height: auto;
+      padding: 14px 0;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-family: 'DM Serif Display', serif;
+      font-size: 18px;
+      letter-spacing: .01em;
+      color: inherit;
+    }
+
+    .brand img { height: 80px; }
+
+    .cart-icon-btn {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 18px;
+      transition: background .15s;
+    }
+
+    .cart-icon-btn:hover { background: var(--border); }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #e11d48;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-badge.visible { display: flex; }
+
+    .founder-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 20px 0 24px;
+    }
+
+    .founder-photo {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    .founder-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      transform: scale(1.25);
+      transform-origin: center center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .section-split,
+      .order-box,
+      .mini-proof {
+        grid-template-columns: 1fr;
+      }
+
+      .h-title { font-size: 38px; }
+      .carousel-wrap { height: 300px; }
+      .founder-wrap {
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav">
+      <a class="brand" href="/en/">
+        <img src="/LogoVPWoBG.png" alt="VetoProtec" />
+      </a>
+      <nav class="navlinks" aria-label="Navigation">
+        <a href="#products">Products</a>
+        <a href="#why-us">Why us</a>
+        <a href="#order">Order</a>
+        <a href="#about">About</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+        <a class="btn" href="/" style="font-size:13px">🌐 FR</a>
+        <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+          🛒
+          <span class="cart-badge" id="cartBadge"></span>
+        </a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="container hero">
+    <div class="hero-grid">
+
+      <div class="card hero-card">
+        <div class="eyebrow">Designed by a practicing veterinarian</div>
+        <h1 class="h-title">Innovative veterinary devices designed for safer everyday procedures.</h1>
+        <p class="h-sub">
+          Developed from real clinical needs, VetoProtec creates practical devices that improve animal positioning,
+          reduce staff handling and bring more safety and comfort to veterinary teams during anaesthesia, imaging and routine care.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" href="#products">Explore products</a>
+          <a class="btn" href="#order">Order internationally</a>
+        </div>
+
+        <div class="pillrow" aria-label="Benefits">
+          <span class="pill">Designed by a veterinarian</span>
+          <span class="pill">Field-tested in practice</span>
+          <span class="pill">Safer workflows</span>
+          <span class="pill">Direct international ordering</span>
+        </div>
+
+        <div class="mini-proof">
+          <div class="proof-item">
+            <strong>Practical innovation</strong>
+            <span>Created to solve real workflow issues in daily veterinary care.</span>
+          </div>
+          <div class="proof-item">
+            <strong>Built for teams</strong>
+            <span>Focused on safety, ergonomics and smoother procedures.</span>
+          </div>
+          <div class="proof-item">
+            <strong>International sales</strong>
+            <span>Direct ordering available for customers outside France.</span>
+          </div>
+        </div>
+
+        <p class="hero-note">
+          For veterinary teams looking for useful, reliable tools — not generic accessories.
+        </p>
+      </div>
+
+      <div class="carousel-wrap" id="carousel">
+        <div class="carousel-track" id="carouselTrack">
+          <div class="carousel-slide">
+            <img src="/PetHolderMixed.png" alt="PetHolder veterinary positioning device" />
+            <span class="carousel-label">PetHolder</span>
+          </div>
+          <div class="carousel-slide">
+            <img src="/PetAnesth.jpg" alt="PetAnesth anaesthesia support system" />
+            <span class="carousel-label">PetAnesth</span>
+          </div>
+          <div class="carousel-slide">
+            <img src="/PetAnesth2.jpg" alt="PetAnesth in veterinary use" />
+            <span class="carousel-label">Clinical use</span>
+          </div>
+          <div class="carousel-slide">
+            <img src="/PetAnesth3.jpeg" alt="Veterinary device in routine procedure" />
+            <span class="carousel-label">Workflow support</span>
+          </div>
+          <div class="carousel-slide">
+            <img src="/mixed.png" alt="VetoProtec devices" />
+            <span class="carousel-label">Built from practice</span>
+          </div>
+        </div>
+
+        <button class="carousel-btn prev" id="prevBtn" aria-label="Previous image">‹</button>
+        <button class="carousel-btn next" id="nextBtn" aria-label="Next image">›</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <section id="trust-signals" class="section-soft">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Built from real veterinary practice</h2>
+        <p class="section-sub">
+          VetoProtec devices are not generic accessories. They were created to solve practical problems encountered in daily veterinary work:
+          safer positioning, better support during procedures, and fewer improvised setups for clinical teams.
+        </p>
+        <div class="pillrow">
+          <span class="pill">Designed from clinical experience</span>
+          <span class="pill">Made for veterinary teams</span>
+          <span class="pill">Focused on safety & ergonomics</span>
+          <span class="pill">Suitable for direct international purchase</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="products">
+    <div class="container">
+      <h2 class="section-title">Our flagship devices</h2>
+      <p class="section-sub">
+        Two practical innovations designed to improve safety, positioning and workflow during veterinary procedures.
+      </p>
+
+      <div class="grid2">
+
+        <div class="card product">
+          <img src="/petholder_product.png" alt="" class="product-bg" aria-hidden="true" />
+          <span class="product-kicker">Positioning & restraint support</span>
+          <h3>PetHolder</h3>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
+            A suction-based positioning device designed to stabilise sedated animals during examinations and procedures.
+          </p>
+          <p style="color:var(--muted);margin:0;font-weight:300;line-height:1.6">
+            PetHolder helps veterinary teams position sedated animals more securely while reducing manual restraint.
+            It supports safer, more consistent handling during imaging, examinations and selected minor procedures.
+          </p>
+          <ul>
+            <li>Helps reduce repeated staff handling during procedures.</li>
+            <li>Supports stable positioning for sedated animals.</li>
+            <li>Useful for radiography, examinations and selected minor interventions.</li>
+            <li>Adheres to smooth, non-porous surfaces such as glass, stainless steel, metal and plastic.</li>
+            <li>Holding force up to 5–10 kg per suction cup depending on surface conditions.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn primary" href="/en/PetHolder.html">View PetHolder</a>
+          </div>
+        </div>
+
+        <div class="card product">
+          <img src="/petanesth_product.png" alt="" class="product-bg" aria-hidden="true" />
+          <span class="product-kicker">Anaesthesia workflow support</span>
+          <h3>PetAnesth</h3>
+          <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
+            A dedicated support system for veterinary anaesthesia circuits.
+          </p>
+          <p style="color:var(--muted);margin:0;font-weight:300;line-height:1.6">
+            PetAnesth helps secure the breathing circuit, reduce unwanted traction on the endotracheal tube
+            and improve operating room organisation during anaesthetic procedures.
+          </p>
+          <ul>
+            <li>Improves anaesthetic workflow and circuit stability.</li>
+            <li>Helps reduce traction on the endotracheal tube.</li>
+            <li>Keeps the surgical area clearer and better organised.</li>
+            <li>Replaces improvised solutions with a more consistent setup.</li>
+            <li>Quick attachment to veterinary tables up to 5 cm thick.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn primary" href="/en/PetAnesth.html">View PetAnesth</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="why-us">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Why veterinary teams choose VetoProtec</h2>
+        <div class="section-split">
+          <div class="point-card">
+            <h3>Designed by a practicing veterinarian</h3>
+            <p>
+              Every device starts from a real issue observed in practice, not from a generic product catalogue.
+            </p>
+          </div>
+
+          <div class="point-card">
+            <h3>Practical innovation</h3>
+            <p>
+              Our products are designed to make procedures safer, simpler and more reproducible for the whole team.
+            </p>
+          </div>
+
+          <div class="point-card">
+            <h3>Built for everyday clinical use</h3>
+            <p>
+              Easy to integrate into routine workflows, with a strong focus on ergonomics, safety and comfort.
+            </p>
+          </div>
+
+          <div class="point-card">
+            <h3>International direct ordering</h3>
+            <p>
+              Veterinary professionals outside France can order directly through our online sales process.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="order">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Order internationally</h2>
+        <p class="section-sub">
+          International customers can order directly online. For larger quantities, distributor enquiries or specific practice needs,
+          you can also contact us for a tailored quotation.
+        </p>
+
+        <div class="order-box">
+          <div class="order-step">
+            <div class="num">1</div>
+            <h3>Choose your product</h3>
+            <p>Select the device that fits your practice needs and review the product details.</p>
+          </div>
+          <div class="order-step">
+            <div class="num">2</div>
+            <h3>Order directly</h3>
+            <p>International customers can proceed through the online ordering flow and payment system.</p>
+          </div>
+          <div class="order-step">
+            <div class="num">3</div>
+            <h3>Need a quote?</h3>
+            <p>For larger orders, professional enquiries or specific requirements, contact us directly.</p>
+          </div>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#products">Choose your product</a>
+          <a class="btn" href="#contact">Request a quote</a>
+        </div>
+
+        <div class="pillrow">
+          <span class="pill">Direct online ordering</span>
+          <span class="pill">Quote requests available</span>
+          <span class="pill">B2B enquiries welcome</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Designed from real veterinary experience</h2>
+        <p class="section-sub">
+          VetoProtec was founded to bring practical innovation to veterinary teams. Every product is developed from real clinical observations,
+          then refined for safer handling, better workflow and improved day-to-day usability.
+        </p>
+
+        <div class="founder-wrap">
+          <div class="founder-photo">
+            <img src="/drderrien.jpg" alt="Dr Derrien, founder of VetoProtec" />
+          </div>
+          <p style="margin:0;color:var(--muted);font-weight:300;font-size:15px;line-height:1.7;">
+            I founded VetoProtec after seeing how often veterinary teams had to rely on workarounds for routine procedures.
+            As a practicing veterinarian, my goal is simple: create useful devices that solve real clinical problems,
+            improve workflow, and support both staff safety and animal welfare.
+          </p>
+        </div>
+
+        <div class="pillrow">
+          <span class="pill">Practical innovation</span>
+          <span class="pill">Built for teams</span>
+          <span class="pill">Everyday clinical use</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ</h2>
+      <p class="section-sub">Common product and ordering questions.</p>
+
+      <details>
+        <summary>Who are VetoProtec products designed for?</summary>
+        <p>Our devices are designed for veterinary professionals and practices looking for safer, more practical solutions for routine procedures, imaging and anaesthesia-related workflows.</p>
+      </details>
+
+      <details>
+        <summary>Do you ship internationally?</summary>
+        <p>Yes. International customers can contact us directly for shipping information, quotations or order assistance depending on destination and order volume.</p>
+      </details>
+
+      <details>
+        <summary>Can I request a quote for multiple units?</summary>
+        <p>Yes. If you need several units or want to discuss a professional order, please contact us with the product references and quantities required.</p>
+      </details>
+
+      <details>
+        <summary>On which surfaces does the PetHolder work?</summary>
+        <p>On smooth, non-porous surfaces such as glass, metal, plastic and stainless steel. Adhesion depends on the cleanliness, flatness and condition of the surface.</p>
+      </details>
+
+      <details>
+        <summary>Can the PetHolder be used on a non-sedated animal?</summary>
+        <p>No. The device is intended for use on sedated animals only, to avoid sudden movements and ensure appropriate clinical use.</p>
+      </details>
+
+      <details>
+        <summary>What is the maximum table thickness for the PetAnesth clamp?</summary>
+        <p>The clamp opens up to 5 cm. An adapter can be requested for thicker tables.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-sub">Questions, international orders or quote requests — we’ll get back to you quickly.</p>
+
+        <form id="contactForm">
+          <div class="grid2">
+            <div>
+              <label>Name / Practice<br/>
+                <input id="nom" placeholder="Veterinary clinic or company…" required />
+              </label>
+            </div>
+            <div>
+              <label>Email<br/>
+                <input id="email" type="email" placeholder="you@example.com" required />
+              </label>
+            </div>
+          </div>
+
+          <div style="margin-top:14px">
+            <label>Message<br/>
+              <textarea id="message" rows="5" placeholder="Tell us which product you need, your country and the quantity required…" required></textarea>
+            </label>
+          </div>
+
+          <div id="formFeedback" style="display:none;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500"></div>
+
+          <div class="cta">
+            <button class="btn primary" type="submit" id="submitBtn">Send message</button>
+            <a class="btn" href="https://www.instagram.com/veto.protec/">Instagram</a>
+            <a class="btn" href="https://www.linkedin.com/company/veto-protec">LinkedIn</a>
+            <a class="btn" href="https://www.facebook.com/people/Veto-Protec/61567468355158/">Facebook</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Legal notice</a>
+        <a href="/cgv.html">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  // Cart badge
+  function updateCartBadge() {
+    try {
+      const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+      const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      const badge = document.getElementById('cartBadge');
+      if (count > 0) {
+        badge.textContent = count;
+        badge.classList.add('visible');
+      } else {
+        badge.classList.remove('visible');
+      }
+    } catch {}
+  }
+  updateCartBadge();
+
+  // Carousel
+  const track = document.getElementById("carouselTrack");
+  const slides = track.querySelectorAll(".carousel-slide");
+  const dotsEl = document.getElementById("carouselDots");
+  const total = slides.length;
+  let current = 0, timer;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.className = "dot" + (i === 0 ? " active" : "");
+    dot.setAttribute("aria-label", "Image " + (i + 1));
+    dot.addEventListener("click", () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+
+  function goTo(index) {
+    current = (index + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsEl.querySelectorAll(".dot").forEach((d, i) => d.classList.toggle("active", i === current));
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 4000);
+  }
+
+  document.getElementById("prevBtn").addEventListener("click", () => goTo(current - 1));
+  document.getElementById("nextBtn").addEventListener("click", () => goTo(current + 1));
+
+  const carousel = document.getElementById("carousel");
+  carousel.addEventListener("mouseenter", () => clearInterval(timer));
+  carousel.addEventListener("mouseleave", resetTimer);
+
+  let startX = 0;
+  carousel.addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+  carousel.addEventListener("touchend", e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+  });
+
+  resetTimer();
+
+  // Contact form
+  document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById("submitBtn");
+    const feedback = document.getElementById("formFeedback");
+    const nom = document.getElementById("nom").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    btn.textContent = "Sending…";
+    btn.disabled = true;
+    feedback.style.display = "none";
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom, email, message }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        feedback.textContent = "✅ Message sent! We'll get back to you soon.";
+        feedback.style.cssText = "background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500";
+        document.getElementById("contactForm").reset();
+      } else {
+        throw new Error(data.error || "Unknown error");
+      }
+    } catch (err) {
+      feedback.textContent = "❌ " + (err.message || "Something went wrong. Please try again.");
+      feedback.style.cssText = "background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500";
+    } finally {
+      btn.textContent = "Send message";
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
