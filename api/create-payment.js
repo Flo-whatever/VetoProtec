@@ -5,14 +5,14 @@ const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
 const PRODUCTS = {
   petholder: { name: 'PetHolder', price: '55.00' },
-  petanesth: { name: 'PetAnesth', price: '115.00' },
+  petanesth: { name: 'PetAnesth', price: '119.00' },
 };
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { items, customerEmail, customerName, shippingAddress } = req.body;
+    const { items, customerEmail, customerName, billingAddress, shippingAddress, vatNumber } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'No items provided' });
@@ -37,7 +37,9 @@ export default async function handler(req, res) {
       metadata: {
         customerEmail,
         customerName,
+        billingAddress:  billingAddress  || '',
         shippingAddress: shippingAddress || '',
+        vatNumber:       vatNumber       || '',
         items: JSON.stringify(items),
       },
     });
