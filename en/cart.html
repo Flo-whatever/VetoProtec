@@ -95,6 +95,8 @@
         <label>Phone <span style="font-weight:300;font-size:12px">(optional)</span>
           <input type="tel" id="customerPhone" placeholder="+44 …" />
         </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">Billing address</h3>
         <label>Street address
           <input type="text" id="customerAddress" placeholder="123 Main Street…" required />
         </label>
@@ -107,8 +109,83 @@
           </label>
         </div>
         <label>Country
-          <input type="text" id="customerCountry" placeholder="United Kingdom…" required />
+          <select id="customerCountry" required style="width:100%;margin-top:6px">
+            <option value="" disabled selected>Select your country…</option>
+            <optgroup label="Western Europe">
+              <option value="Belgium">Belgium</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Luxembourg">Luxembourg</option>
+              <option value="Germany">Germany</option>
+              <option value="Austria">Austria</option>
+              <option value="Switzerland">Switzerland</option>
+            </optgroup>
+            <optgroup label="Nordic Countries">
+              <option value="Sweden">Sweden</option>
+              <option value="Norway">Norway</option>
+              <option value="Denmark">Denmark</option>
+              <option value="Finland">Finland</option>
+            </optgroup>
+            <optgroup label="Southern Europe">
+              <option value="Spain">Spain</option>
+              <option value="Portugal">Portugal</option>
+              <option value="Italy">Italy</option>
+            </optgroup>
+            <optgroup label="Eastern Europe">
+              <option value="Poland">Poland</option>
+              <option value="Czech Republic">Czech Republic</option>
+              <option value="Romania">Romania</option>
+              <option value="Hungary">Hungary</option>
+              <option value="Slovakia">Slovakia</option>
+              <option value="Bulgaria">Bulgaria</option>
+              <option value="Croatia">Croatia</option>
+              <option value="Slovenia">Slovenia</option>
+              <option value="Estonia">Estonia</option>
+              <option value="Latvia">Latvia</option>
+              <option value="Lithuania">Lithuania</option>
+            </optgroup>
+            <optgroup label="United Kingdom">
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Ireland">Ireland</option>
+            </optgroup>
+            <option value="other">My country is not listed</option>
+          </select>
         </label>
+        <div id="countryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
+          ⚠️ We don't currently ship to your region. Please <a href="/en/#contact" style="color:#854d0e;font-weight:600">contact us</a> — we'll do our best to find a solution!
+        </div>
+
+        <label style="margin-top:14px">
+          VAT number / TVA intracommunautaire / USt-IdNr / NIF-IVA / Partita IVA / BTW number
+          <span style="font-weight:300;font-size:12px"> (optional)</span>
+          <input type="text" id="customerVAT" placeholder="EU123456789…" />
+        </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">
+          Shipping address
+          <span style="font-weight:300;font-size:13px;font-family:'DM Sans',sans-serif"> — if different from billing</span>
+        </h3>
+
+        <label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:400;cursor:pointer;margin-bottom:14px">
+          <input type="checkbox" id="sameAsBilling" checked onchange="toggleShipping()" style="width:auto;margin:0" />
+          Same as billing address
+        </label>
+
+        <div id="shippingFields" style="display:none">
+          <label>Street address
+            <input type="text" id="shippingAddress" placeholder="123 Main Street…" />
+          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label>City
+              <input type="text" id="shippingCity" placeholder="London…" />
+            </label>
+            <label>Postcode
+              <input type="text" id="shippingPostcode" placeholder="SW1A 1AA…" />
+            </label>
+          </div>
+          <label>Country
+            <input type="text" id="shippingCountry" placeholder="Belgium…" />
+          </label>
+        </div>
       </div>
 
       <div id="cartFeedback"></div>
@@ -144,7 +221,7 @@ document.getElementById("y").textContent = new Date().getFullYear();
 
 const PRODUCTS = {
   petholder: { name: 'PetHolder', price: 55.00 },
-  petanesth: { name: 'PetAnesth', price: 115.00 },
+  petanesth: { name: 'PetAnesth', price: 119.00 },
 };
 
 function getCart() {
@@ -157,6 +234,33 @@ function saveCart(cart) {
   renderCart();
   updateCartBadge();
 }
+
+// Toggle shipping address fields
+function toggleShipping() {
+  const same = document.getElementById('sameAsBilling').checked;
+  document.getElementById('shippingFields').style.display = same ? 'none' : 'block';
+}
+
+// Country availability check
+document.addEventListener('DOMContentLoaded', function() {
+  const countrySelect = document.getElementById('customerCountry');
+  const unavailableMsg = document.getElementById('countryUnavailable');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  if (countrySelect) {
+    countrySelect.addEventListener('change', function() {
+      if (this.value === 'other') {
+        unavailableMsg.style.display = 'block';
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.opacity = '0.5';
+      } else {
+        unavailableMsg.style.display = 'none';
+        checkoutBtn.disabled = false;
+        checkoutBtn.style.opacity = '1';
+      }
+    });
+  }
+});
 
 function getCartCount() {
   try {
@@ -239,9 +343,21 @@ async function checkout() {
   const address  = document.getElementById('customerAddress').value.trim();
   const city     = document.getElementById('customerCity').value.trim();
   const postcode = document.getElementById('customerPostcode').value.trim();
-  const country  = document.getElementById('customerCountry').value.trim();
+  const country       = document.getElementById('customerCountry').value;
+  const vatNumber     = document.getElementById('customerVAT').value.trim();
+  const sameAsBilling = document.getElementById('sameAsBilling').checked;
+  const shipAddress   = sameAsBilling ? '' : document.getElementById('shippingAddress').value.trim();
+  const shipCity      = sameAsBilling ? '' : document.getElementById('shippingCity').value.trim();
+  const shipPostcode  = sameAsBilling ? '' : document.getElementById('shippingPostcode').value.trim();
+  const shipCountry   = sameAsBilling ? '' : document.getElementById('shippingCountry').value.trim();
   const feedback = document.getElementById('cartFeedback');
   const btn      = document.getElementById('checkoutBtn');
+
+  if (country === 'other') {
+    feedback.textContent = '⚠️ We don\'t currently ship to your region. Please contact us directly.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
 
   if (!name || !email || !address || !city || !postcode || !country) {
     feedback.textContent = '⚠️ Please fill in all required fields.';
@@ -249,7 +365,10 @@ async function checkout() {
     return;
   }
 
-  const shippingAddress = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tel: ' + phone : ''}`;
+  const billingAddress  = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tel: ' + phone : ''}`;
+  const shippingAddress = sameAsBilling
+    ? billingAddress
+    : `${shipAddress}, ${shipPostcode} ${shipCity}, ${shipCountry}`;
   const items = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
   btn.textContent = 'Redirecting…';
   btn.disabled = true;
@@ -259,7 +378,7 @@ async function checkout() {
     const res = await fetch('/api/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items, customerEmail: email, customerName: name, shippingAddress }),
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Payment error');
