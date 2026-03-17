@@ -27,14 +27,16 @@ export default async function handler(req, res) {
       const meta = payment.metadata || {};
       const customerName    = meta.customerName    || 'Client';
       const customerEmail   = meta.customerEmail   || '';
-      const shippingAddress = meta.shippingAddress || 'Not provided';
+      const billingAddress  = meta.billingAddress  || 'Not provided';
+      const shippingAddress = meta.shippingAddress || billingAddress;
+      const vatNumber       = meta.vatNumber       || '';
       const items           = JSON.parse(meta.items || '[]');
       const amount          = `${payment.amount.value} ${payment.amount.currency}`;
       const date            = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
 
       const PRODUCTS = {
         petholder: { name: 'PetHolder', price: 55.00 },
-        petanesth: { name: 'PetAnesth', price: 115.00 },
+        petanesth: { name: 'PetAnesth', price: 119.00 },
       };
 
       const itemsHtml = items.map(({ productId, quantity }) => {
@@ -124,9 +126,17 @@ export default async function handler(req, res) {
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:700;color:#166534">${amount}</td>
                 </tr>
                 <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Billing address</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${billingAddress}</td>
+                </tr>
+                <tr>
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Shipping address</td>
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${shippingAddress}</td>
                 </tr>
+                ${vatNumber ? `<tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">VAT number</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${vatNumber}</td>
+                </tr>` : ''}
                 <tr>
                   <td style="padding:10px 0;font-weight:600;color:#8a6a7a">Date</td>
                   <td style="padding:10px 0">${date}</td>
