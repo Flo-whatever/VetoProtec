@@ -1,134 +1,570 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end();
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cart — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        var(--bg);
+    }
+    .cart-wrap { max-width: 600px; margin: 60px auto; padding: 0 24px; }
+    .cart-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
+    .cart-empty { color: var(--muted); font-weight: 300; margin: 40px 0; text-align: center; }
+    .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .cart-item-name { font-weight: 500; font-size: 16px; }
+    .cart-item-price { color: var(--muted); font-size: 14px; margin-top: 2px; }
+    .qty-control { display: flex; align-items: center; gap: 10px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+    .qty-btn:hover { background: var(--border); }
+    .qty-num { font-weight: 500; min-width: 20px; text-align: center; }
+    .remove-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 4px 8px; }
+    .remove-btn:hover { color: #e11d48; }
+    .cart-summary { margin-top: 24px; padding: 20px; background: rgba(192,132,200,.08); border: 1px solid var(--border); border-radius: 16px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+    .summary-total { display: flex; justify-content: space-between; font-weight: 600; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .checkout-form { margin-top: 24px; }
+    .checkout-form label { display: block; margin-bottom: 14px; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .checkout-form input { display: block; width: 100%; margin-top: 6px; }
+    #cartFeedback { display:none; margin-top:14px; padding:12px 16px; border-radius:14px; font-size:14px; font-weight:500; }
+
+    /* ── Cart icon ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="/en/">
+      <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+    </a>
+    <div class="nav-right">
+      <a class="btn" href="/en/">← Back</a>
+      <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="cart-wrap">
+    <h1 class="cart-title">Your cart</h1>
+
+    <div id="cartItems"></div>
+
+    <div id="cartSummary" style="display:none">
+      <div class="cart-summary">
+        <div id="summaryLines"></div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="totalAmount"></span>
+        </div>
+        <div style="margin-top:10px;padding:8px 12px;background:rgba(22,101,52,.08);border-radius:10px;font-size:13px;color:#166534;font-weight:500;text-align:center;">
+          ✅ Shipping included
+        </div>
+      </div>
+
+      <div class="checkout-form">
+        <div style="margin-bottom:20px;padding:12px 16px;border-radius:12px;background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;font-size:13px;line-height:1.6">
+          🌍 Online ordering is available for Europe. If your country is not listed, please <a href="/en/#contact" style="color:#0369a1;font-weight:600">contact us</a> — we'll be happy to assist you and provide a custom shipping quote.
+        </div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:16px">Your details</h2>
+        <label>Full name / Practice
+          <input type="text" id="customerName" placeholder="Veterinary clinic…" required />
+        </label>
+        <label>Email
+          <input type="email" id="customerEmail" placeholder="you@example.com" required />
+        </label>
+        <label>Phone <span style="font-weight:300;font-size:12px">(optional)</span>
+          <input type="tel" id="customerPhone" placeholder="+44 …" />
+        </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">Billing address</h3>
+        <label>Street address
+          <input type="text" id="customerAddress" placeholder="123 Main Street…" required />
+        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <label>City
+            <input type="text" id="customerCity" placeholder="London…" required />
+          </label>
+          <label>Postcode
+            <input type="text" id="customerPostcode" placeholder="SW1A 1AA…" required />
+          </label>
+        </div>
+        <label>Country
+          <select id="customerCountry" required style="width:100%;margin-top:6px">
+            <option value="" disabled selected>Select your country…</option>
+            <optgroup label="🚚 Zone 1 — Western Europe">
+              <option value="Germany">Germany</option>
+              <option value="Belgium">Belgium</option>
+              <option value="Luxembourg">Luxembourg</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Austria">Austria</option>
+              <option value="Spain">Spain</option>
+              <option value="Italy">Italy</option>
+              <option value="Portugal">Portugal</option>
+              <option value="Switzerland">Switzerland</option>
+              <option value="Liechtenstein">Liechtenstein</option>
+              <option value="Andorra">Andorra</option>
+              <option value="Monaco">Monaco</option>
+              <option value="San Marino">San Marino</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 2 — Northern, Southern &amp; Eastern Europe">
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Ireland">Ireland</option>
+              <option value="Denmark">Denmark</option>
+              <option value="Sweden">Sweden</option>
+              <option value="Norway">Norway</option>
+              <option value="Finland">Finland</option>
+              <option value="Iceland">Iceland</option>
+              <option value="Greece">Greece</option>
+              <option value="Malta">Malta</option>
+              <option value="Cyprus">Cyprus</option>
+              <option value="Poland">Poland</option>
+              <option value="Czech Republic">Czech Republic</option>
+              <option value="Hungary">Hungary</option>
+              <option value="Slovakia">Slovakia</option>
+              <option value="Romania">Romania</option>
+              <option value="Bulgaria">Bulgaria</option>
+              <option value="Croatia">Croatia</option>
+              <option value="Slovenia">Slovenia</option>
+              <option value="Estonia">Estonia</option>
+              <option value="Latvia">Latvia</option>
+              <option value="Lithuania">Lithuania</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 3 — Balkans &amp; Eastern partners">
+              <option value="Serbia">Serbia</option>
+              <option value="Kosovo">Kosovo</option>
+              <option value="Albania">Albania</option>
+              <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+              <option value="Montenegro">Montenegro</option>
+              <option value="North Macedonia">North Macedonia</option>
+              <option value="Moldova">Moldova</option>
+              <option value="Ukraine">Ukraine</option>
+              <option value="Georgia">Georgia</option>
+              <option value="Armenia">Armenia</option>
+              <option value="Azerbaijan">Azerbaijan</option>
+            </optgroup>
+            <option value="other">My country is not listed</option>
+          </select>
+        </label>
+        <div id="countryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
+          🌍 Online ordering is currently available within the EU and European partner countries only. If you are located outside this area, please <a href="/en/#contact" style="color:#854d0e;font-weight:600">contact us</a> — we'll be happy to assist you and provide a custom shipping quote.
+        </div>
+
+        <label style="margin-top:14px">
+          VAT number / TVA intracommunautaire / USt-IdNr / NIF-IVA / Partita IVA / BTW number
+          <span style="font-weight:300;font-size:12px"> (optional)</span>
+          <input type="text" id="customerVAT" placeholder="EU123456789…" />
+        </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">
+          Shipping address
+          <span style="font-weight:300;font-size:13px;font-family:'DM Sans',sans-serif"> — if different from billing</span>
+        </h3>
+
+        <label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:400;cursor:pointer;margin-bottom:14px">
+          <input type="checkbox" id="sameAsBilling" checked onchange="toggleShipping()" style="width:auto;margin:0" />
+          Same as billing address
+        </label>
+
+        <div id="shippingFields" style="display:none">
+          <label>Street address
+            <input type="text" id="shippingAddress" placeholder="123 Main Street…" />
+          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label>City
+              <input type="text" id="shippingCity" placeholder="London…" />
+            </label>
+            <label>Postcode
+              <input type="text" id="shippingPostcode" placeholder="SW1A 1AA…" />
+            </label>
+          </div>
+          <label>Country
+            <select id="shippingCountry" style="width:100%;margin-top:6px">
+              <option value="" disabled selected>Select your country…</option>
+              <optgroup label="🚚 Zone 1 — Western Europe">
+                <option value="Germany">Germany</option>
+                <option value="Belgium">Belgium</option>
+                <option value="Luxembourg">Luxembourg</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Austria">Austria</option>
+                <option value="Spain">Spain</option>
+                <option value="Italy">Italy</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Switzerland">Switzerland</option>
+                <option value="Liechtenstein">Liechtenstein</option>
+                <option value="Andorra">Andorra</option>
+                <option value="Monaco">Monaco</option>
+                <option value="San Marino">San Marino</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 2 — Northern, Southern &amp; Eastern Europe">
+                <option value="United Kingdom">United Kingdom</option>
+                <option value="Ireland">Ireland</option>
+                <option value="Denmark">Denmark</option>
+                <option value="Sweden">Sweden</option>
+                <option value="Norway">Norway</option>
+                <option value="Finland">Finland</option>
+                <option value="Iceland">Iceland</option>
+                <option value="Greece">Greece</option>
+                <option value="Malta">Malta</option>
+                <option value="Cyprus">Cyprus</option>
+                <option value="Poland">Poland</option>
+                <option value="Czech Republic">Czech Republic</option>
+                <option value="Hungary">Hungary</option>
+                <option value="Slovakia">Slovakia</option>
+                <option value="Romania">Romania</option>
+                <option value="Bulgaria">Bulgaria</option>
+                <option value="Croatia">Croatia</option>
+                <option value="Slovenia">Slovenia</option>
+                <option value="Estonia">Estonia</option>
+                <option value="Latvia">Latvia</option>
+                <option value="Lithuania">Lithuania</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 3 — Balkans &amp; Eastern partners">
+                <option value="Serbia">Serbia</option>
+                <option value="Kosovo">Kosovo</option>
+                <option value="Albania">Albania</option>
+                <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+                <option value="Montenegro">Montenegro</option>
+                <option value="North Macedonia">North Macedonia</option>
+                <option value="Moldova">Moldova</option>
+                <option value="Ukraine">Ukraine</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Armenia">Armenia</option>
+                <option value="Azerbaijan">Azerbaijan</option>
+              </optgroup>
+              <option value="other">My country is not listed</option>
+            </select>
+          </label>
+          <div id="shippingCountryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
+            🌍 Online ordering is currently available within the EU and European partner countries only. If you are located outside this area, please <a href="/en/#contact" style="color:#854d0e;font-weight:600">contact us</a> — we'll be happy to assist you and provide a custom shipping quote.
+          </div>
+        </div>
+      </div>
+
+      <div id="cartFeedback"></div>
+
+      <div class="cta" style="margin-top:20px">
+        <button class="btn primary" id="checkoutBtn" onclick="checkout()">Proceed to payment →</button>
+        <a class="btn" href="/en/">Continue shopping</a>
+      </div>
+      <div id="customShippingCta" style="display:none;margin-top:12px">
+        <button class="btn primary" id="customShippingBtn" onclick="sendCustomRequest()" style="background:linear-gradient(135deg,#c084c8,#f472b6)">📦 Send request to our team →</button>
+      </div>
+    </div>
+
+    <div id="cartEmpty" class="cart-empty" style="display:none">
+      <p>Your cart is empty.</p>
+      <a class="btn primary" href="/en/#products" style="margin-top:16px;display:inline-block">View products</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Legal notice</a>
+        <a href="/cgv.html">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+const PRODUCTS = {
+  petholder: { name: 'PetHolder', price: 55.00 },
+  petanesth: { name: 'PetAnesth', price: 119.00 },
+};
+
+function getCart() {
+  try { return JSON.parse(sessionStorage.getItem('vp_cart') || '{}'); }
+  catch { return {}; }
+}
+
+function saveCart(cart) {
+  sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  renderCart();
+  updateCartBadge();
+}
+
+// Send custom shipping request
+async function sendCustomRequest() {
+  const cart     = getCart();
+  const name     = document.getElementById('customerName').value.trim();
+  const email    = document.getElementById('customerEmail').value.trim();
+  const phone    = document.getElementById('customerPhone').value.trim();
+  const address  = document.getElementById('customerAddress').value.trim();
+  const city     = document.getElementById('customerCity').value.trim();
+  const postcode = document.getElementById('customerPostcode').value.trim();
+  const country  = document.getElementById('customerCountry').value;
+  const vatNumber = document.getElementById('customerVAT').value.trim() || '';
+  const sameAsBilling = document.getElementById('sameAsBilling').checked;
+  const shipAddress = sameAsBilling ? address : document.getElementById('shippingAddress').value.trim();
+  const shipCity    = sameAsBilling ? city    : document.getElementById('shippingCity').value.trim();
+  const shipPostcode= sameAsBilling ? postcode: document.getElementById('shippingPostcode').value.trim();
+  const shipCountry = sameAsBilling ? country : document.getElementById('shippingCountry').value;
+  const feedback = document.getElementById('cartFeedback');
+  const btn = document.getElementById('customShippingBtn');
+
+  if (!name || !email || !address || !city || !postcode) {
+    feedback.textContent = '⚠️ Please fill in all required fields.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  const billingAddress  = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tel: ' + phone : ''}`;
+  const shippingAddress = sameAsBilling ? billingAddress : `${shipAddress}, ${shipPostcode} ${shipCity}, ${shipCountry}`;
+  const items = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  feedback.style.display = 'none';
 
   try {
-    const { customerName, customerEmail, customerPhone, billingAddress, shippingAddress, vatNumber, items, country } = req.body;
-
-    const PRODUCTS = {
-      petholder: { name: 'PetHolder', price: 55.00 },
-      petanesth: { name: 'PetAnesth', price: 119.00 },
-    };
-
-    const itemsSummary = items.map(({ productId, quantity }) => {
-      const p = PRODUCTS[productId] || { name: productId, price: 0 };
-      return `${p.name} x${quantity} (${(p.price * quantity).toFixed(2)} €)`;
-    }).join(', ');
-
-    const date = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-    // ── Email à VetoProtec ──
-    await fetch('https://api.resend.com/emails', {
+    const res = await fetch('/api/contact-order', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'VetoProtec Orders <contact@vetoprotec.fr>',
-        to: ['drderrien@vetoprotec.fr'],
-        reply_to: customerEmail,
-        subject: `📦 Custom shipping request — ${itemsSummary}`,
-        html: `
-          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
-            <h2 style="color:#c084c8;margin:0 0 8px">Custom shipping request 📦</h2>
-            <p style="color:#6b7280;margin:0 0 20px;font-size:14px">This customer is located outside standard shipping zones — a custom quote is needed.</p>
-            <table style="width:100%;border-collapse:collapse">
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;width:160px;color:#8a6a7a">Customer</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${customerName}</td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Email</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee"><a href="mailto:${customerEmail}">${customerEmail}</a></td>
-              </tr>
-              ${customerPhone ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Phone</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${customerPhone}</td>
-              </tr>` : ''}
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Order</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${itemsSummary}</td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Billing address</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${billingAddress}</td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Shipping address</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${shippingAddress}</td>
-              </tr>
-              <tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Destination country</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:700;color:#c084c8">${country}</td>
-              </tr>
-              ${vatNumber ? `<tr>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">VAT number</td>
-                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${vatNumber}</td>
-              </tr>` : ''}
-              <tr>
-                <td style="padding:10px 0;font-weight:600;color:#8a6a7a">Date</td>
-                <td style="padding:10px 0">${date}</td>
-              </tr>
-            </table>
-            <p style="margin:24px 0 0;font-size:12px;color:#b0a0b0">Répondre à cet email contacte directement le client.</p>
-          </div>
-        `,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName: name, customerEmail: email, customerPhone: phone, billingAddress, shippingAddress, vatNumber, items, country }),
     });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error');
 
-    // ── Email au client ──
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'VetoProtec <contact@vetoprotec.fr>',
-        to: [customerEmail],
-        reply_to: 'contact@vetoprotec.fr',
-        subject: 'Your order request — VetoProtec',
-        html: `
-          <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
-            <h2 style="color:#c084c8;margin:0 0 8px">Request received ✅</h2>
-            <p style="color:#6b7280;margin:0 0 24px">Thank you, ${customerName}! We have received your order request and will get back to you shortly with a custom shipping quote for your region.</p>
-            <table style="width:100%;border-collapse:collapse">
-              <thead>
-                <tr style="background:#fdf4ff">
-                  <th style="padding:10px;text-align:left;color:#8a6a7a;font-weight:600">Product</th>
-                  <th style="padding:10px;text-align:right;color:#8a6a7a;font-weight:600">Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${items.map(({ productId, quantity }) => {
-                  const p = PRODUCTS[productId] || { name: productId, price: 0 };
-                  return `<tr>
-                    <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${p.name} x${quantity}</td>
-                    <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;text-align:right">${(p.price * quantity).toFixed(2)} €</td>
-                  </tr>`;
-                }).join('')}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td style="padding:12px 0;font-weight:700;font-size:16px">Products total</td>
-                  <td style="padding:12px 0;font-weight:700;font-size:16px;text-align:right">${items.reduce((t, { productId, quantity }) => t + (PRODUCTS[productId]?.price || 0) * quantity, 0).toFixed(2)} €</td>
-                </tr>
-              </tfoot>
-            </table>
-            <p style="margin:20px 0 8px;padding:12px 16px;background:#fdf4ff;border-radius:10px;font-size:14px;color:#6b7280">
-              + Shipping costs will be confirmed separately based on your location.
-            </p>
-            <p style="margin:24px 0 8px;color:#6b7280;font-size:14px">Questions? Reply to this email or contact us at <a href="mailto:contact@vetoprotec.fr">contact@vetoprotec.fr</a></p>
-            <p style="margin:0;font-size:12px;color:#b0a0b0">VetoProtec — vetoprotec.fr</p>
-          </div>
-        `,
-      }),
-    });
-
-    res.status(200).json({ success: true });
-
+    sessionStorage.removeItem('vp_cart');
+    feedback.textContent = '✅ Request sent! Our team will get back to you shortly with a custom shipping quote.';
+    feedback.style.cssText = 'background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    document.getElementById('customShippingBtn').style.display = 'none';
+    updateCartBadge();
   } catch (err) {
-    console.error('Contact order error:', err);
-    res.status(500).json({ error: err.message });
+    feedback.textContent = '❌ ' + (err.message || 'Something went wrong. Please try again.');
+    feedback.style.cssText = 'background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    btn.textContent = '📦 Send request to our team →';
+    btn.disabled = false;
   }
 }
+
+// Toggle shipping address fields
+function toggleShipping() {
+  const same = document.getElementById('sameAsBilling').checked;
+  document.getElementById('shippingFields').style.display = same ? 'none' : 'block';
+}
+
+// Shipping country availability check
+document.addEventListener('DOMContentLoaded', function() {
+  const shippingCountrySelect = document.getElementById('shippingCountry');
+  if (shippingCountrySelect) {
+    shippingCountrySelect.addEventListener('change', function() {
+      const unavail = document.getElementById('shippingCountryUnavailable');
+      const btn = document.getElementById('checkoutBtn');
+      if (this.value === 'other') {
+        unavail.style.display = 'block';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      } else {
+        unavail.style.display = 'none';
+        // Re-enable only if billing country is also valid
+        const billingCountry = document.getElementById('customerCountry').value;
+        if (billingCountry !== 'other') {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      }
+    });
+  }
+});
+
+// Country availability check
+document.addEventListener('DOMContentLoaded', function() {
+  const countrySelect = document.getElementById('customerCountry');
+  const unavailableMsg = document.getElementById('countryUnavailable');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  if (countrySelect) {
+    countrySelect.addEventListener('change', function() {
+      const customCta = document.getElementById('customShippingCta');
+      if (this.value === 'other') {
+        unavailableMsg.style.display = 'block';
+        checkoutBtn.style.display = 'none';
+        customCta.style.display = 'block';
+      } else {
+        unavailableMsg.style.display = 'none';
+        checkoutBtn.style.display = '';
+        checkoutBtn.disabled = false;
+        checkoutBtn.style.opacity = '1';
+        customCta.style.display = 'none';
+      }
+    });
+  }
+});
+
+function getCartCount() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  } catch { return 0; }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+  else { badge.classList.remove('visible'); }
+}
+
+function renderCart() {
+  const cart = getCart();
+  const keys = Object.keys(cart).filter(k => cart[k] > 0);
+  const itemsEl = document.getElementById('cartItems');
+  const summaryEl = document.getElementById('cartSummary');
+  const emptyEl = document.getElementById('cartEmpty');
+
+  if (keys.length === 0) {
+    itemsEl.innerHTML = '';
+    summaryEl.style.display = 'none';
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  summaryEl.style.display = 'block';
+
+  let total = 0;
+  let summaryLines = '';
+  itemsEl.innerHTML = keys.map(productId => {
+    const product = PRODUCTS[productId];
+    const qty = cart[productId];
+    const subtotal = product.price * qty;
+    total += subtotal;
+    summaryLines += `<div class="summary-row"><span>${product.name} x${qty}</span><span>${subtotal.toFixed(2)} €</span></div>`;
+    return `
+      <div class="cart-item">
+        <div>
+          <div class="cart-item-name">${product.name}</div>
+          <div class="cart-item-price">${product.price.toFixed(2)} € / unit</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty('${productId}', -1)">−</button>
+            <span class="qty-num">${qty}</span>
+            <button class="qty-btn" onclick="updateQty('${productId}', 1)">+</button>
+          </div>
+          <button class="remove-btn" onclick="removeItem('${productId}')" title="Remove">✕</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('summaryLines').innerHTML = summaryLines;
+  document.getElementById('totalAmount').textContent = total.toFixed(2) + ' €';
+}
+
+function updateQty(productId, delta) {
+  const cart = getCart();
+  cart[productId] = (cart[productId] || 0) + delta;
+  if (cart[productId] <= 0) delete cart[productId];
+  saveCart(cart);
+}
+
+function removeItem(productId) {
+  const cart = getCart();
+  delete cart[productId];
+  saveCart(cart);
+}
+
+async function checkout() {
+  const cart     = getCart();
+  const name     = document.getElementById('customerName').value.trim();
+  const email    = document.getElementById('customerEmail').value.trim();
+  const phone    = document.getElementById('customerPhone').value.trim();
+  const address  = document.getElementById('customerAddress').value.trim();
+  const city     = document.getElementById('customerCity').value.trim();
+  const postcode = document.getElementById('customerPostcode').value.trim();
+  const country       = document.getElementById('customerCountry').value;
+  const vatNumber     = document.getElementById('customerVAT').value.trim() || '';
+  const sameAsBilling = document.getElementById('sameAsBilling').checked;
+  const shipAddress   = sameAsBilling ? '' : document.getElementById('shippingAddress').value.trim();
+  const shipCity      = sameAsBilling ? '' : document.getElementById('shippingCity').value.trim();
+  const shipPostcode  = sameAsBilling ? '' : document.getElementById('shippingPostcode').value.trim();
+  const shipCountry   = sameAsBilling ? '' : document.getElementById('shippingCountry').value.trim();
+  const feedback = document.getElementById('cartFeedback');
+  const btn      = document.getElementById('checkoutBtn');
+
+  if (!sameAsBilling && shipCountry === 'other') {
+    feedback.textContent = '⚠️ We don\'t currently ship to your delivery region. Please contact us directly.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  if (!sameAsBilling && (!shipAddress || !shipCity || !shipPostcode || !shipCountry)) {
+    feedback.textContent = '⚠️ Please fill in the complete shipping address.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  if (!name || !email || !address || !city || !postcode || !country) {
+    feedback.textContent = '⚠️ Please fill in all required fields.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  const billingAddress  = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tel: ' + phone : ''}`;
+  const shippingAddress = sameAsBilling
+    ? billingAddress
+    : `${shipAddress}, ${shipPostcode} ${shipCity}, ${shipCountry}`;
+  const items = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+  btn.textContent = 'Redirecting…';
+  btn.disabled = true;
+  feedback.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber: vatNumber || '' }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Payment error');
+    sessionStorage.removeItem('vp_cart');
+    if (data.paymentId) sessionStorage.setItem('vp_payment_id', data.paymentId);
+    window.location.href = data.checkoutUrl;
+  } catch (err) {
+    feedback.textContent = '❌ ' + (err.message || 'Something went wrong. Please try again.');
+    feedback.style.cssText = 'background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    btn.textContent = 'Proceed to payment →';
+    btn.disabled = false;
+  }
+}
+
+renderCart();
+updateCartBadge();
+</script>
+
+</body>
+</html>
