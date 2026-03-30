@@ -8,7 +8,7 @@ const PRODUCTS = {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const { items, customerEmail, customerName, billingAddress, shippingAddress, vatNumber } = req.body;
+    const { items, customerEmail, customerName, billingAddress, shippingAddress, vatNumber, shippingFee } = req.body;
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'No items provided' });
     }
@@ -21,8 +21,10 @@ export default async function handler(req, res) {
     }).join(', ');
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
     const payment = await mollie.payments.create({
-      amount: { currency: 'EUR', value: total.toFixed(2) },
-      description: `VetoProtec — ${description} | ${customerName}`,
+      const shipping = parseFloat(shippingFee) || 0;
+      const grandTotal = total + shipping;
+      amount: { currency: 'EUR', value: grandTotal.toFixed(2) },
+      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'} | ${customerName}`,
       redirectUrl: `${baseUrl}/en/confirmation.html`,
       cancelUrl:   `${baseUrl}/en/confirmation.html?status=cancelled`,
       webhookUrl:  `${baseUrl}/api/webhook-mollie`,
@@ -32,6 +34,7 @@ export default async function handler(req, res) {
         billingAddress:  billingAddress  || '',
         shippingAddress: shippingAddress || '',
         vatNumber:       vatNumber       || '',
+        shippingFee:     shipping > 0 ? `${shipping.toFixed(2)} €` : 'included',
         items: JSON.stringify(items),
       },
     });
