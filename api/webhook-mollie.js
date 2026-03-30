@@ -30,6 +30,7 @@ export default async function handler(req, res) {
       const billingAddress  = meta.billingAddress  || 'Not provided';
       const shippingAddress = meta.shippingAddress || billingAddress;
       const vatNumber       = meta.vatNumber       || '';
+      const shippingFee     = meta.shippingFee     || 'included';
       const items           = JSON.parse(meta.items || '[]');
       const amount          = `${payment.amount.value} ${payment.amount.currency}`;
       const date            = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
@@ -124,6 +125,10 @@ export default async function handler(req, res) {
                 <tr>
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Amount paid</td>
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:700;color:#166534">${amount}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Shipping</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${shippingFee}</td>
                 </tr>
                 <tr>
                   <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Billing address</td>
