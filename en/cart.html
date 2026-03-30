@@ -82,9 +82,7 @@
           <span>Total</span>
           <span id="totalAmount"></span>
         </div>
-        <div style="margin-top:10px;padding:8px 12px;background:rgba(22,101,52,.08);border-radius:10px;font-size:13px;color:#166534;font-weight:500;text-align:center;">
-          ✅ Shipping included
-        </div>
+        <div id="shippingInfo" style="margin-top:10px;padding:8px 12px;border-radius:10px;font-size:13px;font-weight:500;text-align:center;"></div>
       </div>
 
       <div class="checkout-form">
@@ -193,11 +191,11 @@
         </h3>
 
         <label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:400;cursor:pointer;margin-bottom:14px">
-          <input type="checkbox" id="sameAsBilling" checked onchange="toggleShipping()" style="width:auto;margin:0" />
+          <input type="checkbox" id="sameAsBilling" onchange="toggleShipping()" style="width:auto;margin:0" />
           Same as billing address
         </label>
 
-        <div id="shippingFields" style="display:none">
+        <div id="shippingFields">
           <label>Street address
             <input type="text" id="shippingAddress" placeholder="123 Main Street…" />
           </label>
@@ -493,8 +491,23 @@ function renderCart() {
       </div>`;
   }).join('');
 
+  const SHIPPING_FEE = 5.99;
+  const SHIPPING_THRESHOLD = 100.00;
+  const shippingInfo = document.getElementById('shippingInfo');
+  let finalTotal = total;
+
+  if (total >= SHIPPING_THRESHOLD) {
+    shippingInfo.textContent = '✅ Shipping included';
+    shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(22,101,52,.08);border-radius:10px;font-size:13px;color:#166534;font-weight:500;text-align:center;';
+  } else {
+    finalTotal = total + SHIPPING_FEE;
+    summaryLines += `<div class="summary-row"><span>Shipping</span><span>${SHIPPING_FEE.toFixed(2)} €</span></div>`;
+    shippingInfo.textContent = '🚚 Free shipping on orders over 100 €';
+    shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(192,132,200,.08);border-radius:10px;font-size:13px;color:var(--muted);font-weight:400;text-align:center;';
+  }
+
   document.getElementById('summaryLines').innerHTML = summaryLines;
-  document.getElementById('totalAmount').textContent = total.toFixed(2) + ' €';
+  document.getElementById('totalAmount').textContent = finalTotal.toFixed(2) + ' €';
 }
 
 function updateQty(productId, delta) {
@@ -556,10 +569,12 @@ async function checkout() {
   feedback.style.display = 'none';
 
   try {
+    const cartTotal = Object.entries(cart).reduce((t, [pid, qty]) => t + (PRODUCTS[pid]?.price || 0) * qty, 0);
+    const shippingFee = cartTotal >= 100 ? 0 : 5.99;
     const res = await fetch('/api/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber: vatNumber || '' }),
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber: vatNumber || '', shippingFee }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Payment error');
