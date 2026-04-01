@@ -23,7 +23,7 @@ export default async function handler(req, res) {
   try {
     const payment = await mollie.payments.get(id);
 
-    if (payment.status === 'paid') {
+    if (payment.status === 'paid' && parseFloat(payment.amountRefunded?.value || 0) === 0) {
       const meta = payment.metadata || {};
       const customerName    = meta.customerName    || 'Client';
       const customerEmail   = meta.customerEmail   || '';
