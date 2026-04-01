@@ -3,84 +3,167 @@ const { createMollieClient } = pkg;
 
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
-const PRODUCTS = {
-  petholder: { name: 'PetHolder', price: 55.00 },
-  petanesth: { name: 'PetAnesth', price: 119.00 },
-};
+const processedPayments = new Set();
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== 'POST') return res.status(405).end();
+
+  const { id } = req.body;
+  if (!id) return res.status(400).end();
+
+  // Skip si déjà traité — répondre 200 quand même pour stopper les retries
+  if (processedPayments.has(id)) {
+    console.log(`Payment ${id} already processed — skipping`);
+    return res.status(200).end();
   }
 
-  try {
-    const {
-      items,
-      customerEmail,
-      customerName,
-      billingAddress,
-      shippingAddress,
-      vatNumber,
-      shippingFee,
-    } = req.body;
+  // Marquer immédiatement avant tout traitement async
+  processedPayments.add(id);
 
-    if (!items || !Array.isArray(items) || items.length === 0) {
-      return res.status(400).json({ error: 'No items provided' });
+  try {
+    const payment = await mollie.payments.get(id);
+
+    if (payment.status === 'paid' && parseFloat(payment.amountRefunded?.value || 0) === 0) {
+      const meta = payment.metadata || {};
+      const customerName    = meta.customerName    || 'Client';
+      const customerEmail   = meta.customerEmail   || '';
+      const billingAddress  = meta.billingAddress  || 'Not provided';
+      const shippingAddress = meta.shippingAddress || billingAddress;
+      const vatNumber       = meta.vatNumber       || '';
+      const shippingFee     = meta.shippingFee     || 'included';
+      const items           = JSON.parse(meta.items || '[]');
+      const amount          = `${payment.amount.value} ${payment.amount.currency}`;
+      const date            = new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+      const PRODUCTS = {
+        petholder: { name: 'PetHolder', price: 55.00 },
+        petanesth: { name: 'PetAnesth', price: 119.00 },
+      };
+
+      const itemsHtml = items.map(({ productId, quantity }) => {
+        const p = PRODUCTS[productId] || { name: productId, price: 0 };
+        return `
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${p.name}</td>
+            <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;text-align:center">${quantity}</td>
+            <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;text-align:right">${(p.price * quantity).toFixed(2)} €</td>
+          </tr>`;
+      }).join('');
+
+      const itemsSummary = items.map(({ productId, quantity }) => {
+        const p = PRODUCTS[productId] || { name: productId, price: 0 };
+        return `${p.name} x${quantity}`;
+      }).join(', ');
+
+      // ── Email au client ──
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'VetoProtec <contact@vetoprotec.fr>',
+          to: [customerEmail],
+          reply_to: 'contact@vetoprotec.fr',
+          subject: 'Order confirmed — VetoProtec',
+          html: `
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <h2 style="color:#c084c8;margin:0 0 8px">Order confirmed ✅</h2>
+              <p style="color:#6b7280;margin:0 0 24px">Thank you for your order, ${customerName}. We will get back to you shortly with shipping details.</p>
+              <table style="width:100%;border-collapse:collapse">
+                <thead>
+                  <tr style="background:#fdf4ff">
+                    <th style="padding:10px;text-align:left;color:#8a6a7a;font-weight:600">Product</th>
+                    <th style="padding:10px;text-align:center;color:#8a6a7a;font-weight:600">Qty</th>
+                    <th style="padding:10px;text-align:right;color:#8a6a7a;font-weight:600">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>${itemsHtml}</tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2" style="padding:12px 0;font-weight:700;font-size:16px">Total paid</td>
+                    <td style="padding:12px 0;font-weight:700;font-size:16px;text-align:right">${amount}</td>
+                  </tr>
+                </tfoot>
+              </table>
+              <p style="margin:24px 0 8px;color:#6b7280;font-size:14px">Questions? Reply to this email or contact us at <a href="mailto:contact@vetoprotec.fr">contact@vetoprotec.fr</a></p>
+              <p style="margin:0;font-size:12px;color:#b0a0b0">VetoProtec — vetoprotec.fr</p>
+            </div>
+          `,
+        }),
+      });
+
+      // ── Email à VetoProtec ──
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'VetoProtec Orders <contact@vetoprotec.fr>',
+          to: ['drderrien@vetoprotec.fr'],
+          reply_to: customerEmail,
+          subject: `🛒 New order — ${itemsSummary}`,
+          html: `
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
+              <h2 style="color:#c084c8;margin:0 0 20px">New order received 🛒</h2>
+              <table style="width:100%;border-collapse:collapse">
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;width:140px;color:#8a6a7a">Customer</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${customerName}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Email</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee"><a href="mailto:${customerEmail}">${customerEmail}</a></td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Order</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${itemsSummary}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Amount paid</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:700;color:#166534">${amount}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Shipping</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${shippingFee}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Billing address</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${billingAddress}</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Shipping address</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${shippingAddress}</td>
+                </tr>
+                ${vatNumber ? `<tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">VAT number</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${vatNumber}</td>
+                </tr>` : ''}
+                <tr>
+                  <td style="padding:10px 0;font-weight:600;color:#8a6a7a">Date</td>
+                  <td style="padding:10px 0">${date}</td>
+                </tr>
+              </table>
+              <p style="margin:24px 0 0;font-size:12px;color:#b0a0b0">
+                Répondre à cet email contacte directement le client.
+              </p>
+            </div>
+          `,
+        }),
+      });
+
+      console.log(`Payment ${id} paid — emails sent to ${customerEmail} and drderrien@vetoprotec.fr`);
+    } else {
+      console.log(`Payment ${id} status: ${payment.status} — no emails sent`);
     }
 
-    let total = 0;
+    res.status(200).end();
 
-    const description = items
-      .map(({ productId, quantity }) => {
-        const product = PRODUCTS[productId];
-        if (!product) {
-          throw new Error(`Unknown product: ${productId}`);
-        }
-
-        const qty = Number(quantity);
-        if (!Number.isInteger(qty) || qty <= 0) {
-          throw new Error(`Invalid quantity for product: ${productId}`);
-        }
-
-        total += product.price * qty;
-        return `${product.name} x${qty}`;
-      })
-      .join(', ');
-
-    const shipping = Number(shippingFee) || 0;
-    const grandTotal = total + shipping;
-
-    const baseUrl =
-      process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
-
-    const payment = await mollie.payments.create({
-      amount: {
-        currency: 'EUR',
-        value: grandTotal.toFixed(2),
-      },
-      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${customerName ? ` | ${customerName}` : ''}`,
-      redirectUrl: `${baseUrl}/en/confirmation.html`,
-      cancelUrl: `${baseUrl}/en/confirmation.html?status=cancelled`,
-      webhookUrl: `${baseUrl}/api/webhook-mollie`,
-      metadata: {
-        customerEmail: customerEmail || '',
-        customerName: customerName || '',
-        billingAddress: billingAddress || '',
-        shippingAddress: shippingAddress || '',
-        vatNumber: vatNumber || '',
-        shippingFee: shipping > 0 ? `${shipping.toFixed(2)} €` : 'included',
-        items: JSON.stringify(items),
-      },
-    });
-
-    return res.status(200).json({
-      checkoutUrl: payment.getCheckoutUrl(),
-      paymentId: payment.id,
-    });
   } catch (err) {
-    console.error('Mollie error:', err);
-    return res.status(500).json({
-      error: err.message || 'Payment creation failed',
-    });
+    console.error('Webhook error:', err);
+    res.status(500).end();
   }
 }
