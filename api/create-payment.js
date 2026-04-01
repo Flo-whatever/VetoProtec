@@ -19,10 +19,13 @@ export default async function handler(req, res) {
       total += parseFloat(product.price) * quantity;
       return `${product.name} x${quantity}`;
     }).join(', ');
+
+    // ── Shipping calculation ── OUTSIDE the object
+    const shipping = parseFloat(shippingFee) || 0;
+    const grandTotal = total + shipping;
+
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
     const payment = await mollie.payments.create({
-      const shipping = parseFloat(shippingFee) || 0;
-      const grandTotal = total + shipping;
       amount: { currency: 'EUR', value: grandTotal.toFixed(2) },
       description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'} | ${customerName}`,
       redirectUrl: `${baseUrl}/en/confirmation.html`,
