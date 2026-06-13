@@ -107,10 +107,56 @@
     .brand { font-weight: 700; font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: .01em; color: inherit; }
     .brand img { height: 80px; }
 
+    /* ── Partenaires & Réseau ── */
+    .partner-logos {
+      display: flex; align-items: center; gap: 32px; flex-wrap: wrap; margin: 24px 0 8px;
+    }
+    .partner-logos img {
+      height: 52px; object-fit: contain; filter: grayscale(30%); opacity: .85;
+      transition: opacity .2s, filter .2s;
+    }
+    .partner-logos img:hover { opacity: 1; filter: grayscale(0%); }
+
+    .partner-text-only {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 12px 0;
+    }
+    .partner-badge {
+      background: var(--surface, #f8f6fb); border: 1px solid var(--border);
+      border-radius: 10px; padding: 8px 18px;
+      font-size: 14px; font-weight: 500; color: var(--text);
+    }
+
+    .reseau-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px;
+    }
+    .reseau-region {
+      background: var(--surface, #f8f6fb); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 20px;
+    }
+    .reseau-region h4 {
+      margin: 0 0 10px; font-family: 'DM Serif Display', serif; font-size: 16px; font-weight: 400;
+      color: var(--text);
+    }
+    .reseau-region ul { margin: 0; padding-left: 16px; }
+    .reseau-region li { margin: 6px 0; font-size: 14px; color: var(--muted); font-weight: 300; line-height: 1.5; }
+    .reseau-region li a { color: var(--accent2, #9333ea); text-decoration: none; font-weight: 500; }
+    .reseau-region li a:hover { text-decoration: underline; }
+    .reseau-note { font-size: 12px; color: var(--muted); font-style: italic; margin-top: 4px; display: block; }
+
+    .distrib-banner {
+      margin-top: 28px; padding: 20px 24px;
+      background: linear-gradient(135deg, #fce7f3, #e9d5ff);
+      border-radius: 16px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .distrib-banner p { margin: 0; font-weight: 500; font-size: 15px; color: var(--text); }
+    .distrib-banner a { flex-shrink: 0; }
+
     @media (max-width: 900px) {
       .hero-grid { grid-template-columns: 1fr; }
       .h-title { font-size: 34px; }
       .carousel-wrap { height: 260px; }
+      .distrib-banner { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -125,6 +171,7 @@
       <nav class="navlinks" aria-label="Navigation">
         <a href="#produits">Produits</a>
         <a href="#commande">Commander</a>
+        <a href="#partenaires">Partenaires</a>
         <a href="#apropos">À propos</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
@@ -194,13 +241,13 @@
           <img src="/petholder_product.png" alt="" class="product-bg" aria-hidden="true" />
           <h3>PetHolder</h3>
           <p style="font-weight:500;color:var(--text);margin:4px 0 10px;font-size:15px;">
-          Ventouses de stabilisation pour animaux sédatés lors d’examens et de procédures vétérinaires.</p>
-          <p style="color:var(--muted);margin:0;font-weight:300">Conçu pour maintenir l’animal en position lors d’examens ou de petites procédures, PetHolder améliore la sécurité et réduit la manipulation par le personnel.</p>
+          Ventouses de stabilisation pour animaux sédatés lors d'examens et de procédures vétérinaires.</p>
+          <p style="color:var(--muted);margin:0;font-weight:300">Conçu pour maintenir l'animal en position lors d'examens ou de petites procédures, PetHolder améliore la sécurité et réduit la manipulation par le personnel.</p>
           <ul>
             <li>Stabilisation douce et efficace des animaux sous sédation.</li>
             <li>Idéal pour la radiologie, les petites interventions et certains examens.</li>
             <li>Forte adhérence sur surfaces lisses : verre, métal, plastique, acier inoxydable.</li>
-            <li>Force de maintien jusqu’à 5–10 kg par ventouse sur surface lisse.</li>
+            <li>Force de maintien jusqu'à 5–10 kg par ventouse sur surface lisse.</li>
           </ul>
           <div class="cta"><a class="btn primary" href="PetHolder.html">Fiche produit</a></div>
         </div>
@@ -213,9 +260,9 @@
           <p style="color:var(--muted);margin:0;font-weight:300">Conçu pour stabiliser le circuit respiratoire et sécuriser les procédures anesthésiques au bloc opératoire.</p>
           <ul>
             <li>Améliore la sécurité anesthésique en limitant la traction sur le tube endotrachéal.</li>
-            <li>Optimise l’ergonomie au bloc et libère le champ opératoire.</li>
+            <li>Optimise l'ergonomie au bloc et libère le champ opératoire.</li>
             <li>Évite les installations improvisées et standardise la mise en place du circuit.</li>
-            <li>Fixation rapide sur table vétérinaire (compatible tables jusqu’à 5 cm d’épaisseur).</li>
+            <li>Fixation rapide sur table vétérinaire (compatible tables jusqu'à 5 cm d'épaisseur).</li>
           </ul>
           <div class="cta"><a class="btn primary" href="PetAnesth.html">Fiche produit</a></div>
         </div>
@@ -233,6 +280,96 @@
           <a class="btn primary" href="#contact">Contacter VetoProtec</a>
           <a class="btn" href="#faq">Voir la FAQ</a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SECTION PARTENAIRES & RÉSEAU
+  ══════════════════════════════════════════ -->
+  <section id="partenaires">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title">Partenaires & Réseau</h2>
+
+        <!-- Collaborations académiques -->
+        <h3 style="font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin:0 0 8px;">Collaborations académiques</h3>
+        <p style="color:var(--muted);font-weight:300;margin:0 0 16px;">
+          VetoProtec travaille en collaboration avec l'ENVA (École Nationale Vétérinaire d'Alfort) et Oniris (École Nationale Vétérinaire de Nantes). Nos produits sont également utilisés à l'Université de Valence (Espagne).
+        </p>
+        <div class="partner-logos">
+          <img src="/2023_ENVA_Paris_RVB.jpg" alt="ENVA — École Nationale Vétérinaire d'Alfort" title="ENVA" />
+        </div>
+        <div class="partner-text-only">
+          <span class="partner-badge">Oniris — ENVN</span>
+          <span class="partner-badge">Université de Valence</span>
+        </div>
+
+        <!-- Nos centrales -->
+        <h3 style="font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin:28px 0 8px;">Nos centrales</h3>
+        <p style="color:var(--muted);font-weight:300;margin:0 0 16px;">
+          Nos produits sont référencés auprès des principales centrales d'achats vétérinaires en France.
+        </p>
+        <div class="partner-text-only">
+          <a class="partner-badge" href="https://www.alcyon.com/" target="_blank" rel="noopener" style="text-decoration:none;">Alcyon</a>
+          <a class="partner-badge" href="https://www.coveto.fr/" target="_blank" rel="noopener" style="text-decoration:none;">Coveto</a>
+          <a class="partner-badge" href="https://www.centravet.fr/" target="_blank" rel="noopener" style="text-decoration:none;">Centravet</a>
+        </div>
+
+        <!-- Réseau international -->
+        <h3 style="font-family:'DM Serif Display',serif;font-size:18px;font-weight:400;margin:28px 0 8px;">Réseau international</h3>
+        <p style="color:var(--muted);font-weight:300;margin:0 0 20px;">
+          VetoProtec est disponible en Europe grâce à un réseau de distributeurs partenaires.
+        </p>
+
+        <div class="reseau-grid">
+
+          <div class="reseau-region">
+            <h4>🇮🇹 Italie</h4>
+            <ul>
+              <li>
+                <a href="https://www.alcyonitalia.com/" target="_blank" rel="noopener">Alcyon Italia</a>
+              </li>
+              <li>
+                MGM Lab
+                <span class="reseau-note">Pour toute commande, merci de contacter directement MGM Lab.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="reseau-region">
+            <h4>🇧🇪🇱🇺 Belgique & Luxembourg</h4>
+            <ul>
+              <li>
+                <a href="https://www.alcyonbelux.be/fr" target="_blank" rel="noopener">Alcyon Belux</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="reseau-region">
+            <h4>🇳🇱 Pays-Bas</h4>
+            <ul>
+              <li>NL Pharma</li>
+            </ul>
+          </div>
+
+          <div class="reseau-region">
+            <h4>🇳🇴 Norvège</h4>
+            <ul>
+              <li>
+                <a href="https://www.tindklinikkutstyr.no/" target="_blank" rel="noopener">Tind Klinikkutstyr</a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Encart distributeur -->
+        <div class="distrib-banner">
+          <p>🌍 Vous souhaitez devenir distributeur Véto Protec dans votre pays ?</p>
+          <a class="btn primary" href="#contact">Contactez-nous !</a>
+        </div>
+
       </div>
     </div>
   </section>
