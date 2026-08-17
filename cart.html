@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panier — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        var(--bg);
+    }
+    .cart-wrap { max-width: 600px; margin: 60px auto; padding: 0 24px; }
+    .cart-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 8px; }
+    .cart-empty { color: var(--muted); font-weight: 300; margin: 40px 0; text-align: center; }
+    .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .cart-item-name { font-weight: 500; font-size: 16px; }
+    .cart-item-price { color: var(--muted); font-size: 14px; margin-top: 2px; }
+    .qty-control { display: flex; align-items: center; gap: 10px; }
+    .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+    .qty-btn:hover { background: var(--border); }
+    .qty-num { font-weight: 500; min-width: 20px; text-align: center; }
+    .remove-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 18px; padding: 4px 8px; }
+    .remove-btn:hover { color: #e11d48; }
+    .cart-summary { margin-top: 24px; padding: 20px; background: rgba(192,132,200,.08); border: 1px solid var(--border); border-radius: 16px; }
+    .summary-row { display: flex; justify-content: space-between; margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+    .summary-total { display: flex; justify-content: space-between; font-weight: 600; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+    .checkout-form { margin-top: 24px; }
+    .checkout-form label { display: block; margin-bottom: 14px; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .checkout-form input { display: block; width: 100%; margin-top: 6px; }
+    #cartFeedback { display:none; margin-top:14px; padding:12px 16px; border-radius:14px; font-size:14px; font-weight:500; }
+
+    /* ── Icône panier ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="/">
+      <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+    </a>
+    <div class="nav-right">
+      <a class="btn" href="/">← Retour</a>
+      <a class="cart-icon-btn" href="/cart.html" aria-label="Voir le panier">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="cart-wrap">
+    <h1 class="cart-title">Votre panier</h1>
+
+    <div id="cartItems"></div>
+
+    <div id="cartSummary" style="display:none">
+      <div class="cart-summary">
+        <div id="summaryLines"></div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="totalAmount"></span>
+        </div>
+        <div id="shippingInfo" style="margin-top:10px;padding:8px 12px;border-radius:10px;font-size:13px;font-weight:500;text-align:center;"></div>
+      </div>
+
+      <div class="checkout-form">
+        <div style="margin-bottom:20px;padding:12px 16px;border-radius:12px;background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;font-size:13px;line-height:1.6">
+          🌍 La commande en ligne est disponible pour l'Europe. Si votre pays n'est pas listé, merci de <a href="/#contact" style="color:#0369a1;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+        </div>
+        <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:16px">Vos coordonnées</h2>
+        <label>Nom de la clinique / de la société
+          <input type="text" id="customerName" placeholder="Clinique vétérinaire…" required />
+        </label>
+        <label>Email
+          <input type="email" id="customerEmail" placeholder="vous@exemple.fr" required />
+          <span style="font-size:12px;color:#b45309;font-weight:400;margin-top:5px;display:block">⚠️ Vérifiez bien votre adresse email — c'est par ce moyen que nous vous contacterons.</span>
+        </label>
+        <label>Téléphone <span style="font-weight:300;font-size:12px">(facultatif)</span>
+          <input type="tel" id="customerPhone" placeholder="+33 …" />
+        </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">Adresse de facturation</h3>
+        <label>Adresse
+          <input type="text" id="customerAddress" placeholder="12 rue Principale…" required />
+        </label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <label>Ville
+            <input type="text" id="customerCity" placeholder="Paris…" required />
+          </label>
+          <label>Code postal
+            <input type="text" id="customerPostcode" placeholder="75001…" required />
+          </label>
+        </div>
+        <label>Pays
+          <select id="customerCountry" required style="width:100%;margin-top:6px">
+            <option value="" disabled selected>Sélectionnez votre pays…</option>
+            <optgroup label="🚚 Zone 1 — Europe de l'Ouest">
+              <option value="France">France</option>
+              <option value="Germany">Allemagne</option>
+              <option value="Belgium">Belgique</option>
+              <option value="Luxembourg">Luxembourg</option>
+              <option value="Netherlands">Pays-Bas</option>
+              <option value="Austria">Autriche</option>
+              <option value="Spain">Espagne</option>
+              <option value="Italy">Italie</option>
+              <option value="Portugal">Portugal</option>
+              <option value="Switzerland">Suisse</option>
+              <option value="Liechtenstein">Liechtenstein</option>
+              <option value="Andorra">Andorre</option>
+              <option value="Monaco">Monaco</option>
+              <option value="San Marino">Saint-Marin</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est">
+              <option value="United Kingdom">Royaume-Uni</option>
+              <option value="Ireland">Irlande</option>
+              <option value="Denmark">Danemark</option>
+              <option value="Sweden">Suède</option>
+              <option value="Norway">Norvège</option>
+              <option value="Finland">Finlande</option>
+              <option value="Iceland">Islande</option>
+              <option value="Greece">Grèce</option>
+              <option value="Malta">Malte</option>
+              <option value="Cyprus">Chypre</option>
+              <option value="Poland">Pologne</option>
+              <option value="Czech Republic">République tchèque</option>
+              <option value="Hungary">Hongrie</option>
+              <option value="Slovakia">Slovaquie</option>
+              <option value="Romania">Roumanie</option>
+              <option value="Bulgaria">Bulgarie</option>
+              <option value="Croatia">Croatie</option>
+              <option value="Slovenia">Slovénie</option>
+              <option value="Estonia">Estonie</option>
+              <option value="Latvia">Lettonie</option>
+              <option value="Lithuania">Lituanie</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est">
+              <option value="Serbia">Serbie</option>
+              <option value="Kosovo">Kosovo</option>
+              <option value="Albania">Albanie</option>
+              <option value="Bosnia and Herzegovina">Bosnie-Herzégovine</option>
+              <option value="Montenegro">Monténégro</option>
+              <option value="North Macedonia">Macédoine du Nord</option>
+              <option value="Moldova">Moldavie</option>
+              <option value="Ukraine">Ukraine</option>
+              <option value="Georgia">Géorgie</option>
+              <option value="Armenia">Arménie</option>
+              <option value="Azerbaijan">Azerbaïdjan</option>
+            </optgroup>
+            <option value="other">Mon pays n'est pas dans la liste</option>
+          </select>
+        </label>
+        <div id="countryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
+          🌍 La commande en ligne est actuellement disponible uniquement dans l'UE et les pays partenaires européens. Si vous êtes situé en dehors de cette zone, indiquez votre pays ci-dessous — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+        </div>
+        <div id="customCountryField" style="display:none;margin-top:10px">
+          <label>Votre pays
+            <input type="text" id="customCountryName" placeholder="ex. Australie, Canada, Japon…" style="margin-top:6px" />
+          </label>
+        </div>
+
+        <label style="margin-top:14px">
+          Numéro de TVA
+          <span style="font-weight:300;font-size:12px"> (facultatif — requis pour une facturation exonérée de TVA)</span>
+          <input type="text" id="customerVAT" placeholder="FR12345678901… / CHE-xxx…" />
+          <span style="font-size:11px;color:var(--muted);font-weight:300;margin-top:4px;display:block">TVA intracommunautaire (UE) · USt-IdNr (DE) · NIF-IVA (ES) · Partita IVA (IT) · BTW (NL) · UID CHE-xxx (CH)</span>
+        </label>
+
+        <h3 style="font-family:'DM Serif Display',serif;font-size:17px;margin:20px 0 12px;color:var(--text)">
+          Adresse de livraison
+          <span style="font-weight:300;font-size:13px;font-family:'DM Sans',sans-serif"> — si différente de la facturation</span>
+        </h3>
+
+        <label style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:400;cursor:pointer;margin-bottom:14px">
+          <input type="checkbox" id="sameAsBilling" onchange="toggleShipping()" style="width:auto;margin:0" />
+          Identique à l'adresse de facturation
+        </label>
+
+        <div id="shippingFields">
+          <label>Adresse
+            <input type="text" id="shippingAddress" placeholder="12 rue Principale…" />
+          </label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <label>Ville
+              <input type="text" id="shippingCity" placeholder="Paris…" />
+            </label>
+            <label>Code postal
+              <input type="text" id="shippingPostcode" placeholder="75001…" />
+            </label>
+          </div>
+          <label>Pays
+            <select id="shippingCountry" style="width:100%;margin-top:6px">
+              <option value="" disabled selected>Sélectionnez votre pays…</option>
+              <optgroup label="🚚 Zone 1 — Europe de l'Ouest">
+                <option value="France">France</option>
+                <option value="Germany">Allemagne</option>
+                <option value="Belgium">Belgique</option>
+                <option value="Luxembourg">Luxembourg</option>
+                <option value="Netherlands">Pays-Bas</option>
+                <option value="Austria">Autriche</option>
+                <option value="Spain">Espagne</option>
+                <option value="Italy">Italie</option>
+                <option value="Portugal">Portugal</option>
+                <option value="Switzerland">Suisse</option>
+                <option value="Liechtenstein">Liechtenstein</option>
+                <option value="Andorra">Andorre</option>
+                <option value="Monaco">Monaco</option>
+                <option value="San Marino">Saint-Marin</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est">
+                <option value="United Kingdom">Royaume-Uni</option>
+                <option value="Ireland">Irlande</option>
+                <option value="Denmark">Danemark</option>
+                <option value="Sweden">Suède</option>
+                <option value="Norway">Norvège</option>
+                <option value="Finland">Finlande</option>
+                <option value="Iceland">Islande</option>
+                <option value="Greece">Grèce</option>
+                <option value="Malta">Malte</option>
+                <option value="Cyprus">Chypre</option>
+                <option value="Poland">Pologne</option>
+                <option value="Czech Republic">République tchèque</option>
+                <option value="Hungary">Hongrie</option>
+                <option value="Slovakia">Slovaquie</option>
+                <option value="Romania">Roumanie</option>
+                <option value="Bulgaria">Bulgarie</option>
+                <option value="Croatia">Croatie</option>
+                <option value="Slovenia">Slovénie</option>
+                <option value="Estonia">Estonie</option>
+                <option value="Latvia">Lettonie</option>
+                <option value="Lithuania">Lituanie</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est">
+                <option value="Serbia">Serbie</option>
+                <option value="Kosovo">Kosovo</option>
+                <option value="Albania">Albanie</option>
+                <option value="Bosnia and Herzegovina">Bosnie-Herzégovine</option>
+                <option value="Montenegro">Monténégro</option>
+                <option value="North Macedonia">Macédoine du Nord</option>
+                <option value="Moldova">Moldavie</option>
+                <option value="Ukraine">Ukraine</option>
+                <option value="Georgia">Géorgie</option>
+                <option value="Armenia">Arménie</option>
+                <option value="Azerbaijan">Azerbaïdjan</option>
+              </optgroup>
+              <option value="other">Mon pays n'est pas dans la liste</option>
+            </select>
+          </label>
+          <div id="shippingCountryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
+            🌍 La commande en ligne est actuellement disponible uniquement dans l'UE et les pays partenaires européens. Si vous êtes situé en dehors de cette zone, merci de <a href="/#contact" style="color:#854d0e;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+          </div>
+        </div>
+      </div>
+
+      <div id="cartFeedback"></div>
+
+      <div class="cta" style="margin-top:20px">
+        <button class="btn primary" id="checkoutBtn" onclick="checkout()">Procéder au paiement →</button>
+        <a class="btn" href="/">Continuer mes achats</a>
+      </div>
+      <div id="customShippingCta" style="display:none;margin-top:12px">
+        <button class="btn primary" id="customShippingBtn" onclick="sendCustomRequest()" style="background:linear-gradient(135deg,#c084c8,#f472b6)">📦 Envoyer la demande à notre équipe →</button>
+      </div>
+    </div>
+
+    <div id="cartEmpty" class="cart-empty" style="display:none">
+      <p>Votre panier est vide.</p>
+      <a class="btn primary" href="/#produits" style="margin-top:16px;display:inline-block">Voir les produits</a>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgv.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+const PRODUCTS = {
+  petholder: { name: 'PetHolder', price: 55.00 },
+  petanesth: { name: 'PetAnesth', price: 119.00 },
+};
+
+function getCart() {
+  try { return JSON.parse(sessionStorage.getItem('vp_cart') || '{}'); }
+  catch { return {}; }
+}
+
+function saveCart(cart) {
+  sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  renderCart();
+  updateCartBadge();
+}
+
+// Demande de livraison personnalisée
+async function sendCustomRequest() {
+  const cart     = getCart();
+  const name     = document.getElementById('customerName').value.trim();
+  const email    = document.getElementById('customerEmail').value.trim();
+  const phone    = document.getElementById('customerPhone').value.trim();
+  const address  = document.getElementById('customerAddress').value.trim();
+  const city     = document.getElementById('customerCity').value.trim();
+  const postcode = document.getElementById('customerPostcode').value.trim();
+  const country  = document.getElementById('customerCountry').value;
+  const customCountryName = country === 'other'
+    ? (document.getElementById('customCountryName').value.trim() || 'Non précisé')
+    : country;
+  const vatNumber = document.getElementById('customerVAT').value.trim() || '';
+  const sameAsBilling = document.getElementById('sameAsBilling').checked;
+  const shipAddress = sameAsBilling ? address : document.getElementById('shippingAddress').value.trim();
+  const shipCity    = sameAsBilling ? city    : document.getElementById('shippingCity').value.trim();
+  const shipPostcode= sameAsBilling ? postcode: document.getElementById('shippingPostcode').value.trim();
+  const shipCountry = sameAsBilling ? country : document.getElementById('shippingCountry').value;
+  const feedback = document.getElementById('cartFeedback');
+  const btn = document.getElementById('customShippingBtn');
+
+  if (!name || !email || !address || !city || !postcode) {
+    feedback.textContent = '⚠️ Merci de renseigner tous les champs obligatoires.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  const billingAddress  = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tél: ' + phone : ''}`;
+  const shippingAddress = sameAsBilling ? billingAddress : `${shipAddress}, ${shipPostcode} ${shipCity}, ${shipCountry}`;
+  const items = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+
+  btn.textContent = 'Envoi…';
+  btn.disabled = true;
+  feedback.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/contact-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName: name, customerEmail: email, customerPhone: phone, billingAddress, shippingAddress, vatNumber, items, country: customCountryName }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+
+    sessionStorage.removeItem('vp_cart');
+    feedback.textContent = '✅ Demande envoyée ! Notre équipe reviendra vers vous rapidement avec un devis de livraison personnalisé.';
+    feedback.style.cssText = 'background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    document.getElementById('customShippingBtn').style.display = 'none';
+    updateCartBadge();
+  } catch (err) {
+    feedback.textContent = '❌ ' + (err.message || 'Une erreur est survenue. Merci de réessayer.');
+    feedback.style.cssText = 'background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    btn.textContent = '📦 Envoyer la demande à notre équipe →';
+    btn.disabled = false;
+  }
+}
+
+function toggleShipping() {
+  const same = document.getElementById('sameAsBilling').checked;
+  document.getElementById('shippingFields').style.display = same ? 'none' : 'block';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const shippingCountrySelect = document.getElementById('shippingCountry');
+  if (shippingCountrySelect) {
+    shippingCountrySelect.addEventListener('change', function() {
+      const unavail = document.getElementById('shippingCountryUnavailable');
+      const btn = document.getElementById('checkoutBtn');
+      if (this.value === 'other') {
+        unavail.style.display = 'block';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+      } else {
+        unavail.style.display = 'none';
+        const billingCountry = document.getElementById('customerCountry').value;
+        if (billingCountry !== 'other') {
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        }
+      }
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const countrySelect = document.getElementById('customerCountry');
+  const unavailableMsg = document.getElementById('countryUnavailable');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  if (countrySelect) {
+    countrySelect.addEventListener('change', function() {
+      const customCta = document.getElementById('customShippingCta');
+      const customCountryField = document.getElementById('customCountryField');
+      if (this.value === 'other') {
+        unavailableMsg.style.display = 'block';
+        customCountryField.style.display = 'block';
+        checkoutBtn.style.display = 'none';
+        customCta.style.display = 'block';
+      } else {
+        unavailableMsg.style.display = 'none';
+        customCountryField.style.display = 'none';
+        checkoutBtn.style.display = '';
+        checkoutBtn.disabled = false;
+        checkoutBtn.style.opacity = '1';
+        customCta.style.display = 'none';
+      }
+    });
+  }
+});
+
+function getCartCount() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  } catch { return 0; }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+  else { badge.classList.remove('visible'); }
+}
+
+function renderCart() {
+  const cart = getCart();
+  const keys = Object.keys(cart).filter(k => cart[k] > 0);
+  const itemsEl = document.getElementById('cartItems');
+  const summaryEl = document.getElementById('cartSummary');
+  const emptyEl = document.getElementById('cartEmpty');
+
+  if (keys.length === 0) {
+    itemsEl.innerHTML = '';
+    summaryEl.style.display = 'none';
+    emptyEl.style.display = 'block';
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  summaryEl.style.display = 'block';
+
+  let total = 0;
+  let summaryLines = '';
+  itemsEl.innerHTML = keys.map(productId => {
+    const product = PRODUCTS[productId];
+    const qty = cart[productId];
+    const subtotal = product.price * qty;
+    total += subtotal;
+    summaryLines += `<div class="summary-row"><span>${product.name} x${qty}</span><span>${subtotal.toFixed(2)} €</span></div>`;
+    return `
+      <div class="cart-item">
+        <div>
+          <div class="cart-item-name">${product.name}</div>
+          <div class="cart-item-price">${product.price.toFixed(2)} € / unité</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty('${productId}', -1)">−</button>
+            <span class="qty-num">${qty}</span>
+            <button class="qty-btn" onclick="updateQty('${productId}', 1)">+</button>
+          </div>
+          <button class="remove-btn" onclick="removeItem('${productId}')" title="Retirer">✕</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  const SHIPPING_FEE = 5.99;
+  const SHIPPING_THRESHOLD = 100.00;
+  const shippingInfo = document.getElementById('shippingInfo');
+  let finalTotal = total;
+
+  if (total >= SHIPPING_THRESHOLD) {
+    shippingInfo.textContent = '✅ Livraison incluse';
+    shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(22,101,52,.08);border-radius:10px;font-size:13px;color:#166534;font-weight:500;text-align:center;';
+  } else {
+    finalTotal = total + SHIPPING_FEE;
+    summaryLines += `<div class="summary-row"><span>Livraison</span><span>${SHIPPING_FEE.toFixed(2)} €</span></div>`;
+    shippingInfo.textContent = '🚚 Livraison offerte dès 100 €';
+    shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(192,132,200,.08);border-radius:10px;font-size:13px;color:var(--muted);font-weight:400;text-align:center;';
+  }
+
+  document.getElementById('summaryLines').innerHTML = summaryLines;
+  document.getElementById('totalAmount').textContent = finalTotal.toFixed(2) + ' €';
+}
+
+function updateQty(productId, delta) {
+  const cart = getCart();
+  cart[productId] = (cart[productId] || 0) + delta;
+  if (cart[productId] <= 0) delete cart[productId];
+  saveCart(cart);
+}
+
+function removeItem(productId) {
+  const cart = getCart();
+  delete cart[productId];
+  saveCart(cart);
+}
+
+async function checkout() {
+  const cart     = getCart();
+  const name     = document.getElementById('customerName').value.trim();
+  const email    = document.getElementById('customerEmail').value.trim();
+  const phone    = document.getElementById('customerPhone').value.trim();
+  const address  = document.getElementById('customerAddress').value.trim();
+  const city     = document.getElementById('customerCity').value.trim();
+  const postcode = document.getElementById('customerPostcode').value.trim();
+  const country       = document.getElementById('customerCountry').value;
+  const vatNumber     = document.getElementById('customerVAT').value.trim() || '';
+  const sameAsBilling = document.getElementById('sameAsBilling').checked;
+  const shipAddress   = sameAsBilling ? '' : document.getElementById('shippingAddress').value.trim();
+  const shipCity      = sameAsBilling ? '' : document.getElementById('shippingCity').value.trim();
+  const shipPostcode  = sameAsBilling ? '' : document.getElementById('shippingPostcode').value.trim();
+  const shipCountry   = sameAsBilling ? '' : document.getElementById('shippingCountry').value.trim();
+  const feedback = document.getElementById('cartFeedback');
+  const btn      = document.getElementById('checkoutBtn');
+
+  if (!sameAsBilling && shipCountry === 'other') {
+    feedback.textContent = '⚠️ Nous ne livrons pas encore votre région de destination. Merci de nous contacter directement.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  if (!sameAsBilling && (!shipAddress || !shipCity || !shipPostcode || !shipCountry)) {
+    feedback.textContent = '⚠️ Merci de renseigner l\'adresse de livraison complète.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  if (!name || !email || !address || !city || !postcode || !country) {
+    feedback.textContent = '⚠️ Merci de renseigner tous les champs obligatoires.';
+    feedback.style.cssText = 'background:#fef9c3;color:#854d0e;border:1px solid #fde68a;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    return;
+  }
+
+  const billingAddress  = `${address}, ${postcode} ${city}, ${country}${phone ? ' — Tél: ' + phone : ''}`;
+  const shippingAddress = sameAsBilling
+    ? billingAddress
+    : `${shipAddress}, ${shipPostcode} ${shipCity}, ${shipCountry}`;
+  const items = Object.entries(cart).map(([productId, quantity]) => ({ productId, quantity }));
+  btn.textContent = 'Redirection…';
+  btn.disabled = true;
+  feedback.style.display = 'none';
+
+  try {
+    const cartTotal = Object.entries(cart).reduce((t, [pid, qty]) => t + (PRODUCTS[pid]?.price || 0) * qty, 0);
+    const shippingFee = cartTotal >= 100 ? 0 : 5.99;
+    const res = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber: vatNumber || '', shippingFee, locale: 'fr' }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur de paiement');
+    sessionStorage.removeItem('vp_cart');
+    if (data.paymentId) sessionStorage.setItem('vp_payment_id', data.paymentId);
+    window.location.href = data.checkoutUrl;
+  } catch (err) {
+    feedback.textContent = '❌ ' + (err.message || 'Une erreur est survenue. Merci de réessayer.');
+    feedback.style.cssText = 'background:#fef2f2;color:#991b1b;border:1px solid #fecaca;display:block;margin-top:14px;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:500';
+    btn.textContent = 'Procéder au paiement →';
+    btn.disabled = false;
+  }
+}
+
+renderCart();
+updateCartBadge();
+</script>
+
+</body>
+</html>

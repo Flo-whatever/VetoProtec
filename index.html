@@ -107,6 +107,24 @@
     .brand { font-weight: 700; font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: .01em; color: inherit; }
     .brand img { height: 80px; }
 
+    /* ── Icône panier ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+
     /* ── Partenaires & Réseau ── */
     .partner-logos {
       display: flex; align-items: center; gap: 32px; flex-wrap: wrap; margin: 24px 0 8px;
@@ -176,6 +194,10 @@
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
         <a class="btn" href="/en/" style="font-size:13px">🌐 EN</a>
+        <a class="cart-icon-btn" href="/cart.html" aria-label="Voir le panier">
+          🛒
+          <span class="cart-badge" id="cartBadge"></span>
+        </a>
       </nav>
     </div>
   </div>
@@ -475,6 +497,17 @@
 
 <script>
   document.getElementById("y").textContent = new Date().getFullYear();
+
+  // Badge panier
+  (function updateCartBadge() {
+    try {
+      const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+      const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      const badge = document.getElementById('cartBadge');
+      if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+      else { badge.classList.remove('visible'); }
+    } catch {}
+  })();
 
   const track  = document.getElementById("carouselTrack");
   const slides = track.querySelectorAll(".carousel-slide");

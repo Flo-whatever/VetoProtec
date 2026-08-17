@@ -21,6 +21,7 @@ export default async function handler(req, res) {
       shippingAddress,
       vatNumber,
       shippingFee,
+      locale,
     } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -43,6 +44,7 @@ export default async function handler(req, res) {
     const grandTotal = total + shipping;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
+    const localePrefix = locale === 'fr' ? '' : '/en';
 
     const payment = await mollie.payments.create({
       amount: {
@@ -50,8 +52,8 @@ export default async function handler(req, res) {
         value: grandTotal.toFixed(2),
       },
       description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${customerName ? ` | ${customerName}` : ''}`,
-      redirectUrl: `${baseUrl}/en/confirmation.html`,
-      cancelUrl: `${baseUrl}/en/confirmation.html?status=cancelled`,
+      redirectUrl: `${baseUrl}${localePrefix}/confirmation.html`,
+      cancelUrl: `${baseUrl}${localePrefix}/confirmation.html?status=cancelled`,
       webhookUrl: `${baseUrl}/api/webhook-mollie`,
       metadata: {
         customerEmail: customerEmail || '',

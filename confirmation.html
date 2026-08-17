@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Confirmation de commande — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body { background: var(--bg); }
+    .confirm-wrap { max-width: 520px; margin: 100px auto; padding: 0 24px; text-align: center; }
+    .confirm-icon { font-size: 64px; margin-bottom: 24px; }
+    .confirm-title { font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 12px; }
+    .confirm-sub { color: var(--muted); font-weight: 300; line-height: 1.6; margin-bottom: 32px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="confirm-wrap" id="confirmWrap">
+    <div class="confirm-icon">⏳</div>
+    <p style="color:var(--muted)">Vérification du paiement…</p>
+  </div>
+</main>
+<script>
+const params = new URLSearchParams(window.location.search);
+const status = params.get('status');
+const el = document.getElementById('confirmWrap');
+
+function showSuccess() {
+  el.innerHTML = `
+    <div class="confirm-icon">✅</div>
+    <h1 class="confirm-title">Commande confirmée !</h1>
+    <p class="confirm-sub">Merci pour votre commande. Vous allez recevoir un email de confirmation sous peu. Nous reviendrons vers vous avec les détails de livraison.</p>
+    <a class="btn primary" href="/">Retour à l'accueil</a>
+  `;
+}
+
+function showCancelled() {
+  el.innerHTML = `
+    <div class="confirm-icon">❌</div>
+    <h1 class="confirm-title">Paiement annulé</h1>
+    <p class="confirm-sub">Votre commande n'a pas été finalisée. Aucun montant n'a été débité. Vous pouvez réessayer ou nous contacter si vous avez besoin d'aide.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn primary" href="/cart.html">Retour au panier</a>
+      <a class="btn" href="/#contact">Nous contacter</a>
+    </div>
+  `;
+}
+
+function showFailed() {
+  el.innerHTML = `
+    <div class="confirm-icon">⚠️</div>
+    <h1 class="confirm-title">Échec du paiement</h1>
+    <p class="confirm-sub">Une erreur est survenue lors du paiement. Aucun montant n'a été débité. Merci de réessayer ou d'utiliser un autre moyen de paiement.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn primary" href="/cart.html">Réessayer</a>
+      <a class="btn" href="/#contact">Nous contacter</a>
+    </div>
+  `;
+}
+
+// Annulation explicite
+if (status === 'cancelled') {
+  showCancelled();
+} else {
+  // Récupère l'ID de paiement depuis l'URL ou sessionStorage
+  const paymentId = params.get('id') || sessionStorage.getItem('vp_payment_id');
+  if (paymentId) {
+    sessionStorage.removeItem('vp_payment_id');
+    fetch(`/api/check-payment?id=${paymentId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'paid') showSuccess();
+        else if (data.status === 'canceled' || data.status === 'expired') showCancelled();
+        else showFailed();
+      })
+      .catch(() => showFailed());
+  } else {
+    showFailed();
+  }
+}
+</script>
+</body>
+</html>

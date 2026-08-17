@@ -77,6 +77,43 @@
       flex-direction: column;
     }
 
+    /* ── Prix ── */
+    .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+
+    /* ── Icône panier ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+
+    /* ── Toast panier ── */
+    .cart-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #166534; color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      z-index: 999;
+      transform: translateY(80px); opacity: 0;
+      transition: transform .3s ease, opacity .3s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cart-toast.show { transform: translateY(0); opacity: 1; }
+    .cart-toast a { color: #fff; font-weight: 600; text-decoration: underline; }
+
     @media (max-width: 768px) {
       .hero-visuals {
         grid-template-columns: 1fr;
@@ -89,6 +126,10 @@
 </head>
 <body>
 
+<div class="cart-toast" id="cartToast">
+  ✅ Ajouté au panier — <a href="/cart.html">Voir le panier</a>
+</div>
+
 <header>
   <div class="nav">
     <a class="brand" href="/">
@@ -97,6 +138,10 @@
     <div class="nav-right">
       <a class="btn" href="/#produits">← Produits</a>
       <a class="btn" href="/en/PetHolder.html" style="font-size:13px">🌐 EN</a>
+      <a class="cart-icon-btn" href="/cart.html" aria-label="Voir le panier">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
     </div>
   </div>
 </header>
@@ -114,8 +159,12 @@
         PetHolder est un dispositif de contention conçu pour maintenir les animaux sédatés en position stable sur surface lisse, lors d'examens radiologiques, de petites interventions chirurgicales ou d'actes de médecine générale.
         Grâce à ses ventouses haute adhérence, il assure une fixation fiable tout en garantissant la sécurité de l'animal et du personnel soignant.
       </p>
+      <div class="price-tag">55,00 €</div>
+      <div class="price-vat">HT</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:300;margin-bottom:16px;">Lot de 2 ventouses — capuchon bleu</div>
       <div class="hero-cta">
-        <a class="btn primary" href="/#contact">Commander</a>
+        <button class="btn primary" onclick="addToCart('petholder')">🛒 Ajouter au panier</button>
+        <a class="btn" href="/#contact">Nous contacter</a>
       </div>
       <div class="warning-badge">⚠️ Utilisation exclusivement sur animaux sédatés</div>
     </div>
@@ -216,7 +265,8 @@
       <h2 class="cta-title">Intéressé par PetHolder ?</h2>
       <p class="cta-sub">Disponible pour commandes groupées et partenariats avec centrales d'achat vétérinaires.</p>
       <div class="cta-btns">
-        <a class="btn primary" href="/#contact">Nous contacter</a>
+        <button class="btn primary" onclick="addToCart('petholder')">🛒 Ajouter au panier</button>
+        <a class="btn" href="/#contact">Nous contacter</a>
       </div>
     </div>
   </div>
@@ -235,6 +285,36 @@
   </div>
 </footer>
 
-<script>document.getElementById("y").textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+function getCartCount() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    return Object.values(cart).reduce((a, b) => a + b, 0);
+  } catch { return 0; }
+}
+
+function updateCartBadge() {
+  const badge = document.getElementById('cartBadge');
+  const count = getCartCount();
+  if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+  else { badge.classList.remove('visible'); }
+}
+
+function addToCart(productId) {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    cart[productId] = (cart[productId] || 0) + 1;
+    sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  } catch(e) {}
+  updateCartBadge();
+  const toast = document.getElementById('cartToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+updateCartBadge();
+</script>
 </body>
 </html>
