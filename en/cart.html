@@ -18,6 +18,7 @@
     .cart-empty { color: var(--muted); font-weight: 300; margin: 40px 0; text-align: center; }
     .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); }
     .cart-item-name { font-weight: 500; font-size: 16px; }
+    .offered-badge { display: inline-block; margin-left: 8px; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; background: rgba(22,101,52,.1); color: #166534; vertical-align: middle; }
     .cart-item-price { color: var(--muted); font-size: 14px; margin-top: 2px; }
     .qty-control { display: flex; align-items: center; gap: 10px; }
     .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: center; transition: background .15s; }
@@ -322,31 +323,43 @@ const PRODUCTS = {
 
 let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
 
-function computeBogoDiscount(cart, promo) {
+// Returns { productId: freeQty } — units free per product under the
+// currently applied bogo code. Shared between the discount total and the
+// "free" badge shown next to each matching cart line.
+function computeBogoFreeQtyMap(cart, promo) {
+  const map = {};
   const groupSize = promo.bogoBuyQty + promo.bogoGetQty;
-  if (!(groupSize > 0)) return 0;
+  if (!(groupSize > 0)) return map;
 
   if (promo.bogoGetProduct && promo.bogoGetProduct !== 'same') {
-    const getProduct = PRODUCTS[promo.bogoGetProduct];
     const buyQtyInCart = cart[promo.bogoBuyProduct] || 0;
     const getQtyInCart = cart[promo.bogoGetProduct] || 0;
-    if (!getProduct || buyQtyInCart <= 0 || getQtyInCart <= 0) return 0;
+    if (buyQtyInCart <= 0 || getQtyInCart <= 0) return map;
     const groups = Math.floor(buyQtyInCart / promo.bogoBuyQty);
     const freeEligible = groups * promo.bogoGetQty;
     const freeActual = Math.min(freeEligible, getQtyInCart);
-    return freeActual * getProduct.price;
+    if (freeActual > 0) map[promo.bogoGetProduct] = freeActual;
+    return map;
   }
 
-  let discount = 0;
   for (const productId of Object.keys(cart)) {
     if (promo.bogoBuyProduct !== 'all' && promo.bogoBuyProduct !== productId) continue;
-    const product = PRODUCTS[productId];
-    if (!product) continue;
     const qty = cart[productId];
     const fullGroups = Math.floor(qty / groupSize);
     const remainder = qty % groupSize;
     const payableQty = fullGroups * promo.bogoBuyQty + Math.min(remainder, promo.bogoBuyQty);
-    discount += (qty - payableQty) * product.price;
+    const freeQty = qty - payableQty;
+    if (freeQty > 0) map[productId] = freeQty;
+  }
+  return map;
+}
+
+function computeBogoDiscount(cart, promo) {
+  const freeMap = computeBogoFreeQtyMap(cart, promo);
+  let discount = 0;
+  for (const productId of Object.keys(freeMap)) {
+    const product = PRODUCTS[productId];
+    if (product) discount += freeMap[productId] * product.price;
   }
   return discount;
 }
@@ -554,6 +567,8 @@ function renderCart() {
   emptyEl.style.display = 'none';
   summaryEl.style.display = 'block';
 
+  const bogoFreeMap = (appliedPromo && appliedPromo.kind === 'bogo') ? computeBogoFreeQtyMap(cart, appliedPromo) : {};
+
   let total = 0;
   let summaryLines = '';
   itemsEl.innerHTML = keys.map(productId => {
@@ -562,10 +577,12 @@ function renderCart() {
     const subtotal = product.price * qty;
     total += subtotal;
     summaryLines += `<div class="summary-row"><span>${product.name} x${qty}</span><span>${subtotal.toFixed(2)} €</span></div>`;
+    const freeQty = bogoFreeMap[productId] || 0;
+    const offeredBadge = freeQty > 0 ? `<span class="offered-badge">${freeQty} free</span>` : '';
     return `
       <div class="cart-item">
         <div>
-          <div class="cart-item-name">${product.name}</div>
+          <div class="cart-item-name">${product.name}${offeredBadge}</div>
           <div class="cart-item-price">${product.price.toFixed(2)} € / unit</div>
         </div>
         <div style="display:flex;align-items:center;gap:16px">
