@@ -320,7 +320,32 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
 };
 
-let appliedPromo = null; // { code, discountPercent }
+let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoProduct, bogoBuyQty, bogoGetQty }
+
+function computeBogoDiscount(cart, promo) {
+  const groupSize = promo.bogoBuyQty + promo.bogoGetQty;
+  if (!(groupSize > 0)) return 0;
+  let discount = 0;
+  for (const productId of Object.keys(cart)) {
+    if (promo.bogoProduct !== 'all' && promo.bogoProduct !== productId) continue;
+    const product = PRODUCTS[productId];
+    if (!product) continue;
+    const qty = cart[productId];
+    const fullGroups = Math.floor(qty / groupSize);
+    const remainder = qty % groupSize;
+    const payableQty = fullGroups * promo.bogoBuyQty + Math.min(remainder, promo.bogoBuyQty);
+    discount += (qty - payableQty) * product.price;
+  }
+  return discount;
+}
+
+function promoLabel(promo) {
+  if (promo.kind === 'bogo') {
+    const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', all: 'eligible products' };
+    return `Code ${promo.code} (buy ${promo.bogoBuyQty} get ${promo.bogoGetQty} free — ${names[promo.bogoProduct] || promo.bogoProduct})`;
+  }
+  return `Code ${promo.code} (-${promo.discountPercent}%)`;
+}
 
 function getCart() {
   try { return JSON.parse(sessionStorage.getItem('vp_cart') || '{}'); }
@@ -341,8 +366,13 @@ async function applyPromo() {
     });
     const data = await res.json();
     if (data.valid) {
-      appliedPromo = { code: data.code, discountPercent: data.discountPercent };
-      feedback.textContent = `✅ Code ${data.code} applied: -${data.discountPercent}%`;
+      appliedPromo = data.kind === 'bogo'
+        ? { code: data.code, kind: 'bogo', bogoProduct: data.bogoProduct, bogoBuyQty: data.bogoBuyQty, bogoGetQty: data.bogoGetQty }
+        : { code: data.code, kind: 'percent', discountPercent: data.discountPercent };
+      const successLabel = data.kind === 'bogo'
+        ? `buy ${data.bogoBuyQty} get ${data.bogoGetQty} free`
+        : `-${data.discountPercent}%`;
+      feedback.textContent = `✅ Code ${data.code} applied: ${successLabel}`;
       feedback.style.cssText = 'display:block;margin-top:8px;font-size:13px;font-weight:500;padding:8px 12px;border-radius:10px;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0';
     } else {
       appliedPromo = null;
@@ -550,9 +580,13 @@ function renderCart() {
   }
 
   if (appliedPromo) {
-    const discountAmount = total * (appliedPromo.discountPercent / 100);
-    finalTotal -= discountAmount;
-    summaryLines += `<div class="summary-row" style="color:#166534"><span>Code ${appliedPromo.code} (-${appliedPromo.discountPercent}%)</span><span>-${discountAmount.toFixed(2)} €</span></div>`;
+    const discountAmount = appliedPromo.kind === 'bogo'
+      ? computeBogoDiscount(cart, appliedPromo)
+      : total * (appliedPromo.discountPercent / 100);
+    if (discountAmount > 0) {
+      finalTotal -= discountAmount;
+      summaryLines += `<div class="summary-row" style="color:#166534"><span>${promoLabel(appliedPromo)}</span><span>-${discountAmount.toFixed(2)} €</span></div>`;
+    }
   }
 
   document.getElementById('summaryLines').innerHTML = summaryLines;

@@ -1,5 +1,5 @@
 import pkg from '@mollie/api-client';
-import { validatePromo } from './_promo.js';
+import { validatePromo, computeBogoDiscount } from './_promo.js';
 const { createMollieClient } = pkg;
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
@@ -49,7 +49,11 @@ export default async function handler(req, res) {
       if (!promoResult.valid) {
         return res.status(400).json({ error: promoResult.error || 'Code promo invalide' });
       }
-      discountAmount = total * (promoResult.discountPercent / 100);
+      if (promoResult.kind === 'bogo') {
+        discountAmount = computeBogoDiscount(items, PRODUCTS, promoResult);
+      } else {
+        discountAmount = total * (promoResult.discountPercent / 100);
+      }
       appliedPromoCode = promoResult.code;
     }
 

@@ -22,7 +22,8 @@
       margin-bottom: 28px;
     }
     .promo-form label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; }
-    .promo-form input { width: 100%; margin-top: 6px; }
+    .promo-form input, .promo-form select { width: 100%; margin-top: 6px; }
+    .promo-form-bogo { display: none; grid-column: 1 / -1; grid-template-columns: 1.4fr 1fr 1fr; gap: 10px; align-items: end; }
     #createFeedback { display:none; margin-top:14px; padding:10px 14px; border-radius:12px; font-size:13px; font-weight:500; }
 
     .promo-table { width: 100%; border-collapse: collapse; }
@@ -56,6 +57,13 @@
       <input type="text" id="newCode" placeholder="SUMMER20" style="text-transform:uppercase" />
     </div>
     <div>
+      <label>Type</label>
+      <select id="newKind" onchange="onKindChange()">
+        <option value="percent">Réduction %</option>
+        <option value="bogo">X achetés, Y offerts</option>
+      </select>
+    </div>
+    <div id="percentField">
       <label>Réduction (%)</label>
       <input type="number" id="newDiscount" placeholder="20" min="1" max="100" />
     </div>
@@ -64,6 +72,25 @@
       <input type="number" id="newStock" placeholder="50" min="1" />
     </div>
     <button class="btn primary" onclick="createPromo()">Créer</button>
+
+    <div class="promo-form-bogo" id="bogoFields">
+      <div>
+        <label>Produit concerné</label>
+        <select id="newBogoProduct">
+          <option value="all">Tous les produits</option>
+          <option value="petholder">PetHolder</option>
+          <option value="petanesth">PetAnesth</option>
+        </select>
+      </div>
+      <div>
+        <label>Achetés</label>
+        <input type="number" id="newBogoBuy" placeholder="2" min="1" />
+      </div>
+      <div>
+        <label>Offerts</label>
+        <input type="number" id="newBogoGet" placeholder="1" min="1" />
+      </div>
+    </div>
   </div>
   <div id="createFeedback"></div>
 
@@ -155,16 +182,22 @@ function renderPromos(promos) {
   empty.style.display = 'none';
   table.style.display = 'table';
 
+  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', all: 'tous produits' };
+
   body.innerHTML = promos.map(p => {
     const exhausted = p.stock <= 0;
     let pillClass = 'pill--active', pillLabel = 'Actif';
     if (exhausted) { pillClass = 'pill--empty'; pillLabel = 'Épuisé'; }
     else if (!p.active) { pillClass = 'pill--paused'; pillLabel = 'Interrompu'; }
 
+    const discountLabel = p.kind === 'bogo'
+      ? `${p.bogoBuyQty} achetés, ${p.bogoGetQty} offerts (${productLabels[p.bogoProduct] || p.bogoProduct})`
+      : `-${p.discountPercent}%`;
+
     return `
       <tr>
         <td class="promo-code">${p.code}</td>
-        <td>-${p.discountPercent}%</td>
+        <td>${discountLabel}</td>
         <td>${p.stock} / ${p.stockTotal}</td>
         <td><span class="pill ${pillClass}">${pillLabel}</span></td>
         <td>
@@ -176,19 +209,38 @@ function renderPromos(promos) {
   }).join('');
 }
 
+function onKindChange() {
+  const kind = document.getElementById('newKind').value;
+  document.getElementById('percentField').style.display = kind === 'percent' ? 'block' : 'none';
+  document.getElementById('bogoFields').style.display = kind === 'bogo' ? 'grid' : 'none';
+}
+
 async function createPromo() {
   const code = document.getElementById('newCode').value.trim();
+  const kind = document.getElementById('newKind').value;
   const discountPercent = document.getElementById('newDiscount').value;
   const stock = document.getElementById('newStock').value;
+  const bogoProduct = document.getElementById('newBogoProduct').value;
+  const bogoBuyQty = document.getElementById('newBogoBuy').value;
+  const bogoGetQty = document.getElementById('newBogoGet').value;
   const feedback = document.getElementById('createFeedback');
 
+  const payload = { code, kind, stock };
+  if (kind === 'bogo') {
+    Object.assign(payload, { bogoProduct, bogoBuyQty, bogoGetQty });
+  } else {
+    payload.discountPercent = discountPercent;
+  }
+
   try {
-    await apiCall('POST', { code, discountPercent, stock });
+    await apiCall('POST', payload);
     feedback.textContent = '✅ Code promo créé.';
     feedback.style.cssText = 'display:block;margin-top:14px;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:500;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0';
     document.getElementById('newCode').value = '';
     document.getElementById('newDiscount').value = '';
     document.getElementById('newStock').value = '';
+    document.getElementById('newBogoBuy').value = '';
+    document.getElementById('newBogoGet').value = '';
     loadPromos();
   } catch (err) {
     if (err.message === 'unauthorized') return;
