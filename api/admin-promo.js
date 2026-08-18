@@ -28,7 +28,8 @@ export default async function handler(req, res) {
         if (kind === 'percent') {
           promo.discountPercent = Number(data.discountPercent);
         } else {
-          promo.bogoProduct = data.bogoProduct || 'all';
+          promo.bogoBuyProduct = data.bogoBuyProduct || data.bogoProduct || 'all';
+          promo.bogoGetProduct = data.bogoGetProduct || 'same';
           promo.bogoBuyQty = Number(data.bogoBuyQty);
           promo.bogoGetQty = Number(data.bogoGetQty);
         }
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { code, kind, discountPercent, stock, bogoProduct, bogoBuyQty, bogoGetQty } = req.body || {};
+      const { code, kind, discountPercent, stock, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty } = req.body || {};
       const normalized = normalizeCode(code);
       const promoKind = kind === 'bogo' ? 'bogo' : 'percent';
 
@@ -66,10 +67,25 @@ export default async function handler(req, res) {
         }
         record.discountPercent = pct;
       } else {
-        const validProducts = ['petholder', 'petanesth', 'all'];
-        if (!validProducts.includes(bogoProduct)) {
-          return res.status(400).json({ error: 'Produit invalide' });
+        const validSingle = ['petholder', 'petanesth'];
+        const buyProduct = bogoBuyProduct;
+        const getProduct = bogoGetProduct || 'same';
+
+        if (!['all', ...validSingle].includes(buyProduct)) {
+          return res.status(400).json({ error: 'Produit acheté invalide' });
         }
+        if (!['same', ...validSingle].includes(getProduct)) {
+          return res.status(400).json({ error: 'Produit offert invalide' });
+        }
+        if (getProduct !== 'same') {
+          if (buyProduct === 'all') {
+            return res.status(400).json({ error: 'Choisissez un produit acheté précis pour offrir un produit différent' });
+          }
+          if (getProduct === buyProduct) {
+            return res.status(400).json({ error: 'Le produit offert doit être différent du produit acheté (ou "même produit")' });
+          }
+        }
+
         const buyQty = Number(bogoBuyQty);
         const getQty = Number(bogoGetQty);
         if (!Number.isInteger(buyQty) || buyQty <= 0) {
@@ -78,7 +94,8 @@ export default async function handler(req, res) {
         if (!Number.isInteger(getQty) || getQty <= 0) {
           return res.status(400).json({ error: 'Quantité "offerts" invalide (entier positif)' });
         }
-        record.bogoProduct = bogoProduct;
+        record.bogoBuyProduct = buyProduct;
+        record.bogoGetProduct = getProduct;
         record.bogoBuyQty = buyQty;
         record.bogoGetQty = getQty;
       }

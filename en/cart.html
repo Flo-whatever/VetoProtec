@@ -320,14 +320,26 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
 };
 
-let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoProduct, bogoBuyQty, bogoGetQty }
+let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
 
 function computeBogoDiscount(cart, promo) {
   const groupSize = promo.bogoBuyQty + promo.bogoGetQty;
   if (!(groupSize > 0)) return 0;
+
+  if (promo.bogoGetProduct && promo.bogoGetProduct !== 'same') {
+    const getProduct = PRODUCTS[promo.bogoGetProduct];
+    const buyQtyInCart = cart[promo.bogoBuyProduct] || 0;
+    const getQtyInCart = cart[promo.bogoGetProduct] || 0;
+    if (!getProduct || buyQtyInCart <= 0 || getQtyInCart <= 0) return 0;
+    const groups = Math.floor(buyQtyInCart / promo.bogoBuyQty);
+    const freeEligible = groups * promo.bogoGetQty;
+    const freeActual = Math.min(freeEligible, getQtyInCart);
+    return freeActual * getProduct.price;
+  }
+
   let discount = 0;
   for (const productId of Object.keys(cart)) {
-    if (promo.bogoProduct !== 'all' && promo.bogoProduct !== productId) continue;
+    if (promo.bogoBuyProduct !== 'all' && promo.bogoBuyProduct !== productId) continue;
     const product = PRODUCTS[productId];
     if (!product) continue;
     const qty = cart[productId];
@@ -342,7 +354,10 @@ function computeBogoDiscount(cart, promo) {
 function promoLabel(promo) {
   if (promo.kind === 'bogo') {
     const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', all: 'eligible products' };
-    return `Code ${promo.code} (buy ${promo.bogoBuyQty} get ${promo.bogoGetQty} free — ${names[promo.bogoProduct] || promo.bogoProduct})`;
+    if (promo.bogoGetProduct && promo.bogoGetProduct !== 'same') {
+      return `Code ${promo.code} (buy ${promo.bogoBuyQty} ${names[promo.bogoBuyProduct]} get ${promo.bogoGetQty} ${names[promo.bogoGetProduct]} free)`;
+    }
+    return `Code ${promo.code} (buy ${promo.bogoBuyQty} get ${promo.bogoGetQty} free — ${names[promo.bogoBuyProduct] || promo.bogoBuyProduct})`;
   }
   return `Code ${promo.code} (-${promo.discountPercent}%)`;
 }
@@ -367,7 +382,7 @@ async function applyPromo() {
     const data = await res.json();
     if (data.valid) {
       appliedPromo = data.kind === 'bogo'
-        ? { code: data.code, kind: 'bogo', bogoProduct: data.bogoProduct, bogoBuyQty: data.bogoBuyQty, bogoGetQty: data.bogoGetQty }
+        ? { code: data.code, kind: 'bogo', bogoBuyProduct: data.bogoBuyProduct, bogoGetProduct: data.bogoGetProduct, bogoBuyQty: data.bogoBuyQty, bogoGetQty: data.bogoGetQty }
         : { code: data.code, kind: 'percent', discountPercent: data.discountPercent };
       const successLabel = data.kind === 'bogo'
         ? `buy ${data.bogoBuyQty} get ${data.bogoGetQty} free`

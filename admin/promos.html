@@ -23,7 +23,7 @@
     }
     .promo-form label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; }
     .promo-form input, .promo-form select { width: 100%; margin-top: 6px; }
-    .promo-form-bogo { display: none; grid-column: 1 / -1; grid-template-columns: 1.4fr 1fr 1fr; gap: 10px; align-items: end; }
+    .promo-form-bogo { display: none; grid-column: 1 / -1; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; align-items: end; }
     #createFeedback { display:none; margin-top:14px; padding:10px 14px; border-radius:12px; font-size:13px; font-weight:500; }
 
     .promo-table { width: 100%; border-collapse: collapse; }
@@ -75,9 +75,17 @@
 
     <div class="promo-form-bogo" id="bogoFields">
       <div>
-        <label>Produit concerné</label>
-        <select id="newBogoProduct">
+        <label>Produit acheté</label>
+        <select id="newBogoBuyProduct">
           <option value="all">Tous les produits</option>
+          <option value="petholder">PetHolder</option>
+          <option value="petanesth">PetAnesth</option>
+        </select>
+      </div>
+      <div>
+        <label>Produit offert</label>
+        <select id="newBogoGetProduct">
+          <option value="same">Même produit</option>
           <option value="petholder">PetHolder</option>
           <option value="petanesth">PetAnesth</option>
         </select>
@@ -92,6 +100,9 @@
       </div>
     </div>
   </div>
+  <p id="bogoHint" style="display:none;font-size:12px;color:var(--muted);margin-top:-18px;margin-bottom:20px">
+    « Même produit » : achetez X unités d'un produit, Y offertes du même. Sinon : choisissez un produit acheté précis et un produit offert différent (ex. 1 PetAnesth acheté = 1 PetHolder offert).
+  </p>
   <div id="createFeedback"></div>
 
   <table class="promo-table" id="promoTable" style="display:none">
@@ -190,9 +201,14 @@ function renderPromos(promos) {
     if (exhausted) { pillClass = 'pill--empty'; pillLabel = 'Épuisé'; }
     else if (!p.active) { pillClass = 'pill--paused'; pillLabel = 'Interrompu'; }
 
-    const discountLabel = p.kind === 'bogo'
-      ? `${p.bogoBuyQty} achetés, ${p.bogoGetQty} offerts (${productLabels[p.bogoProduct] || p.bogoProduct})`
-      : `-${p.discountPercent}%`;
+    let discountLabel;
+    if (p.kind !== 'bogo') {
+      discountLabel = `-${p.discountPercent}%`;
+    } else if (p.bogoGetProduct && p.bogoGetProduct !== 'same') {
+      discountLabel = `${p.bogoBuyQty} ${productLabels[p.bogoBuyProduct] || p.bogoBuyProduct} acheté(s) = ${p.bogoGetQty} ${productLabels[p.bogoGetProduct] || p.bogoGetProduct} offert(s)`;
+    } else {
+      discountLabel = `${p.bogoBuyQty} achetés, ${p.bogoGetQty} offerts (${productLabels[p.bogoBuyProduct] || p.bogoBuyProduct})`;
+    }
 
     return `
       <tr>
@@ -213,6 +229,7 @@ function onKindChange() {
   const kind = document.getElementById('newKind').value;
   document.getElementById('percentField').style.display = kind === 'percent' ? 'block' : 'none';
   document.getElementById('bogoFields').style.display = kind === 'bogo' ? 'grid' : 'none';
+  document.getElementById('bogoHint').style.display = kind === 'bogo' ? 'block' : 'none';
 }
 
 async function createPromo() {
@@ -220,14 +237,15 @@ async function createPromo() {
   const kind = document.getElementById('newKind').value;
   const discountPercent = document.getElementById('newDiscount').value;
   const stock = document.getElementById('newStock').value;
-  const bogoProduct = document.getElementById('newBogoProduct').value;
+  const bogoBuyProduct = document.getElementById('newBogoBuyProduct').value;
+  const bogoGetProduct = document.getElementById('newBogoGetProduct').value;
   const bogoBuyQty = document.getElementById('newBogoBuy').value;
   const bogoGetQty = document.getElementById('newBogoGet').value;
   const feedback = document.getElementById('createFeedback');
 
   const payload = { code, kind, stock };
   if (kind === 'bogo') {
-    Object.assign(payload, { bogoProduct, bogoBuyQty, bogoGetQty });
+    Object.assign(payload, { bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty });
   } else {
     payload.discountPercent = discountPercent;
   }
