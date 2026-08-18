@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@mollie/api-client": "^3.7.0"
+    "@mollie/api-client": "^3.7.0",
+    "@upstash/redis": "^1.34.0"
   }
 }

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Codes promo — Admin VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body { background: var(--bg); }
+    .admin-wrap { max-width: 720px; margin: 60px auto 100px; padding: 0 24px; }
+    .admin-title { font-family: 'DM Serif Display', serif; font-size: 30px; margin-bottom: 24px; }
+
+    .login-box { max-width: 360px; margin: 120px auto; padding: 0 24px; text-align: center; }
+    .login-box input { margin: 16px 0; }
+
+    .promo-form {
+      display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 10px; align-items: end;
+      padding: 20px; background: rgba(192,132,200,.08); border: 1px solid var(--border); border-radius: 16px;
+      margin-bottom: 28px;
+    }
+    .promo-form label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; }
+    .promo-form input { width: 100%; margin-top: 6px; }
+    #createFeedback { display:none; margin-top:14px; padding:10px 14px; border-radius:12px; font-size:13px; font-weight:500; }
+
+    .promo-table { width: 100%; border-collapse: collapse; }
+    .promo-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+    .promo-table td { padding: 12px 10px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+    .promo-code { font-weight: 600; font-family: monospace; letter-spacing: .02em; }
+    .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .pill--active { background: rgba(22,101,52,.1); color: #166534; }
+    .pill--paused { background: rgba(180,83,9,.1); color: #b45309; }
+    .pill--empty { background: rgba(153,27,27,.1); color: #991b1b; }
+    .toggle-btn { font-size: 12px; padding: 6px 12px; }
+    .empty-state { color: var(--muted); font-weight: 300; text-align: center; padding: 40px 0; }
+  </style>
+</head>
+<body>
+
+<div id="loginView" class="login-box">
+  <h1 class="admin-title" style="font-size:26px">Accès admin</h1>
+  <p style="color:var(--muted);font-weight:300;margin-bottom:8px">Codes promo — VetoProtec</p>
+  <input type="password" id="pwInput" placeholder="Mot de passe" onkeydown="if(event.key==='Enter') login()" />
+  <div id="loginError" style="display:none;color:#991b1b;font-size:13px;margin-bottom:10px"></div>
+  <button class="btn primary" onclick="login()" style="width:100%">Se connecter</button>
+</div>
+
+<main id="dashboardView" class="admin-wrap" style="display:none">
+  <h1 class="admin-title">Codes promo</h1>
+
+  <div class="promo-form">
+    <div>
+      <label>Code</label>
+      <input type="text" id="newCode" placeholder="SUMMER20" style="text-transform:uppercase" />
+    </div>
+    <div>
+      <label>Réduction (%)</label>
+      <input type="number" id="newDiscount" placeholder="20" min="1" max="100" />
+    </div>
+    <div>
+      <label>Stock</label>
+      <input type="number" id="newStock" placeholder="50" min="1" />
+    </div>
+    <button class="btn primary" onclick="createPromo()">Créer</button>
+  </div>
+  <div id="createFeedback"></div>
+
+  <table class="promo-table" id="promoTable" style="display:none">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Réduction</th>
+        <th>Stock</th>
+        <th>Statut</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="promoTableBody"></tbody>
+  </table>
+  <div id="emptyState" class="empty-state" style="display:none">Aucun code promo pour le moment.</div>
+</main>
+
+<script>
+let adminPassword = sessionStorage.getItem('vp_admin_pw') || '';
+
+async function apiCall(method, body) {
+  const res = await fetch('/api/admin-promo', {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Admin-Password': adminPassword,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) {
+    sessionStorage.removeItem('vp_admin_pw');
+    adminPassword = '';
+    showLogin('Session expirée, merci de vous reconnecter.');
+    throw new Error('unauthorized');
+  }
+  if (!res.ok) throw new Error(data.error || 'Erreur serveur');
+  return data;
+}
+
+function showLogin(error) {
+  document.getElementById('loginView').style.display = 'block';
+  document.getElementById('dashboardView').style.display = 'none';
+  const errEl = document.getElementById('loginError');
+  if (error) {
+    errEl.textContent = error;
+    errEl.style.display = 'block';
+  } else {
+    errEl.style.display = 'none';
+  }
+}
+
+async function login() {
+  const pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  adminPassword = pw;
+  try {
+    await loadPromos();
+    sessionStorage.setItem('vp_admin_pw', pw);
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('dashboardView').style.display = 'block';
+  } catch (err) {
+    if (err.message !== 'unauthorized') {
+      showLogin('Mot de passe incorrect.');
+    } else {
+      showLogin('Mot de passe incorrect.');
+    }
+    adminPassword = '';
+  }
+}
+
+async function loadPromos() {
+  const data = await apiCall('GET');
+  renderPromos(data.promos || []);
+}
+
+function renderPromos(promos) {
+  const table = document.getElementById('promoTable');
+  const body = document.getElementById('promoTableBody');
+  const empty = document.getElementById('emptyState');
+
+  if (promos.length === 0) {
+    table.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  table.style.display = 'table';
+
+  body.innerHTML = promos.map(p => {
+    const exhausted = p.stock <= 0;
+    let pillClass = 'pill--active', pillLabel = 'Actif';
+    if (exhausted) { pillClass = 'pill--empty'; pillLabel = 'Épuisé'; }
+    else if (!p.active) { pillClass = 'pill--paused'; pillLabel = 'Interrompu'; }
+
+    return `
+      <tr>
+        <td class="promo-code">${p.code}</td>
+        <td>-${p.discountPercent}%</td>
+        <td>${p.stock} / ${p.stockTotal}</td>
+        <td><span class="pill ${pillClass}">${pillLabel}</span></td>
+        <td>
+          <button class="btn toggle-btn" onclick="togglePromo('${p.code}', ${!p.active})">
+            ${p.active ? 'Interrompre' : 'Relancer'}
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+async function createPromo() {
+  const code = document.getElementById('newCode').value.trim();
+  const discountPercent = document.getElementById('newDiscount').value;
+  const stock = document.getElementById('newStock').value;
+  const feedback = document.getElementById('createFeedback');
+
+  try {
+    await apiCall('POST', { code, discountPercent, stock });
+    feedback.textContent = '✅ Code promo créé.';
+    feedback.style.cssText = 'display:block;margin-top:14px;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:500;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0';
+    document.getElementById('newCode').value = '';
+    document.getElementById('newDiscount').value = '';
+    document.getElementById('newStock').value = '';
+    loadPromos();
+  } catch (err) {
+    if (err.message === 'unauthorized') return;
+    feedback.textContent = '❌ ' + err.message;
+    feedback.style.cssText = 'display:block;margin-top:14px;padding:10px 14px;border-radius:12px;font-size:13px;font-weight:500;background:#fef2f2;color:#991b1b;border:1px solid #fecaca';
+  }
+}
+
+async function togglePromo(code, active) {
+  try {
+    await apiCall('PATCH', { code, active });
+    loadPromos();
+  } catch (err) {
+    if (err.message !== 'unauthorized') alert('Erreur : ' + err.message);
+  }
+}
+
+// Reconnexion automatique si un mot de passe est déjà en session
+if (adminPassword) {
+  loadPromos()
+    .then(() => {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'block';
+    })
+    .catch(() => showLogin());
+} else {
+  showLogin();
+}
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   try {
-    const { customerName, customerEmail, customerPhone, billingAddress, shippingAddress, vatNumber, items, country } = req.body;
+    const { customerName, customerEmail, customerPhone, billingAddress, shippingAddress, vatNumber, items, country, promoCode } = req.body;
 
     const PRODUCTS = {
       petholder: { name: 'PetHolder', price: 55.00 },
@@ -64,6 +64,10 @@ export default async function handler(req, res) {
               ${vatNumber ? `<tr>
                 <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">VAT number</td>
                 <td style="padding:10px 0;border-bottom:1px solid #f0e0ee">${vatNumber}</td>
+              </tr>` : ''}
+              ${promoCode ? `<tr>
+                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:600;color:#8a6a7a">Promo code</td>
+                <td style="padding:10px 0;border-bottom:1px solid #f0e0ee;font-weight:700;color:#c084c8">${promoCode}</td>
               </tr>` : ''}
               <tr>
                 <td style="padding:10px 0;font-weight:600;color:#8a6a7a">Date</td>

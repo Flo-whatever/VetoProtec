@@ -1,4 +1,5 @@
 import pkg from '@mollie/api-client';
+import { redis } from './_kv.js';
 const { createMollieClient } = pkg;
 
 const mollie = createMollieClient({
@@ -88,6 +89,15 @@ export default async function handler(req, res) {
     const shippingAddress = meta.shippingAddress || billingAddress;
     const vatNumber = meta.vatNumber || '';
     const shippingFee = meta.shippingFee || 'included';
+    const promoCode = meta.promoCode || '';
+
+    if (promoCode) {
+      try {
+        await redis.hincrby('promo:' + promoCode, 'stock', -1);
+      } catch (err) {
+        console.error(`Failed to decrement stock for promo ${promoCode}:`, err);
+      }
+    }
 
     const items = safeParseItems(meta.items);
     const amount = `${payment.amount.value} ${payment.amount.currency}`;
@@ -161,6 +171,7 @@ export default async function handler(req, res) {
           <p><strong>Billing:</strong> ${escapeHtml(billingAddress)}</p>
           <p><strong>Shipping address:</strong> ${escapeHtml(shippingAddress)}</p>
           ${vatNumber ? `<p><strong>VAT:</strong> ${escapeHtml(vatNumber)}</p>` : ''}
+          ${promoCode ? `<p><strong>Promo code:</strong> ${escapeHtml(promoCode)}</p>` : ''}
           <p><strong>Date:</strong> ${escapeHtml(date)}</p>
         </div>
       `,

@@ -1,4 +1,5 @@
 import pkg from '@mollie/api-client';
+import { validatePromo } from './_promo.js';
 const { createMollieClient } = pkg;
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
@@ -22,6 +23,7 @@ export default async function handler(req, res) {
       vatNumber,
       shippingFee,
       locale,
+      promoCode,
     } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -40,8 +42,19 @@ export default async function handler(req, res) {
       return `${product.name} x${qty}`;
     }).join(', ');
 
+    let discountAmount = 0;
+    let appliedPromoCode = '';
+    if (promoCode) {
+      const promoResult = await validatePromo(promoCode);
+      if (!promoResult.valid) {
+        return res.status(400).json({ error: promoResult.error || 'Code promo invalide' });
+      }
+      discountAmount = total * (promoResult.discountPercent / 100);
+      appliedPromoCode = promoResult.code;
+    }
+
     const shipping = Number(shippingFee) || 0;
-    const grandTotal = total + shipping;
+    const grandTotal = total - discountAmount + shipping;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
     const localePrefix = locale === 'fr' ? '' : '/en';
@@ -51,7 +64,7 @@ export default async function handler(req, res) {
         currency: 'EUR',
         value: grandTotal.toFixed(2),
       },
-      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${customerName ? ` | ${customerName}` : ''}`,
+      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${appliedPromoCode ? ` | promo ${appliedPromoCode}` : ''}${customerName ? ` | ${customerName}` : ''}`,
       redirectUrl: `${baseUrl}${localePrefix}/confirmation.html`,
       cancelUrl: `${baseUrl}${localePrefix}/confirmation.html?status=cancelled`,
       webhookUrl: `${baseUrl}/api/webhook-mollie`,
@@ -63,6 +76,7 @@ export default async function handler(req, res) {
         vatNumber: vatNumber || '',
         shippingFee: shipping > 0 ? `${shipping.toFixed(2)} €` : 'included',
         items: JSON.stringify(items),
+        promoCode: appliedPromoCode,
       },
     });
 
