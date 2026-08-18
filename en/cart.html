@@ -364,6 +364,24 @@ function computeBogoDiscount(cart, promo) {
   return discount;
 }
 
+// For a cross-product code (bought product != free product), automatically
+// add the missing units of the free product to the cart — the customer
+// doesn't have to remember to add it themselves to benefit from it.
+// Never reduces a quantity already present.
+function ensureBogoFreeProductInCart(cart, promo) {
+  if (!promo || promo.kind !== 'bogo' || !promo.bogoGetProduct || promo.bogoGetProduct === 'same') return cart;
+  const buyQtyInCart = cart[promo.bogoBuyProduct] || 0;
+  if (buyQtyInCart < promo.bogoBuyQty) return cart;
+
+  const groups = Math.floor(buyQtyInCart / promo.bogoBuyQty);
+  const freeEligible = groups * promo.bogoGetQty;
+  const getQtyInCart = cart[promo.bogoGetProduct] || 0;
+  if (freeEligible > getQtyInCart) {
+    cart[promo.bogoGetProduct] = freeEligible;
+  }
+  return cart;
+}
+
 function promoLabel(promo) {
   if (promo.kind === 'bogo') {
     const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', all: 'eligible products' };
@@ -397,6 +415,11 @@ async function applyPromo() {
       appliedPromo = data.kind === 'bogo'
         ? { code: data.code, kind: 'bogo', bogoBuyProduct: data.bogoBuyProduct, bogoGetProduct: data.bogoGetProduct, bogoBuyQty: data.bogoBuyQty, bogoGetQty: data.bogoGetQty }
         : { code: data.code, kind: 'percent', discountPercent: data.discountPercent };
+
+      if (appliedPromo.kind === 'bogo' && appliedPromo.bogoGetProduct !== 'same') {
+        sessionStorage.setItem('vp_cart', JSON.stringify(ensureBogoFreeProductInCart(getCart(), appliedPromo)));
+      }
+
       const successLabel = data.kind === 'bogo'
         ? `buy ${data.bogoBuyQty} get ${data.bogoGetQty} free`
         : `-${data.discountPercent}%`;
@@ -413,6 +436,7 @@ async function applyPromo() {
     feedback.style.cssText = 'display:block;margin-top:8px;font-size:13px;font-weight:500;padding:8px 12px;border-radius:10px;background:#fef2f2;color:#991b1b;border:1px solid #fecaca';
   }
   renderCart();
+  updateCartBadge();
 }
 
 function saveCart(cart) {
@@ -626,9 +650,12 @@ function renderCart() {
 }
 
 function updateQty(productId, delta) {
-  const cart = getCart();
+  let cart = getCart();
   cart[productId] = (cart[productId] || 0) + delta;
   if (cart[productId] <= 0) delete cart[productId];
+  if (appliedPromo && appliedPromo.kind === 'bogo' && appliedPromo.bogoGetProduct !== 'same') {
+    cart = ensureBogoFreeProductInCart(cart, appliedPromo);
+  }
   saveCart(cart);
 }
 
