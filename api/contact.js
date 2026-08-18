@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "VetoProtec Contact <contact@vetoprotec.fr>", // ← ton domaine vérifié dans Resend
-        to: ["drderrien@vetoprotec.fr"],                          // ← l'adresse où tu veux recevoir
+        to: ["contact@vetoprotec.fr"],                          // ← l'adresse où tu veux recevoir
         reply_to: email,                                    // ← le visiteur reçoit ta réponse directement
         subject: `Nouveau message de ${nom}`,
         html: `

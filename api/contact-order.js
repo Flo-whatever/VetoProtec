@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: 'VetoProtec Orders <contact@vetoprotec.fr>',
-        to: ['drderrien@vetoprotec.fr'],
+        to: ['contact@vetoprotec.fr'],
         reply_to: customerEmail,
         subject: `📦 Custom shipping request — ${itemsSummary}`,
         html: `

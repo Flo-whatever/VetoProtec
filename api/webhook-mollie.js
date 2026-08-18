@@ -157,7 +157,7 @@ export default async function handler(req, res) {
     // ── Email admin ──
     await sendEmail({
       from: 'VetoProtec Orders <contact@vetoprotec.fr>',
-      to: ['drderrien@vetoprotec.fr'],
+      to: ['contact@vetoprotec.fr'],
       reply_to: customerEmail || 'contact@vetoprotec.fr',
       subject: `🛒 New order — ${itemsSummary}`,
       html: `
