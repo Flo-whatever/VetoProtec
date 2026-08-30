@@ -8,6 +8,10 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
 };
 
+// TVA française — appliquée uniquement pour une facturation en France sur
+// les pages FR. Les pages EN ciblent une clientèle hors France (jamais de TVA).
+const VAT_RATE = 0.20;
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -20,6 +24,7 @@ export default async function handler(req, res) {
       customerName,
       billingAddress,
       shippingAddress,
+      deliveryCountry,
       vatNumber,
       shippingFee,
       locale,
@@ -58,7 +63,9 @@ export default async function handler(req, res) {
     }
 
     const shipping = Number(shippingFee) || 0;
-    const grandTotal = total - discountAmount + shipping;
+    const vatApplicable = locale === 'fr' && deliveryCountry === 'France';
+    const vatAmount = vatApplicable ? (total - discountAmount + shipping) * VAT_RATE : 0;
+    const grandTotal = total - discountAmount + shipping + vatAmount;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
     const localePrefix = locale === 'fr' ? '' : '/en';
@@ -68,7 +75,7 @@ export default async function handler(req, res) {
         currency: 'EUR',
         value: grandTotal.toFixed(2),
       },
-      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${appliedPromoCode ? ` | promo ${appliedPromoCode}` : ''}${customerName ? ` | ${customerName}` : ''}`,
+      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${vatApplicable ? ' + VAT 20%' : ''}${appliedPromoCode ? ` | promo ${appliedPromoCode}` : ''}${customerName ? ` | ${customerName}` : ''}`,
       redirectUrl: `${baseUrl}${localePrefix}/confirmation.html`,
       cancelUrl: `${baseUrl}${localePrefix}/confirmation.html?status=cancelled`,
       webhookUrl: `${baseUrl}/api/webhook-mollie`,
@@ -79,6 +86,7 @@ export default async function handler(req, res) {
         shippingAddress: shippingAddress || '',
         vatNumber: vatNumber || '',
         shippingFee: shipping > 0 ? `${shipping.toFixed(2)} €` : 'included',
+        vat: vatApplicable ? `${vatAmount.toFixed(2)} €` : 'N/A',
         items: JSON.stringify(items),
         promoCode: appliedPromoCode,
       },

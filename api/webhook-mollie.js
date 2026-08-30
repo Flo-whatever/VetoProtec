@@ -89,6 +89,7 @@ export default async function handler(req, res) {
     const shippingAddress = meta.shippingAddress || billingAddress;
     const vatNumber = meta.vatNumber || '';
     const shippingFee = meta.shippingFee || 'included';
+    const vat = meta.vat || 'N/A';
     const promoCode = meta.promoCode || '';
 
     if (promoCode) {
@@ -168,6 +169,7 @@ export default async function handler(req, res) {
           <p><strong>Order:</strong> ${escapeHtml(itemsSummary)}</p>
           <p><strong>Total:</strong> ${escapeHtml(amount)}</p>
           <p><strong>Shipping:</strong> ${escapeHtml(shippingFee)}</p>
+          ${vat !== 'N/A' ? `<p><strong>VAT (20%):</strong> ${escapeHtml(vat)}</p>` : ''}
           <p><strong>Billing:</strong> ${escapeHtml(billingAddress)}</p>
           <p><strong>Shipping address:</strong> ${escapeHtml(shippingAddress)}</p>
           ${vatNumber ? `<p><strong>VAT:</strong> ${escapeHtml(vatNumber)}</p>` : ''}

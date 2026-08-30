@@ -323,6 +323,18 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
 };
 
+// TVA française — appliquée uniquement quand la livraison a lieu en France
+// (principe de destination). Les prix catalogue ci-dessus sont HT.
+const VAT_RATE = 0.20;
+function isVatApplicable() {
+  const sameAsBilling = document.getElementById('sameAsBilling');
+  const billingCountry = document.getElementById('customerCountry');
+  const shippingCountry = document.getElementById('shippingCountry');
+  const useShipping = shippingCountry && sameAsBilling && !sameAsBilling.checked;
+  const effectiveCountry = useShipping ? shippingCountry.value : (billingCountry ? billingCountry.value : '');
+  return effectiveCountry === 'France';
+}
+
 let appliedPromo = null; // { code, kind, discountPercent } ou { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
 
 // Renvoie { productId: freeQty } — unités offertes par produit sous le
@@ -509,6 +521,7 @@ async function sendCustomRequest() {
 function toggleShipping() {
   const same = document.getElementById('sameAsBilling').checked;
   document.getElementById('shippingFields').style.display = same ? 'none' : 'block';
+  renderCart();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -529,6 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
           btn.style.opacity = '1';
         }
       }
+      renderCart();
     });
   }
 });
@@ -555,6 +569,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkoutBtn.style.opacity = '1';
         customCta.style.display = 'none';
       }
+      renderCart();
     });
   }
 });
@@ -606,7 +621,7 @@ function renderCart() {
       <div class="cart-item">
         <div>
           <div class="cart-item-name">${product.name}${offeredBadge}</div>
-          <div class="cart-item-price">${product.price.toFixed(2)} € / unité</div>
+          <div class="cart-item-price">${product.price.toFixed(2)} € HT / unité</div>
         </div>
         <div style="display:flex;align-items:center;gap:16px">
           <div class="qty-control">
@@ -642,6 +657,16 @@ function renderCart() {
       finalTotal -= discountAmount;
       summaryLines += `<div class="summary-row" style="color:#166534"><span>${promoLabel(appliedPromo)}</span><span>-${discountAmount.toFixed(2)} €</span></div>`;
     }
+  }
+
+  const totalLabel = document.querySelector('.summary-total span:first-child');
+  if (isVatApplicable()) {
+    const vatAmount = finalTotal * VAT_RATE;
+    summaryLines += `<div class="summary-row"><span>TVA (20%)</span><span>${vatAmount.toFixed(2)} €</span></div>`;
+    finalTotal += vatAmount;
+    if (totalLabel) totalLabel.textContent = 'Total TTC';
+  } else if (totalLabel) {
+    totalLabel.textContent = 'Total';
   }
 
   document.getElementById('summaryLines').innerHTML = summaryLines;
@@ -715,7 +740,7 @@ async function checkout() {
     const res = await fetch('/api/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, vatNumber: vatNumber || '', shippingFee, locale: 'fr', promoCode: appliedPromo ? appliedPromo.code : '' }),
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, deliveryCountry: sameAsBilling ? country : shipCountry, vatNumber: vatNumber || '', shippingFee, locale: 'fr', promoCode: appliedPromo ? appliedPromo.code : '' }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erreur de paiement');
