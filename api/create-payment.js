@@ -8,6 +8,7 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
   'petties-rose': { name: 'PetTies (Rose)', price: 20.00 },
   'petties-bleu': { name: 'PetTies (Bleu)', price: 20.00 },
+  'petties-vert': { name: 'PetTies (Vert)', price: 20.00 },
 };
 
 // TVA française — appliquée uniquement pour une facturation en France sur

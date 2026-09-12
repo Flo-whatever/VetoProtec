@@ -9,6 +9,7 @@ export default async function handler(req, res) {
       petanesth: { name: 'PetAnesth', price: 119.00 },
       'petties-rose': { name: 'PetTies (Rose)', price: 20.00 },
       'petties-bleu': { name: 'PetTies (Bleu)', price: 20.00 },
+      'petties-vert': { name: 'PetTies (Vert)', price: 20.00 },
     };
 
     const itemsSummary = items.map(({ productId, quantity }) => {

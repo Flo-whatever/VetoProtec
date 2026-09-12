@@ -321,6 +321,7 @@ const PRODUCTS = {
   petanesth: { name: 'PetAnesth', price: 119.00 },
   'petties-rose': { name: 'PetTies (Pink)', price: 20.00 },
   'petties-bleu': { name: 'PetTies (Blue)', price: 20.00 },
+  'petties-vert': { name: 'PetTies (Green)', price: 20.00 },
 };
 
 let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
@@ -386,7 +387,7 @@ function ensureBogoFreeProductInCart(cart, promo) {
 
 function promoLabel(promo) {
   if (promo.kind === 'bogo') {
-    const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Pink)', 'petties-bleu': 'PetTies (Blue)', all: 'eligible products' };
+    const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Pink)', 'petties-bleu': 'PetTies (Blue)', 'petties-vert': 'PetTies (Green)', all: 'eligible products' };
     if (promo.bogoGetProduct && promo.bogoGetProduct !== 'same') {
       return `Code ${promo.code} (buy ${promo.bogoBuyQty} ${names[promo.bogoBuyProduct]} get ${promo.bogoGetQty} ${names[promo.bogoGetProduct]} free)`;
     }

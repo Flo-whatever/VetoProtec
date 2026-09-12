@@ -82,6 +82,7 @@
           <option value="petanesth">PetAnesth</option>
           <option value="petties-rose">PetTies (Rose)</option>
           <option value="petties-bleu">PetTies (Bleu)</option>
+          <option value="petties-vert">PetTies (Vert)</option>
         </select>
       </div>
       <div>
@@ -92,6 +93,7 @@
           <option value="petanesth">PetAnesth</option>
           <option value="petties-rose">PetTies (Rose)</option>
           <option value="petties-bleu">PetTies (Bleu)</option>
+          <option value="petties-vert">PetTies (Vert)</option>
         </select>
       </div>
       <div>
@@ -197,7 +199,7 @@ function renderPromos(promos) {
   empty.style.display = 'none';
   table.style.display = 'table';
 
-  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', all: 'tous produits' };
+  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'tous produits' };
 
   body.innerHTML = promos.map(p => {
     const exhausted = p.stock <= 0;
