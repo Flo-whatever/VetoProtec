@@ -34,14 +34,14 @@
     /* ── Colours ── */
     .color-swatches { display: flex; gap: 10px; margin: 4px 0 16px; }
     .color-swatch { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
-    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); }
+    .swatch-dot { width: 16px; height: 16px; min-width: 16px; flex-shrink: 0; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.15); box-sizing: border-box; }
 
     /* ── Price & colour picker ── */
     .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
     .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
-    .color-picker { display: flex; gap: 10px; margin: 4px 0 16px; }
-    .color-option { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px 6px 8px; }
-    .color-option input { margin: 0; }
+    .color-picker { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 16px; }
+    .color-option { display: flex; flex-shrink: 0; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 7px 14px 7px 9px; box-sizing: border-box; }
+    .color-option input { margin: 0; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent2); }
     .green-note { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 10px; background: var(--rose-light); border-radius: 12px; padding: 10px 14px; }
     .green-note a { color: var(--accent2); font-weight: 600; text-decoration: none; }
     .green-note a:hover { text-decoration: underline; }
