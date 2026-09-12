@@ -321,6 +321,7 @@ document.getElementById("y").textContent = new Date().getFullYear();
 const PRODUCTS = {
   petholder: { name: 'PetHolder', price: 55.00 },
   petanesth: { name: 'PetAnesth', price: 119.00 },
+  'petanesth-legacy': { name: 'PetAnesth (ancien modèle)', price: 59.00 },
   'petties-rose': { name: 'PetTies (Rose)', price: 20.00 },
   'petties-bleu': { name: 'PetTies (Bleu)', price: 20.00 },
   'petties-vert': { name: 'PetTies (Vert)', price: 20.00 },
@@ -402,7 +403,7 @@ function ensureBogoFreeProductInCart(cart, promo) {
 
 function promoLabel(promo) {
   if (promo.kind === 'bogo') {
-    const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'produits éligibles' };
+    const names = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petanesth-legacy': 'PetAnesth (ancien modèle)', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'produits éligibles' };
     if (promo.bogoGetProduct && promo.bogoGetProduct !== 'same') {
       return `Code ${promo.code} (${promo.bogoBuyQty} ${names[promo.bogoBuyProduct]} acheté(s) = ${promo.bogoGetQty} ${names[promo.bogoGetProduct]} offert(s))`;
     }

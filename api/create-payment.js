@@ -6,6 +6,7 @@ const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 const PRODUCTS = {
   petholder: { name: 'PetHolder', price: 55.00 },
   petanesth: { name: 'PetAnesth', price: 119.00 },
+  'petanesth-legacy': { name: 'PetAnesth (ancien modele)', price: 59.00 },
   'petties-rose': { name: 'PetTies (Rose)', price: 20.00 },
   'petties-bleu': { name: 'PetTies (Bleu)', price: 20.00 },
   'petties-vert': { name: 'PetTies (Vert)', price: 20.00 },

@@ -34,6 +34,13 @@
     .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
     .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
 
+    /* ── Version picker ── */
+    .version-picker { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 16px; }
+    .version-option { display: flex; flex-shrink: 0; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px 8px 10px; box-sizing: border-box; }
+    .version-option input { margin: 0; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent2); }
+    .version-option .v-sub { font-weight: 300; color: var(--muted); }
+    .legacy-note { font-size: 13px; color: var(--muted); font-weight: 300; margin: 4px 0 16px; background: var(--rose-light); border-radius: 12px; padding: 10px 14px; }
+
     /* ── Cart icon in header ── */
     .cart-icon-btn {
       position: relative;
@@ -148,10 +155,20 @@
         The PetAnesth features seven lateral clip-in slots allowing multiple anaesthesia tubes to be held simultaneously.
         <br>Compatible with standard diameters used in veterinary medicine, it is equipped with a rotating bracket for freely orienting the tubing. This design minimises tension on the breathing circuit and reduces the risk of endotracheal tube displacement.
       </p>
-      <div class="price-tag">119,00 €</div>
-      <div class="price-vat">Excl. VAT</div>
+      <div class="version-picker">
+        <label class="version-option"><input type="radio" name="anesth-version" value="petanesth" checked>New generation <span class="v-sub">— quiet arm</span></label>
+        <label class="version-option"><input type="radio" name="anesth-version" value="petanesth-legacy">Previous model <span class="v-sub">— limited stock</span></label>
+      </div>
+
+      <div class="price-tag" id="paPrice">€119.00</div>
+      <div class="price-vat" id="paPriceVat">Excl. VAT</div>
+
+      <div class="legacy-note" id="paLegacyNote" hidden>
+        ⚠️ Previous PetAnesth model (earlier design, louder than the new generation). Limited stock, available while supplies last.
+      </div>
+
       <div class="hero-cta">
-        <button class="btn primary" onclick="addToCart('petanesth')">🛒 Add to cart</button>
+        <button class="btn primary" onclick="addSelectedAnesth()">🛒 Add to cart</button>
         <a class="btn" href="/en/#contact">Contact us</a>
       </div>
     </div>
@@ -254,7 +271,7 @@
       <h2 class="cta-title">Interested in PetAnesth?</h2>
       <p class="cta-sub">Available for professional orders, bulk volumes and partnerships with veterinary purchasing groups.</p>
       <div class="cta-btns">
-        <button class="btn primary" onclick="addToCart('petanesth')">🛒 Add to cart</button>
+        <button class="btn primary" onclick="addSelectedAnesth()">🛒 Add to cart</button>
         <a class="btn" href="/en/#contact">Contact us</a>
       </div>
     </div>
@@ -309,24 +326,47 @@ function addToCart(productId) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
+function addSelectedAnesth() {
+  const selected = document.querySelector('input[name="anesth-version"]:checked').value;
+  addToCart(selected);
+}
+
 // Init badge on page load
 updateCartBadge();
 </script>
 
 <script>
 (function () {
-  const MEDIA = [
+  const MEDIA_NEW = [
+    { type: 'image', src: '/PetAnesthNewArm.jpg',        label: 'Overview',      alt: 'PetAnesth — new generation, overview' },
+    { type: 'image', src: '/PetAnesthNewArm2.jpg',        label: 'Product view',  alt: 'PetAnesth — new generation, product view' },
+    { type: 'image', src: '/PetAnesth-fixationTube.jpg', label: 'Clamp detail',  alt: 'PetAnesth — new generation, clamp detail' },
+  ];
+
+  const MEDIA_LEGACY = [
     { type: 'image', src: '/PetAnesth.jpg',   label: 'Side view',   alt: 'Side view' },
     { type: 'image', src: '/PetAnesth2.jpg',  label: '3/4 view',    alt: '3/4 view' },
     { type: 'image', src: '/PetAnesth3.jpeg', label: 'Front view',  alt: 'Front view' },
     { type: 'image', src: '/PetAnesth5.png',  label: 'Slot detail', alt: 'Slot detail' },
-    { type: 'youtube', videoId: 'mI3xWe4LJFE', poster: 'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg', label: 'Demo video', alt: 'PetAnesth demonstration' },
+    { type: 'youtube', videoId: 'mI3xWe4LJFE', poster: 'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg', label: 'Demo video', alt: 'PetAnesth demonstration (previous model)' },
   ];
 
+  const PRICES = { 'petanesth': '€119.00', 'petanesth-legacy': '€59.00' };
+
+  var MEDIA;
   var current = 0;
   var thumbsEl = document.getElementById('paThumbCol');
   var mainViewEl = document.getElementById('paMainView');
 
+  function renderGallery(media) {
+    MEDIA = media;
+    current = 0;
+    thumbsEl.innerHTML = '';
+    mainViewEl.innerHTML = '';
+    buildSlides();
+  }
+
+  function buildSlides() {
   MEDIA.forEach(function (m, i) {
     var slide = document.createElement('div');
     slide.className = 'main-slide' + (i === 0 ? ' active' : '');
@@ -369,6 +409,7 @@ updateCartBadge();
     t.addEventListener('click', function () { go(i); });
     thumbsEl.appendChild(t);
   });
+  }
 
   function go(idx) {
     var n = ((idx % MEDIA.length) + MEDIA.length) % MEDIA.length;
@@ -391,6 +432,24 @@ updateCartBadge();
     if (e.key === 'ArrowLeft') go(current - 1);
     if (e.key === 'ArrowRight') go(current + 1);
   });
+
+  // ── Version switch ──
+  var priceEl  = document.getElementById('paPrice');
+  var legacyEl = document.getElementById('paLegacyNote');
+
+  function onVersionChange() {
+    var v = document.querySelector('input[name="anesth-version"]:checked').value;
+    priceEl.textContent = PRICES[v];
+    legacyEl.hidden = (v !== 'petanesth-legacy');
+    renderGallery(v === 'petanesth-legacy' ? MEDIA_LEGACY : MEDIA_NEW);
+  }
+
+  document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {
+    r.addEventListener('change', onVersionChange);
+  });
+
+  renderGallery(MEDIA_NEW);
+
 })();
 </script>
 

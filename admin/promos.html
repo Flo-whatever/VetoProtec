@@ -80,6 +80,7 @@
           <option value="all">Tous les produits</option>
           <option value="petholder">PetHolder</option>
           <option value="petanesth">PetAnesth</option>
+          <option value="petanesth-legacy">PetAnesth (ancien modele)</option>
           <option value="petties-rose">PetTies (Rose)</option>
           <option value="petties-bleu">PetTies (Bleu)</option>
           <option value="petties-vert">PetTies (Vert)</option>
@@ -91,6 +92,7 @@
           <option value="same">Même produit</option>
           <option value="petholder">PetHolder</option>
           <option value="petanesth">PetAnesth</option>
+          <option value="petanesth-legacy">PetAnesth (ancien modele)</option>
           <option value="petties-rose">PetTies (Rose)</option>
           <option value="petties-bleu">PetTies (Bleu)</option>
           <option value="petties-vert">PetTies (Vert)</option>
@@ -199,7 +201,7 @@ function renderPromos(promos) {
   empty.style.display = 'none';
   table.style.display = 'table';
 
-  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'tous produits' };
+  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petanesth-legacy': 'PetAnesth (ancien modele)', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'tous produits' };
 
   body.innerHTML = promos.map(p => {
     const exhausted = p.stock <= 0;

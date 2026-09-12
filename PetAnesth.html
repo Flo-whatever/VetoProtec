@@ -62,6 +62,13 @@
     .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
     .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
 
+    /* ── Sélecteur de version ── */
+    .version-picker { display: flex; flex-wrap: wrap; gap: 10px; margin: 4px 0 16px; }
+    .version-option { display: flex; flex-shrink: 0; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px 8px 10px; box-sizing: border-box; }
+    .version-option input { margin: 0; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--accent2); }
+    .version-option .v-sub { font-weight: 300; color: var(--muted); }
+    .legacy-note { font-size: 13px; color: var(--muted); font-weight: 300; margin: 4px 0 16px; background: var(--rose-light); border-radius: 12px; padding: 10px 14px; }
+
     /* ── Icône panier dans l'en-tête ── */
     .cart-icon-btn {
       position: relative;
@@ -332,10 +339,20 @@
         Le PetAnesth intègre sept encoches latérales à clipsage permettant de maintenir simultanément plusieurs tuyaux d'anesthésie.
         <br>Compatibles avec les diamètres standards utilisés en médecine vétérinaire, il est équipé d'une patte rotative permettant d'orienter les tuyaux. Cette conception limite les tensions sur le circuit et le risque de déplacement de la sonde endotrachéale.
       </p>
-      <div class="price-tag">119,00 €</div>
-      <div class="price-vat">HT</div>
+      <div class="version-picker">
+        <label class="version-option"><input type="radio" name="anesth-version" value="petanesth" checked>Nouvelle génération <span class="v-sub">— bras silencieux</span></label>
+        <label class="version-option"><input type="radio" name="anesth-version" value="petanesth-legacy">Ancien modèle <span class="v-sub">— stock limité</span></label>
+      </div>
+
+      <div class="price-tag" id="paPrice">119,00 €</div>
+      <div class="price-vat" id="paPriceVat">HT</div>
+
+      <div class="legacy-note" id="paLegacyNote" hidden>
+        ⚠️ Ancien modèle de PetAnesth (design précédent, plus bruyant que la nouvelle génération). Stock limité, disponible tant que les quantités le permettent.
+      </div>
+
       <div class="hero-cta">
-        <button class="btn primary" onclick="addToCart('petanesth')">🛒 Ajouter au panier</button>
+        <button class="btn primary" onclick="addSelectedAnesth()">🛒 Ajouter au panier</button>
         <a class="btn" href="/#contact">Nous contacter</a>
       </div>
     </div>
@@ -443,7 +460,7 @@
       <h2 class="cta-title">Intéressé par PetAnesth ?</h2>
       <p class="cta-sub">Disponible pour commandes professionnelles, volumes groupés et partenariats avec centrales d'achat vétérinaires.</p>
       <div class="cta-btns">
-        <button class="btn primary" onclick="addToCart('petanesth')">🛒 Ajouter au panier</button>
+        <button class="btn primary" onclick="addSelectedAnesth()">🛒 Ajouter au panier</button>
         <a class="btn" href="/#contact">Nous contacter</a>
       </div>
     </div>
@@ -498,51 +515,48 @@ function addToCart(productId) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
+function addSelectedAnesth() {
+  const selected = document.querySelector('input[name="anesth-version"]:checked').value;
+  addToCart(selected);
+}
+
 updateCartBadge();
 </script>
 
 <script>
 (function () {
 
-  const MEDIA = [
-    {
-      type:  'image',
-      src:   '/PetAnesth.jpg',
-      label: 'Vue de Profil',
-      alt:   'Vue de Profil'
-    },
-    {
-      type:  'image',
-      src:   '/PetAnesth2.jpg',
-      label: 'Vue de 3/4',
-      alt:   'Vue de 3/4'
-    },
-    {
-      type:  'image',
-      src:   '/PetAnesth3.jpeg',
-      label: 'Vue de face',
-      alt:   'Vue de face'
-    },
-    {
-      type:  'image',
-      src:   '/PetAnesth5.png',
-      label: 'Détail encoche',
-      alt:   'Détail Encoche'
-    },
-    {
-      type:    'youtube',
-      videoId: 'mI3xWe4LJFE',
-      poster:  'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg',
-      label:   'Vidéo démo',
-      alt:     'Démonstration PetAnesth'
-    },
+  const MEDIA_NEW = [
+    { type: 'image', src: '/PetAnesthNewArm.jpg',        label: "Vue d'ensemble",   alt: "PetAnesth — nouvelle génération, vue d'ensemble" },
+    { type: 'image', src: '/PetAnesthNewArm2.jpg',        label: 'Vue produit',      alt: 'PetAnesth — nouvelle génération, vue produit' },
+    { type: 'image', src: '/PetAnesth-fixationTube.jpg', label: 'Détail fixation',  alt: 'PetAnesth — nouvelle génération, détail de la fixation' },
   ];
 
+  const MEDIA_LEGACY = [
+    { type: 'image', src: '/PetAnesth.jpg',   label: 'Vue de Profil', alt: 'Vue de Profil' },
+    { type: 'image', src: '/PetAnesth2.jpg',  label: 'Vue de 3/4',    alt: 'Vue de 3/4' },
+    { type: 'image', src: '/PetAnesth3.jpeg', label: 'Vue de face',   alt: 'Vue de face' },
+    { type: 'image', src: '/PetAnesth5.png',  label: 'Détail encoche', alt: 'Détail Encoche' },
+    { type: 'youtube', videoId: 'mI3xWe4LJFE', poster: 'https://img.youtube.com/vi/mI3xWe4LJFE/hqdefault.jpg', label: 'Vidéo démo', alt: 'Démonstration PetAnesth (ancien modèle)' },
+  ];
+
+  const PRICES = { 'petanesth': '119,00 €', 'petanesth-legacy': '59,00 €' };
+
+  var MEDIA;
   var current    = 0;
   var thumbsEl   = document.getElementById('paThumbCol');
   var mainViewEl = document.getElementById('paMainView');
 
+  function renderGallery(media) {
+    MEDIA = media;
+    current = 0;
+    thumbsEl.innerHTML = '';
+    mainViewEl.innerHTML = '';
+    buildSlides();
+  }
+
   // ── Construit les slides ──
+  function buildSlides() {
   MEDIA.forEach(function (m, i) {
     var slide = document.createElement('div');
     // Toutes les slides sont position:absolute dans .main-view
@@ -659,6 +673,7 @@ updateCartBadge();
     t.addEventListener('click', function () { go(i); });
     thumbsEl.appendChild(t);
   });
+  }
 
   // ── Navigation ──
   function go(idx) {
@@ -692,6 +707,23 @@ updateCartBadge();
     if (e.key === 'ArrowLeft')  go(current - 1);
     if (e.key === 'ArrowRight') go(current + 1);
   });
+
+  // ── Bascule de version ──
+  var priceEl  = document.getElementById('paPrice');
+  var legacyEl = document.getElementById('paLegacyNote');
+
+  function onVersionChange() {
+    var v = document.querySelector('input[name="anesth-version"]:checked').value;
+    priceEl.textContent = PRICES[v];
+    legacyEl.hidden = (v !== 'petanesth-legacy');
+    renderGallery(v === 'petanesth-legacy' ? MEDIA_LEGACY : MEDIA_NEW);
+  }
+
+  document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {
+    r.addEventListener('change', onVersionChange);
+  });
+
+  renderGallery(MEDIA_NEW);
 
 })();
 </script>
