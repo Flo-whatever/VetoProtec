@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetTies — Cotton Restraint Ribbon — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="PetTies: natural cotton restraint ribbon, 20 m x 20 mm roll, available in pink, blue and green. Launching September 2026." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
+    .product-title {
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .cta-section { background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08)); }
+    body {
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
+        var(--bg);
+    }
+    .product-hero { display: block !important; max-width: 960px; margin: 0 auto; padding: 48px 24px 0; }
+    .hero-text { max-width: 960px; margin-bottom: 32px; }
+    .hero-visuals { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .hero-visuals .product-img-wrap { border-radius: 20px; overflow: hidden; height: 380px; }
+    .hero-visuals .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Colours ── */
+    .color-swatches { display: flex; gap: 10px; margin: 4px 0 16px; }
+    .color-swatch { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); }
+
+    /* ── Price & colour picker ── */
+    .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+    .color-picker { display: flex; gap: 10px; margin: 4px 0 16px; }
+    .color-option { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px 6px 8px; }
+    .color-option input { margin: 0; }
+    .green-note { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 10px; background: var(--rose-light); border-radius: 12px; padding: 10px 14px; }
+    .green-note a { color: var(--accent2); font-weight: 600; text-decoration: none; }
+    .green-note a:hover { text-decoration: underline; }
+
+    /* ── Cart toast ── */
+    .cart-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #166534; color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      z-index: 999;
+      transform: translateY(80px); opacity: 0;
+      transition: transform .3s ease, opacity .3s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cart-toast.show { transform: translateY(0); opacity: 1; }
+    .cart-toast a { color: #fff; font-weight: 600; text-decoration: underline; }
+
+    /* ── Cart icon ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+
+    @media (max-width: 768px) {
+      .hero-visuals { grid-template-columns: 1fr; }
+      .hero-visuals .product-img-wrap { height: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cart-toast" id="cartToast">
+  ✅ Added to cart — <a href="/en/cart.html">View cart</a>
+</div>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="/en/">
+      <img src="/LogoVPWoBG.png" alt="VetoProtec" height="80" style="object-fit:contain" />
+    </a>
+    <div class="nav-right">
+      <a class="btn" href="/en/#products">← Products</a>
+      <a class="btn" href="/PetTies.html" style="font-size:13px">🌐 FR</a>
+      <a class="cart-icon-btn" href="/en/cart.html" aria-label="View cart">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="product-hero fade-up">
+
+    <div class="hero-text fade-up--delay">
+      <div class="badge badge--rose">🐾 Professional veterinary equipment</div>
+      <h1 class="product-title">PetTies</h1>
+      <p class="product-tagline">Cotton restraint ribbon — 20 m × 20 mm roll</p>
+      <p class="product-desc">
+        PetTies is a 100% natural cotton restraint ribbon, reusable and made from premium, lined fabric for extra strength and comfort, designed to gently secure a sedated animal's limbs during examinations or minor procedures.
+        Supplied as a 20-metre roll, it can be cut to the desired length and is machine washable for hygienic reuse.
+      </p>
+
+      <div class="color-picker">
+        <label class="color-option"><input type="radio" name="petties-color" value="petties-rose" checked><span class="swatch-dot" style="background:#e08a9c"></span>Pink</label>
+        <label class="color-option"><input type="radio" name="petties-color" value="petties-bleu"><span class="swatch-dot" style="background:#2b5c94"></span>Blue</label>
+      </div>
+
+      <div class="price-tag">€20.00</div>
+      <div class="price-vat">Excl. VAT — direct sale from VetoProtec (pink & blue) · available from September 2026</div>
+
+      <div class="hero-cta">
+        <button class="btn primary" onclick="addSelectedTie()">🛒 Add to cart</button>
+        <a class="btn" href="/en/#contact">Contact us</a>
+      </div>
+
+      <div class="green-note">
+        🟢 The <strong>green</strong> colourway is distributed exclusively through our partner <a href="https://www.centravet.fr/" target="_blank" rel="noopener">Centravet</a> — not available for direct sale on this site.
+      </div>
+    </div>
+
+    <div class="hero-visuals">
+      <div class="product-img-wrap">
+        <img src="/PhotoLiens.png" alt="PetTies restraint ribbon rolls — pink, blue, green" />
+      </div>
+      <div class="product-img-wrap">
+        <img src="/PhotoLiensBleuChat.png" alt="PetTies ribbon used to restrain a cat's paw" />
+      </div>
+    </div>
+
+  </div>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Why PetTies?</p>
+      <h2 class="section-title">Real benefits every day</h2>
+      <p class="section-sub">Designed from field needs to simplify procedures and improve working conditions.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-icon">🧵</div><div class="benefit-title">Premium quality — lined fabric</div><div class="benefit-desc">Lined fabric construction for extra strength and comfort.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">♻️</div><div class="benefit-title">Reusable</div><div class="benefit-desc">Washes and reuses from one procedure to the next without quality loss.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🌿</div><div class="benefit-title">Superior quality</div><div class="benefit-desc">Premium natural cotton, soft on the animal.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🧼</div><div class="benefit-title">Washable at 60 °C</div><div class="benefit-desc">Up to 5 machine washes, hygiene guaranteed.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🎨</div><div class="benefit-title">Innovative colours</div><div class="benefit-desc">Pink, blue & green — a novelty in vet clinics.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">💪</div><div class="benefit-title">High resistance</div><div class="benefit-desc">Strong tear resistance for safe restraint.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Technical datasheet</p>
+      <h2 class="section-title">Technical specifications</h2>
+      <div class="specs-grid">
+
+        <div class="spec-group">
+          <h3>🧵 Material & dimensions</h3>
+          <div class="spec-row"><span class="spec-key">Material</span><span class="spec-val">100% natural cotton, lined fabric</span></div>
+          <div class="spec-row"><span class="spec-key">Width</span><span class="spec-val">20 mm</span></div>
+          <div class="spec-row"><span class="spec-key">Length</span><span class="spec-val">20 m</span></div>
+          <div class="spec-row"><span class="spec-key">Roll diameter</span><span class="spec-val">12.5 cm</span></div>
+          <div class="spec-row"><span class="spec-key">Reusable</span><span class="spec-val">✅ Yes</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>⚖️ Weight & colours</h3>
+          <div class="spec-row"><span class="spec-key">Net weight</span><span class="spec-val">94.1 g</span></div>
+          <div class="spec-row"><span class="spec-key">Gross weight</span><span class="spec-val">111.9 g</span></div>
+          <div class="spec-row"><span class="spec-key">Colours</span><span class="spec-val">Pink / Blue / Green</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>🏭 Origin</h3>
+          <div class="spec-row"><span class="spec-key">Country of manufacture</span><span class="spec-val">China</span></div>
+          <div class="spec-row"><span class="spec-key">Supplier</span><span class="spec-val">Germany</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>🧹 Care</h3>
+          <div class="spec-row"><span class="spec-key">Washability</span><span class="spec-val">Machine washable at 60 °C</span></div>
+          <div class="spec-row"><span class="spec-key">Reusability</span><span class="spec-val">Up to 5 machine washes without quality loss</span></div>
+          <div class="spec-row"><span class="spec-key">Resistance</span><span class="spec-val">High tear resistance</span></div>
+          <div class="spec-row"><span class="spec-key">Eco-responsible</span><span class="spec-val">Natural cotton, reusable</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Where to buy</p>
+      <h2 class="section-title">Distribution by colour</h2>
+      <div class="specs-grid">
+        <div class="spec-group">
+          <h3>🩷💙 Pink & Blue</h3>
+          <div class="spec-row"><span class="spec-key">Channel</span><span class="spec-val">Direct sale from VetoProtec</span></div>
+          <div class="spec-row"><span class="spec-key">Price</span><span class="spec-val">€20.00 excl. VAT</span></div>
+        </div>
+        <div class="spec-group">
+          <h3>💚 Green</h3>
+          <div class="spec-row"><span class="spec-key">Channel</span><span class="spec-val">Centravet partner only</span></div>
+          <div class="spec-row"><span class="spec-key">Order</span><span class="spec-val"><a href="https://www.centravet.fr/" target="_blank" rel="noopener" style="color:var(--accent2);font-weight:600;">centravet.fr</a></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="cta-section">
+      <h2 class="cta-title">Interested in PetTies?</h2>
+      <p class="cta-sub">Pink & blue available for direct sale from September 2026 — bulk orders available.</p>
+      <div class="cta-btns">
+        <button class="btn primary" onclick="addSelectedTie()">🛒 Add to cart</button>
+        <a class="btn" href="/en/#contact">Contact us</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Legal notice</a>
+        <a href="/cgv.html">Terms & Conditions</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+function updateCartBadge() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    const count = Object.values(cart).reduce((a, b) => a + b, 0);
+    const badge = document.getElementById('cartBadge');
+    if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+    else { badge.classList.remove('visible'); }
+  } catch {}
+}
+
+function addToCart(productId) {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    cart[productId] = (cart[productId] || 0) + 1;
+    sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  } catch(e) {}
+  updateCartBadge();
+  const toast = document.getElementById('cartToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+function addSelectedTie() {
+  const selected = document.querySelector('input[name="petties-color"]:checked').value;
+  addToCart(selected);
+}
+
+updateCartBadge();
+</script>
+
+</body>
+</html>

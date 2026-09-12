@@ -56,6 +56,24 @@
     <priority>0.7</priority>
   </url>
 
+  <!-- Fiche produit PetTies EN -->
+  <url>
+    <loc>https://www.vetoprotec.fr/en/PetTies.html</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.vetoprotec.fr/en/PetTies.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.vetoprotec.fr/PetTies.html"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Fiche produit PetTies FR -->
+  <url>
+    <loc>https://www.vetoprotec.fr/PetTies.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.vetoprotec.fr/PetTies.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.vetoprotec.fr/en/PetTies.html"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Mentions légales -->
   <url>
     <loc>https://www.vetoprotec.fr/mentions-legales.html</loc>

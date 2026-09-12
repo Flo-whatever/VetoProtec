@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetTies — Lien de contention en coton — VetoProtec</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+  <meta name="description" content="PetTies : lien de contention en coton naturel, bobine 20 m x 20 mm, disponible en rose, bleu et vert. Lancement septembre 2026." />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .product-img-wrap { background: linear-gradient(160deg, var(--rose-light), var(--accent3)); }
+
+    .product-title {
+      background: linear-gradient(135deg, var(--text) 30%, var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .cta-section {
+      background: linear-gradient(135deg, rgba(192,132,200,.12), rgba(244,114,182,.08));
+    }
+
+    body {
+      background:
+        radial-gradient(900px 600px at 80% 0%, rgba(192,132,200,.15) 0%, transparent 60%),
+        radial-gradient(600px 400px at 0% 80%, rgba(244,114,182,.1) 0%, transparent 55%),
+        var(--bg);
+    }
+
+    /* ── Nouveau layout hero ── */
+    .product-hero {
+      display: block !important;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 0;
+    }
+
+    .hero-text {
+      margin-bottom: 32px;
+    }
+
+    .hero-visuals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .hero-visuals .product-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      height: 380px;
+    }
+
+    .hero-visuals .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ── Coloris ── */
+    .color-swatches { display: flex; gap: 10px; margin: 4px 0 16px; }
+    .color-swatch { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.1); }
+
+    /* ── Prix & sélecteur coloris ── */
+    .price-tag { font-size: 22px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    .price-vat { font-size: 12px; color: var(--muted); font-weight: 300; margin-bottom: 16px; }
+    .color-picker { display: flex; gap: 10px; margin: 4px 0 16px; }
+    .color-option { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px 6px 8px; }
+    .color-option input { margin: 0; }
+    .green-note { font-size: 13px; color: var(--muted); font-weight: 300; margin-top: 10px; background: var(--rose-light); border-radius: 12px; padding: 10px 14px; }
+    .green-note a { color: var(--accent2); font-weight: 600; text-decoration: none; }
+    .green-note a:hover { text-decoration: underline; }
+
+    /* ── Toast panier ── */
+    .cart-toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #166534; color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      z-index: 999;
+      transform: translateY(80px); opacity: 0;
+      transition: transform .3s ease, opacity .3s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cart-toast.show { transform: translateY(0); opacity: 1; }
+    .cart-toast a { color: #fff; font-weight: 600; text-decoration: underline; }
+
+    /* ── Icône panier ── */
+    .cart-icon-btn {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--border); background: var(--bg);
+      cursor: pointer; text-decoration: none; font-size: 18px;
+      transition: background .15s;
+    }
+    .cart-icon-btn:hover { background: var(--border); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #e11d48; color: #fff;
+      font-size: 10px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: none; align-items: center; justify-content: center;
+    }
+    .cart-badge.visible { display: flex; }
+
+    @media (max-width: 768px) {
+      .hero-visuals {
+        grid-template-columns: 1fr;
+      }
+      .hero-visuals .product-img-wrap {
+        height: 260px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cart-toast" id="cartToast">
+  ✅ Ajouté au panier — <a href="/cart.html">Voir le panier</a>
+</div>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="/">
+      <img src="/LogoVPWoBG.png" alt="VetoProtec" />
+    </a>
+    <div class="nav-right">
+      <a class="btn" href="/#produits">← Produits</a>
+      <a class="btn" href="/en/PetTies.html" style="font-size:13px">🌐 EN</a>
+      <a class="cart-icon-btn" href="/cart.html" aria-label="Voir le panier">
+        🛒
+        <span class="cart-badge" id="cartBadge"></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="product-hero fade-up">
+
+    <!-- Texte pleine largeur en haut -->
+    <div class="hero-text fade-up--delay">
+      <div class="badge badge--rose">🐾 Équipement vétérinaire professionnel</div>
+      <h1 class="product-title">PetTies</h1>
+      <p class="product-tagline">Lien de contention en coton — bobine 20 m × 20 mm</p>
+      <p class="product-desc">
+        PetTies est un lien de contention en coton 100 % naturel, réutilisable et de qualité premium (tissu doublé pour plus de solidité et de confort), conçu pour maintenir en douceur les membres d'un animal sédaté lors d'examens ou de petites interventions.
+        Livré en bobine de 20 mètres, il se coupe à la longueur souhaitée et se lave en machine pour une réutilisation en toute hygiène.
+      </p>
+
+      <div class="color-picker">
+        <label class="color-option"><input type="radio" name="petties-color" value="petties-rose" checked><span class="swatch-dot" style="background:#e08a9c"></span>Rose</label>
+        <label class="color-option"><input type="radio" name="petties-color" value="petties-bleu"><span class="swatch-dot" style="background:#2b5c94"></span>Bleu</label>
+      </div>
+
+      <div class="price-tag">20,00 €</div>
+      <div class="price-vat">HT — vente directe VetoProtec (rose & bleu) · disponible à partir de septembre 2026</div>
+
+      <div class="hero-cta">
+        <button class="btn primary" onclick="addSelectedTie()">🛒 Ajouter au panier</button>
+        <a class="btn" href="/#contact">Nous contacter</a>
+      </div>
+
+      <div class="green-note">
+        🟢 Le coloris <strong>vert</strong> est distribué exclusivement via notre partenaire <a href="https://www.centravet.fr/" target="_blank" rel="noopener">Centravet</a> — non disponible en vente directe sur ce site.
+      </div>
+    </div>
+
+    <!-- Photos -->
+    <div class="hero-visuals">
+      <div class="product-img-wrap">
+        <img src="/PhotoLiens.png" alt="Bobines de lien de contention PetTies — rose, bleu, vert" />
+      </div>
+      <div class="product-img-wrap">
+        <img src="/PhotoLiensBleuChat.png" alt="Lien PetTies utilisé pour la contention de la patte d'un chat" />
+      </div>
+    </div>
+
+  </div>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Pourquoi PetTies ?</p>
+      <h2 class="section-title">Des bénéfices concrets au quotidien</h2>
+      <p class="section-sub">Conçu à partir des besoins du terrain pour simplifier les gestes et améliorer les conditions de travail.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card"><div class="benefit-icon">🧵</div><div class="benefit-title">Qualité premium — tissu doublé</div><div class="benefit-desc">Confection en tissu doublé pour plus de solidité et de confort.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">♻️</div><div class="benefit-title">Réutilisable</div><div class="benefit-desc">Se lave et se réutilise d'un acte à l'autre, sans perte de qualité.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🌿</div><div class="benefit-title">Qualité supérieure</div><div class="benefit-desc">Coton naturel premium, doux pour l'animal.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🧼</div><div class="benefit-title">Lavable à 60 °C</div><div class="benefit-desc">Jusqu'à 5 lavages machine, hygiène garantie.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🎨</div><div class="benefit-title">Couleurs innovantes</div><div class="benefit-desc">Rose, bleu & vert — une nouveauté en clinique vétérinaire.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">💪</div><div class="benefit-title">Résistance élevée</div><div class="benefit-desc">Haute résistance à la déchirure.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Fiche technique</p>
+      <h2 class="section-title">Caractéristiques techniques</h2>
+      <div class="specs-grid">
+
+        <div class="spec-group">
+          <h3>🧵 Matériau & dimensions</h3>
+          <div class="spec-row"><span class="spec-key">Matière</span><span class="spec-val">100 % coton naturel, tissu doublé</span></div>
+          <div class="spec-row"><span class="spec-key">Largeur</span><span class="spec-val">20 mm</span></div>
+          <div class="spec-row"><span class="spec-key">Longueur</span><span class="spec-val">20 m</span></div>
+          <div class="spec-row"><span class="spec-key">Diamètre du rouleau</span><span class="spec-val">12,5 cm</span></div>
+          <div class="spec-row"><span class="spec-key">Réutilisable</span><span class="spec-val">✅ Oui</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>⚖️ Poids & coloris</h3>
+          <div class="spec-row"><span class="spec-key">Poids net</span><span class="spec-val">94,1 g</span></div>
+          <div class="spec-row"><span class="spec-key">Poids brut</span><span class="spec-val">111,9 g</span></div>
+          <div class="spec-row"><span class="spec-key">Coloris</span><span class="spec-val">Rose / Bleu / Vert</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>🏭 Origine</h3>
+          <div class="spec-row"><span class="spec-key">Pays de fabrication</span><span class="spec-val">Chine</span></div>
+          <div class="spec-row"><span class="spec-key">Fournisseur</span><span class="spec-val">Allemagne</span></div>
+        </div>
+
+        <div class="spec-group">
+          <h3>🧹 Entretien</h3>
+          <div class="spec-row"><span class="spec-key">Lavabilité</span><span class="spec-val">Lavable à 60 °C</span></div>
+          <div class="spec-row"><span class="spec-key">Réutilisabilité</span><span class="spec-val">Jusqu'à 5 lavages machine sans perte de qualité</span></div>
+          <div class="spec-row"><span class="spec-key">Résistance</span><span class="spec-val">Haute résistance à la déchirure</span></div>
+          <div class="spec-row"><span class="spec-key">Éco-responsable</span><span class="spec-val">Coton naturel réutilisable</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="section-label">Où acheter</p>
+      <h2 class="section-title">Distribution par coloris</h2>
+      <div class="specs-grid">
+        <div class="spec-group">
+          <h3>🩷💙 Rose & Bleu</h3>
+          <div class="spec-row"><span class="spec-key">Canal</span><span class="spec-val">Vente directe VetoProtec</span></div>
+          <div class="spec-row"><span class="spec-key">Prix</span><span class="spec-val">20,00 € HT</span></div>
+        </div>
+        <div class="spec-group">
+          <h3>💚 Vert</h3>
+          <div class="spec-row"><span class="spec-key">Canal</span><span class="spec-val">Partenaire Centravet uniquement</span></div>
+          <div class="spec-row"><span class="spec-key">Commande</span><span class="spec-val"><a href="https://www.centravet.fr/" target="_blank" rel="noopener" style="color:var(--accent2);font-weight:600;">centravet.fr</a></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="cta-section">
+      <h2 class="cta-title">Intéressé par PetTies ?</h2>
+      <p class="cta-sub">Rose & bleu disponibles en vente directe à partir de septembre 2026 — commande groupée possible.</p>
+      <div class="cta-btns">
+        <button class="btn primary" onclick="addSelectedTie()">🛒 Ajouter au panier</button>
+        <a class="btn" href="/#contact">Nous contacter</a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>© <span id="y"></span> VetoProtec</div>
+      <div class="footer-links">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/cgv.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById("y").textContent = new Date().getFullYear();
+
+function updateCartBadge() {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    const count = Object.values(cart).reduce((a, b) => a + b, 0);
+    const badge = document.getElementById('cartBadge');
+    if (count > 0) { badge.textContent = count; badge.classList.add('visible'); }
+    else { badge.classList.remove('visible'); }
+  } catch {}
+}
+
+function addToCart(productId) {
+  try {
+    const cart = JSON.parse(sessionStorage.getItem('vp_cart') || '{}');
+    cart[productId] = (cart[productId] || 0) + 1;
+    sessionStorage.setItem('vp_cart', JSON.stringify(cart));
+  } catch(e) {}
+  updateCartBadge();
+  const toast = document.getElementById('cartToast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+function addSelectedTie() {
+  const selected = document.querySelector('input[name="petties-color"]:checked').value;
+  addToCart(selected);
+}
+
+updateCartBadge();
+</script>
+</body>
+</html>

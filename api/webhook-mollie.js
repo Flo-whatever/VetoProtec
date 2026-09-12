@@ -11,6 +11,8 @@ const processedPayments = new Set();
 const PRODUCTS = {
   petholder: { name: 'PetHolder', price: 55.0 },
   petanesth: { name: 'PetAnesth', price: 119.0 },
+  'petties-rose': { name: 'PetTies (Rose)', price: 20.0 },
+  'petties-bleu': { name: 'PetTies (Bleu)', price: 20.0 },
 };
 
 function escapeHtml(value) {
