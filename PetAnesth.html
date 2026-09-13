@@ -388,8 +388,8 @@
         <div class="benefit-card"><div class="benefit-icon">🫁</div><div class="benefit-title">Réduction des tensions</div><div class="benefit-desc">Limite la traction exercée sur le tube endotrachéal pendant toute la durée de l'intervention.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🛡️</div><div class="benefit-title">Sécurité anesthésique</div><div class="benefit-desc">Stabilise le circuit et réduit les risques de déconnexion ou de déplacement accidentel.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🔦</div><div class="benefit-title">Champ opératoire dégagé</div><div class="benefit-desc">Libère l'espace autour de l'animal et améliore l'accès du chirurgien à la zone d'intervention.</div></div>
-        <div class="benefit-card"><div class="benefit-icon">🔄</div><div class="benefit-title">Bras articulé 360°</div><div class="benefit-desc">Orientation précise dans toutes les directions pour s'adapter à chaque configuration de table.</div></div>
-        <div class="benefit-card"><div class="benefit-icon">⚡</div><div class="benefit-title">Installation rapide</div><div class="benefit-desc">Fixation intuitive sur la table d'opération, sans outillage, en quelques secondes.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🔄</div><div class="benefit-title" id="paBenefitArmTitle">Bras articulé 360°</div><div class="benefit-desc" id="paBenefitArmDesc">Orientation précise dans toutes les directions pour s'adapter à chaque configuration de table.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">⚡</div><div class="benefit-title">Installation rapide</div><div class="benefit-desc" id="paBenefitInstallDesc">Fixation intuitive sur la table d'opération, sans outillage, en quelques secondes.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🏥</div><div class="benefit-title">Usage clinique quotidien</div><div class="benefit-desc">Conçu pour résister aux conditions d'utilisation intensives des cabinets et centres hospitaliers vétérinaires.</div></div>
       </div>
     </div>
@@ -414,7 +414,7 @@
       <h2 class="section-title">Installation en 4 étapes</h2>
       <p class="section-sub">Un protocole simple qui s'intègre naturellement dans votre routine opératoire.</p>
       <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Fixation sur la table</strong><span>Clampez le support sur le bord de la table chirurgicale (compatible jusqu'à 5 cm d'épaisseur).</span></div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong id="paStep1Title">Fixation sur la table</strong><span id="paStep1Desc">Clampez le support sur le bord de la table chirurgicale (compatible jusqu'à 5 cm d'épaisseur).</span></div></div>
         <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Orientation du bras articulé</strong><span>Positionnez le bras articulé 360° pour amener la patte support au-dessus du champ opératoire.</span></div></div>
         <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Mise en place du circuit</strong><span>Engagez le circuit d'anesthésie dans les encoches de maintien de la patte support.</span></div></div>
         <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Réglage de la rigidité</strong><span>Ajustez la molette de réglage pour bloquer le bras dans la position souhaitée.</span></div></div>
@@ -429,13 +429,13 @@
       <div class="specs-grid">
         <div class="spec-group">
           <h3>🔩 Mécanique</h3>
-          <div class="spec-row"><span class="spec-key">Bras articulé</span><span class="spec-val">Flexible, orientable 360°</span></div>
+          <div class="spec-row"><span class="spec-key">Bras articulé</span><span class="spec-val" id="paSpecArm">Flexible, orientable 360°</span></div>
           <div class="spec-row"><span class="spec-key">Réglage rigidité</span><span class="spec-val">Molette de serrage</span></div>
           <div class="spec-row"><span class="spec-key">Épaisseur table max.</span><span class="spec-val">5 cm</span></div>
         </div>
         <div class="spec-group">
           <h3>🧱 Support & fixation</h3>
-          <div class="spec-row"><span class="spec-key">Type de fixation</span><span class="spec-val">Clamp sur rebord de table</span></div>
+          <div class="spec-row"><span class="spec-key">Type de fixation</span><span class="spec-val" id="paSpecMount">Clamp sur rebord de table</span></div>
           <div class="spec-row"><span class="spec-key">Patte support</span><span class="spec-val">Encoches de maintien circuit</span></div>
           <div class="spec-row"><span class="spec-key">Compatibilité tables</span><span class="spec-val">Universelle</span></div>
         </div>
@@ -541,6 +541,27 @@ updateCartBadge();
   ];
 
   const PRICES = { 'petanesth': '119,00 €', 'petanesth-legacy': '59,00 €' };
+
+  const VERSION_COPY = {
+    'petanesth': {
+      benefitArmTitle: 'Bras flexible en silicone',
+      benefitArmDesc: "100% silencieux : il s'oriente dans toutes les directions sans un bruit, pour un confort optimal au bloc opératoire.",
+      benefitInstallDesc: "Se clampe partout : table d'opération, potence, barreaux de cage… Multipliez les points d'attache possibles, sans outillage.",
+      step1Title: 'Fixation multi-points',
+      step1Desc: "Clampez le support sur la table d'opération, une potence ou les barreaux d'une cage (épaisseur max. 5 cm).",
+      specArm: 'Flexible en silicone, 100% silencieux, orientable 360°',
+      specMount: 'Clamp universel : table, potence, barreaux de cage',
+    },
+    'petanesth-legacy': {
+      benefitArmTitle: 'Bras articulé 360°',
+      benefitArmDesc: "Orientation précise dans toutes les directions pour s'adapter à chaque configuration de table.",
+      benefitInstallDesc: "Fixation intuitive sur la table d'opération, sans outillage, en quelques secondes.",
+      step1Title: 'Fixation sur la table',
+      step1Desc: "Clampez le support sur le bord de la table chirurgicale (compatible jusqu'à 5 cm d'épaisseur).",
+      specArm: 'Flexible, orientable 360°',
+      specMount: 'Clamp sur rebord de table',
+    },
+  };
 
   var MEDIA;
   var current    = 0;
@@ -717,13 +738,22 @@ updateCartBadge();
     priceEl.textContent = PRICES[v];
     legacyEl.hidden = (v !== 'petanesth-legacy');
     renderGallery(v === 'petanesth-legacy' ? MEDIA_LEGACY : MEDIA_NEW);
+
+    var copy = VERSION_COPY[v];
+    document.getElementById('paBenefitArmTitle').textContent = copy.benefitArmTitle;
+    document.getElementById('paBenefitArmDesc').textContent = copy.benefitArmDesc;
+    document.getElementById('paBenefitInstallDesc').textContent = copy.benefitInstallDesc;
+    document.getElementById('paStep1Title').textContent = copy.step1Title;
+    document.getElementById('paStep1Desc').textContent = copy.step1Desc;
+    document.getElementById('paSpecArm').textContent = copy.specArm;
+    document.getElementById('paSpecMount').textContent = copy.specMount;
   }
 
   document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {
     r.addEventListener('change', onVersionChange);
   });
 
-  renderGallery(MEDIA_NEW);
+  onVersionChange();
 
 })();
 </script>

@@ -199,8 +199,8 @@
         <div class="benefit-card"><div class="benefit-icon">🫁</div><div class="benefit-title">Reduced tension</div><div class="benefit-desc">Minimises traction on the endotracheal tube throughout the entire procedure.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🛡️</div><div class="benefit-title">Anaesthetic safety</div><div class="benefit-desc">Stabilises the circuit and reduces the risk of accidental disconnection or displacement.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🔦</div><div class="benefit-title">Clear surgical field</div><div class="benefit-desc">Frees up space around the animal and improves surgeon access to the operative site.</div></div>
-        <div class="benefit-card"><div class="benefit-icon">🔄</div><div class="benefit-title">360° articulated arm</div><div class="benefit-desc">Precise orientation in all directions to adapt to any table configuration.</div></div>
-        <div class="benefit-card"><div class="benefit-icon">⚡</div><div class="benefit-title">Quick setup</div><div class="benefit-desc">Intuitive attachment to the operating table — no tools required, fitted in seconds.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">🔄</div><div class="benefit-title" id="paBenefitArmTitle">360° articulated arm</div><div class="benefit-desc" id="paBenefitArmDesc">Precise orientation in all directions to adapt to any table configuration.</div></div>
+        <div class="benefit-card"><div class="benefit-icon">⚡</div><div class="benefit-title">Quick setup</div><div class="benefit-desc" id="paBenefitInstallDesc">Intuitive attachment to the operating table — no tools required, fitted in seconds.</div></div>
         <div class="benefit-card"><div class="benefit-icon">🏥</div><div class="benefit-title">Daily clinical use</div><div class="benefit-desc">Built to withstand the intensive use conditions of veterinary practices and hospitals.</div></div>
       </div>
     </div>
@@ -225,7 +225,7 @@
       <h2 class="section-title">Installation in 4 steps</h2>
       <p class="section-sub">A simple protocol that integrates naturally into your surgical routine.</p>
       <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Attach to the table</strong><span>Clamp the support onto the edge of the surgical table (compatible with up to 5 cm thickness).</span></div></div>
+        <div class="step"><div class="step-num">1</div><div class="step-content"><strong id="paStep1Title">Attach to the table</strong><span id="paStep1Desc">Clamp the support onto the edge of the surgical table (compatible with up to 5 cm thickness).</span></div></div>
         <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Orient the articulated arm</strong><span>Position the 360° articulated arm to bring the support bracket over the surgical field.</span></div></div>
         <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Route the circuit</strong><span>Engage the anaesthesia circuit into the holding slots of the support bracket.</span></div></div>
         <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Adjust the tension</strong><span>Turn the tension dial to lock the arm in the desired position.</span></div></div>
@@ -240,13 +240,13 @@
       <div class="specs-grid">
         <div class="spec-group">
           <h3>🔩 Mechanics</h3>
-          <div class="spec-row"><span class="spec-key">Articulated arm</span><span class="spec-val">Flexible, 360° adjustable</span></div>
+          <div class="spec-row"><span class="spec-key">Articulated arm</span><span class="spec-val" id="paSpecArm">Flexible, 360° adjustable</span></div>
           <div class="spec-row"><span class="spec-key">Tension adjustment</span><span class="spec-val">Locking dial</span></div>
           <div class="spec-row"><span class="spec-key">Max. table thickness</span><span class="spec-val">5 cm</span></div>
         </div>
         <div class="spec-group">
           <h3>🧱 Support & attachment</h3>
-          <div class="spec-row"><span class="spec-key">Attachment type</span><span class="spec-val">Table edge clamp</span></div>
+          <div class="spec-row"><span class="spec-key">Attachment type</span><span class="spec-val" id="paSpecMount">Table edge clamp</span></div>
           <div class="spec-row"><span class="spec-key">Support bracket</span><span class="spec-val">Circuit holding slots</span></div>
           <div class="spec-row"><span class="spec-key">Table compatibility</span><span class="spec-val">Universal</span></div>
         </div>
@@ -353,6 +353,27 @@ updateCartBadge();
 
   const PRICES = { 'petanesth': '€119.00', 'petanesth-legacy': '€59.00' };
 
+  const VERSION_COPY = {
+    'petanesth': {
+      benefitArmTitle: 'Flexible silicone arm',
+      benefitArmDesc: '100% silent — it moves in every direction without a sound, for maximum comfort in the operating room.',
+      benefitInstallDesc: 'Clamps onto anything: operating table, IV pole, cage bars… multiplying the possible attachment points, no tools required.',
+      step1Title: 'Multi-point attachment',
+      step1Desc: 'Clamp the support onto the operating table, an IV pole, or cage bars (max. 5 cm thickness).',
+      specArm: 'Flexible silicone, 100% silent, 360° adjustable',
+      specMount: 'Universal clamp: table, IV pole, cage bars',
+    },
+    'petanesth-legacy': {
+      benefitArmTitle: '360° articulated arm',
+      benefitArmDesc: 'Precise orientation in all directions to adapt to any table configuration.',
+      benefitInstallDesc: 'Intuitive attachment to the operating table — no tools required, fitted in seconds.',
+      step1Title: 'Attach to the table',
+      step1Desc: 'Clamp the support onto the edge of the surgical table (compatible with up to 5 cm thickness).',
+      specArm: 'Flexible, 360° adjustable',
+      specMount: 'Table edge clamp',
+    },
+  };
+
   var MEDIA;
   var current = 0;
   var thumbsEl = document.getElementById('paThumbCol');
@@ -442,13 +463,22 @@ updateCartBadge();
     priceEl.textContent = PRICES[v];
     legacyEl.hidden = (v !== 'petanesth-legacy');
     renderGallery(v === 'petanesth-legacy' ? MEDIA_LEGACY : MEDIA_NEW);
+
+    var copy = VERSION_COPY[v];
+    document.getElementById('paBenefitArmTitle').textContent = copy.benefitArmTitle;
+    document.getElementById('paBenefitArmDesc').textContent = copy.benefitArmDesc;
+    document.getElementById('paBenefitInstallDesc').textContent = copy.benefitInstallDesc;
+    document.getElementById('paStep1Title').textContent = copy.step1Title;
+    document.getElementById('paStep1Desc').textContent = copy.step1Desc;
+    document.getElementById('paSpecArm').textContent = copy.specArm;
+    document.getElementById('paSpecMount').textContent = copy.specMount;
   }
 
   document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {
     r.addEventListener('change', onVersionChange);
   });
 
-  renderGallery(MEDIA_NEW);
+  onVersionChange();
 
 })();
 </script>
