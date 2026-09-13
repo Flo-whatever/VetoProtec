@@ -366,6 +366,7 @@
 
       <div class="hero-3d">
         <model-viewer
+          id="paModelViewer"
           src="/merged_model_final.glb"
           alt="PetAnesth modèle 3D interactif"
           auto-rotate
@@ -551,6 +552,7 @@ updateCartBadge();
       step1Desc: "Clampez le support sur la table d'opération, une potence ou les barreaux d'une cage (épaisseur max. 5 cm).",
       specArm: 'Flexible en silicone, 100% silencieux, orientable 360°',
       specMount: 'Clamp universel : table, potence, barreaux de cage',
+      model3d: '/merged_model_final.glb',
     },
     'petanesth-legacy': {
       benefitArmTitle: 'Bras articulé 360°',
@@ -560,6 +562,7 @@ updateCartBadge();
       step1Desc: "Clampez le support sur le bord de la table chirurgicale (compatible jusqu'à 5 cm d'épaisseur).",
       specArm: 'Flexible, orientable 360°',
       specMount: 'Clamp sur rebord de table',
+      model3d: '/PetAnesth.glb',
     },
   };
 
@@ -747,6 +750,7 @@ updateCartBadge();
     document.getElementById('paStep1Desc').textContent = copy.step1Desc;
     document.getElementById('paSpecArm').textContent = copy.specArm;
     document.getElementById('paSpecMount').textContent = copy.specMount;
+    document.getElementById('paModelViewer').setAttribute('src', copy.model3d);
   }
 
   document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {

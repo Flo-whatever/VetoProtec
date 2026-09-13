@@ -180,6 +180,7 @@
       </div>
       <div class="hero-3d">
         <model-viewer
+          id="paModelViewer"
           src="/merged_model_final.glb"
           alt="PetAnesth interactive 3D model"
           auto-rotate camera-controls shadow-intensity="1"
@@ -362,6 +363,7 @@ updateCartBadge();
       step1Desc: 'Clamp the support onto the operating table, an IV pole, or cage bars (max. 5 cm thickness).',
       specArm: 'Flexible silicone, 100% silent, 360° adjustable',
       specMount: 'Universal clamp: table, IV pole, cage bars',
+      model3d: '/merged_model_final.glb',
     },
     'petanesth-legacy': {
       benefitArmTitle: '360° articulated arm',
@@ -371,6 +373,7 @@ updateCartBadge();
       step1Desc: 'Clamp the support onto the edge of the surgical table (compatible with up to 5 cm thickness).',
       specArm: 'Flexible, 360° adjustable',
       specMount: 'Table edge clamp',
+      model3d: '/PetAnesth.glb',
     },
   };
 
@@ -472,6 +475,7 @@ updateCartBadge();
     document.getElementById('paStep1Desc').textContent = copy.step1Desc;
     document.getElementById('paSpecArm').textContent = copy.specArm;
     document.getElementById('paSpecMount').textContent = copy.specMount;
+    document.getElementById('paModelViewer').setAttribute('src', copy.model3d);
   }
 
   document.querySelectorAll('input[name="anesth-version"]').forEach(function (r) {
