@@ -98,7 +98,7 @@
 
       <div class="checkout-form">
         <div style="margin-bottom:20px;padding:12px 16px;border-radius:12px;background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;font-size:13px;line-height:1.6">
-          🌍 La commande en ligne est disponible pour l'Europe. Si votre pays n'est pas listé, merci de <a href="/#contact" style="color:#0369a1;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+          🌍 La commande en ligne est disponible pour l'Europe, les DOM-TOM, les Amériques (Caraïbes incluses), les Émirats arabes unis et la Chine. Si votre pays n'est pas listé, merci de <a href="/#contact" style="color:#0369a1;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
         </div>
         <h2 style="font-family:'DM Serif Display',serif;font-size:20px;margin-bottom:16px">Vos coordonnées</h2>
         <label>Nom de la clinique / de la société
@@ -127,7 +127,7 @@
         <label>Pays
           <select id="customerCountry" required style="width:100%;margin-top:6px">
             <option value="" disabled>Sélectionnez votre pays…</option>
-            <optgroup label="🚚 Zone 1 — Europe de l'Ouest">
+            <optgroup label="🚚 Zone 1 — Europe de l'Ouest" data-zone="europe">
               <option value="France" selected>France</option>
               <option value="Germany">Allemagne</option>
               <option value="Belgium">Belgique</option>
@@ -143,7 +143,7 @@
               <option value="Monaco">Monaco</option>
               <option value="San Marino">Saint-Marin</option>
             </optgroup>
-            <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est">
+            <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est" data-zone="europe">
               <option value="United Kingdom">Royaume-Uni</option>
               <option value="Ireland">Irlande</option>
               <option value="Denmark">Danemark</option>
@@ -166,7 +166,7 @@
               <option value="Latvia">Lettonie</option>
               <option value="Lithuania">Lituanie</option>
             </optgroup>
-            <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est">
+            <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est" data-zone="europe">
               <option value="Serbia">Serbie</option>
               <option value="Kosovo">Kosovo</option>
               <option value="Albania">Albanie</option>
@@ -179,15 +179,71 @@
               <option value="Armenia">Arménie</option>
               <option value="Azerbaijan">Azerbaïdjan</option>
             </optgroup>
+            <optgroup label="🚚 Zone 4 — DOM-TOM" data-zone="domtom">
+              <option value="Guadeloupe">Guadeloupe</option>
+              <option value="Martinique">Martinique</option>
+              <option value="French Guiana">Guyane</option>
+              <option value="Reunion">La Réunion</option>
+              <option value="Mayotte">Mayotte</option>
+              <option value="Saint Martin">Saint-Martin</option>
+              <option value="Saint Barthelemy">Saint-Barthélemy</option>
+              <option value="Saint Pierre and Miquelon">Saint-Pierre-et-Miquelon</option>
+              <option value="French Polynesia">Polynésie française</option>
+              <option value="New Caledonia">Nouvelle-Calédonie</option>
+              <option value="Wallis and Futuna">Wallis-et-Futuna</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 5 — Amériques" data-zone="world">
+              <option value="United States">États-Unis</option>
+              <option value="Canada">Canada</option>
+              <option value="Mexico">Mexique</option>
+              <option value="Belize">Belize</option>
+              <option value="Costa Rica">Costa Rica</option>
+              <option value="El Salvador">Salvador</option>
+              <option value="Guatemala">Guatemala</option>
+              <option value="Honduras">Honduras</option>
+              <option value="Nicaragua">Nicaragua</option>
+              <option value="Panama">Panama</option>
+              <option value="Argentina">Argentine</option>
+              <option value="Bolivia">Bolivie</option>
+              <option value="Brazil">Brésil</option>
+              <option value="Chile">Chili</option>
+              <option value="Colombia">Colombie</option>
+              <option value="Ecuador">Équateur</option>
+              <option value="Guyana">Guyana</option>
+              <option value="Paraguay">Paraguay</option>
+              <option value="Peru">Pérou</option>
+              <option value="Suriname">Suriname</option>
+              <option value="Uruguay">Uruguay</option>
+              <option value="Venezuela">Venezuela</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 5 — Caraïbes" data-zone="world">
+              <option value="Antigua and Barbuda">Antigua-et-Barbuda</option>
+              <option value="Bahamas">Bahamas</option>
+              <option value="Barbados">Barbade</option>
+              <option value="Dominica">Dominique</option>
+              <option value="Dominican Republic">République dominicaine</option>
+              <option value="Grenada">Grenade</option>
+              <option value="Haiti">Haïti</option>
+              <option value="Jamaica">Jamaïque</option>
+              <option value="Puerto Rico">Porto Rico</option>
+              <option value="Saint Kitts and Nevis">Saint-Christophe-et-Niévès</option>
+              <option value="Saint Lucia">Sainte-Lucie</option>
+              <option value="Saint Vincent and the Grenadines">Saint-Vincent-et-les-Grenadines</option>
+              <option value="Trinidad and Tobago">Trinité-et-Tobago</option>
+            </optgroup>
+            <optgroup label="🚚 Zone 6 — Émirats arabes unis &amp; Chine" data-zone="world">
+              <option value="United Arab Emirates">Émirats arabes unis</option>
+              <option value="China">Chine</option>
+            </optgroup>
             <option value="other">Mon pays n'est pas dans la liste</option>
           </select>
         </label>
         <div id="countryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
-          🌍 La commande en ligne est actuellement disponible uniquement dans l'UE et les pays partenaires européens. Si vous êtes situé en dehors de cette zone, indiquez votre pays ci-dessous — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+          🌍 La commande en ligne est disponible pour l'Europe, les DOM-TOM, les Amériques (Caraïbes incluses), les Émirats arabes unis et la Chine. Si votre pays n'est pas dans la liste, indiquez-le ci-dessous — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
         </div>
         <div id="customCountryField" style="display:none;margin-top:10px">
           <label>Votre pays
-            <input type="text" id="customCountryName" placeholder="ex. Australie, Canada, Japon…" style="margin-top:6px" />
+            <input type="text" id="customCountryName" placeholder="ex. Australie, Japon, Inde…" style="margin-top:6px" />
           </label>
         </div>
 
@@ -223,7 +279,7 @@
           <label>Pays
             <select id="shippingCountry" style="width:100%;margin-top:6px">
               <option value="" disabled selected>Sélectionnez votre pays…</option>
-              <optgroup label="🚚 Zone 1 — Europe de l'Ouest">
+              <optgroup label="🚚 Zone 1 — Europe de l'Ouest" data-zone="europe">
                 <option value="France">France</option>
                 <option value="Germany">Allemagne</option>
                 <option value="Belgium">Belgique</option>
@@ -239,7 +295,7 @@
                 <option value="Monaco">Monaco</option>
                 <option value="San Marino">Saint-Marin</option>
               </optgroup>
-              <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est">
+              <optgroup label="🚚 Zone 2 — Europe du Nord, du Sud et de l'Est" data-zone="europe">
                 <option value="United Kingdom">Royaume-Uni</option>
                 <option value="Ireland">Irlande</option>
                 <option value="Denmark">Danemark</option>
@@ -262,7 +318,7 @@
                 <option value="Latvia">Lettonie</option>
                 <option value="Lithuania">Lituanie</option>
               </optgroup>
-              <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est">
+              <optgroup label="🚚 Zone 3 — Balkans & partenaires de l'Est" data-zone="europe">
                 <option value="Serbia">Serbie</option>
                 <option value="Kosovo">Kosovo</option>
                 <option value="Albania">Albanie</option>
@@ -275,11 +331,67 @@
                 <option value="Armenia">Arménie</option>
                 <option value="Azerbaijan">Azerbaïdjan</option>
               </optgroup>
+              <optgroup label="🚚 Zone 4 — DOM-TOM" data-zone="domtom">
+                <option value="Guadeloupe">Guadeloupe</option>
+                <option value="Martinique">Martinique</option>
+                <option value="French Guiana">Guyane</option>
+                <option value="Reunion">La Réunion</option>
+                <option value="Mayotte">Mayotte</option>
+                <option value="Saint Martin">Saint-Martin</option>
+                <option value="Saint Barthelemy">Saint-Barthélemy</option>
+                <option value="Saint Pierre and Miquelon">Saint-Pierre-et-Miquelon</option>
+                <option value="French Polynesia">Polynésie française</option>
+                <option value="New Caledonia">Nouvelle-Calédonie</option>
+                <option value="Wallis and Futuna">Wallis-et-Futuna</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 5 — Amériques" data-zone="world">
+                <option value="United States">États-Unis</option>
+                <option value="Canada">Canada</option>
+                <option value="Mexico">Mexique</option>
+                <option value="Belize">Belize</option>
+                <option value="Costa Rica">Costa Rica</option>
+                <option value="El Salvador">Salvador</option>
+                <option value="Guatemala">Guatemala</option>
+                <option value="Honduras">Honduras</option>
+                <option value="Nicaragua">Nicaragua</option>
+                <option value="Panama">Panama</option>
+                <option value="Argentina">Argentine</option>
+                <option value="Bolivia">Bolivie</option>
+                <option value="Brazil">Brésil</option>
+                <option value="Chile">Chili</option>
+                <option value="Colombia">Colombie</option>
+                <option value="Ecuador">Équateur</option>
+                <option value="Guyana">Guyana</option>
+                <option value="Paraguay">Paraguay</option>
+                <option value="Peru">Pérou</option>
+                <option value="Suriname">Suriname</option>
+                <option value="Uruguay">Uruguay</option>
+                <option value="Venezuela">Venezuela</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 5 — Caraïbes" data-zone="world">
+                <option value="Antigua and Barbuda">Antigua-et-Barbuda</option>
+                <option value="Bahamas">Bahamas</option>
+                <option value="Barbados">Barbade</option>
+                <option value="Dominica">Dominique</option>
+                <option value="Dominican Republic">République dominicaine</option>
+                <option value="Grenada">Grenade</option>
+                <option value="Haiti">Haïti</option>
+                <option value="Jamaica">Jamaïque</option>
+                <option value="Puerto Rico">Porto Rico</option>
+                <option value="Saint Kitts and Nevis">Saint-Christophe-et-Niévès</option>
+                <option value="Saint Lucia">Sainte-Lucie</option>
+                <option value="Saint Vincent and the Grenadines">Saint-Vincent-et-les-Grenadines</option>
+                <option value="Trinidad and Tobago">Trinité-et-Tobago</option>
+              </optgroup>
+              <optgroup label="🚚 Zone 6 — Émirats arabes unis &amp; Chine" data-zone="world">
+                <option value="United Arab Emirates">Émirats arabes unis</option>
+                <option value="China">Chine</option>
+              </optgroup>
               <option value="other">Mon pays n'est pas dans la liste</option>
             </select>
           </label>
           <div id="shippingCountryUnavailable" style="display:none;margin-top:8px;padding:12px 16px;border-radius:12px;background:#fef9c3;border:1px solid #fde68a;color:#854d0e;font-size:14px">
-            🌍 La commande en ligne est actuellement disponible uniquement dans l'UE et les pays partenaires européens. Si vous êtes situé en dehors de cette zone, merci de <a href="/#contact" style="color:#854d0e;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
+            🌍 La commande en ligne est disponible pour l'Europe, les DOM-TOM, les Amériques (Caraïbes incluses), les Émirats arabes unis et la Chine. Si votre pays n'est pas dans la liste, merci de <a href="/#contact" style="color:#854d0e;font-weight:600">nous contacter</a> — nous serons ravis de vous aider et de vous fournir un devis de livraison personnalisé.
           </div>
         </div>
       </div>
@@ -331,12 +443,32 @@ const PRODUCTS = {
 // (principe de destination). Les prix catalogue ci-dessus sont HT.
 const VAT_RATE = 0.20;
 function isVatApplicable() {
+  const select = getDeliveryCountrySelect();
+  return !!select && select.value === 'France';
+}
+
+// Frais de port par zone — la zone de chaque pays est portée par l'attribut
+// data-zone de son <optgroup>. Doit rester aligné avec api/_shipping.js
+// (qui recalcule les frais côté serveur).
+const SHIPPING_ZONES = {
+  europe: { fee: 5.99, freeFrom: 100, note: '🚚 Livraison offerte dès 100 €' },
+  domtom: { fee: 15, note: '🚚 Livraison DOM-TOM : 15 €' },
+  world:  { fee: 30, note: '🚚 Livraison internationale : 30 €' },
+};
+function getDeliveryCountrySelect() {
   const sameAsBilling = document.getElementById('sameAsBilling');
-  const billingCountry = document.getElementById('customerCountry');
-  const shippingCountry = document.getElementById('shippingCountry');
-  const useShipping = shippingCountry && sameAsBilling && !sameAsBilling.checked;
-  const effectiveCountry = useShipping ? shippingCountry.value : (billingCountry ? billingCountry.value : '');
-  return effectiveCountry === 'France';
+  const useShipping = sameAsBilling && !sameAsBilling.checked;
+  return document.getElementById(useShipping ? 'shippingCountry' : 'customerCountry');
+}
+function getShippingZone() {
+  const select = getDeliveryCountrySelect();
+  const option = select && select.selectedOptions[0];
+  const zone = option && option.parentElement.dataset.zone;
+  return SHIPPING_ZONES[zone] || SHIPPING_ZONES.europe;
+}
+function getShippingFee(subtotal) {
+  const zone = getShippingZone();
+  return zone.freeFrom && subtotal >= zone.freeFrom ? 0 : zone.fee;
 }
 
 let appliedPromo = null; // { code, kind, discountPercent } ou { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
@@ -638,18 +770,17 @@ function renderCart() {
       </div>`;
   }).join('');
 
-  const SHIPPING_FEE = 5.99;
-  const SHIPPING_THRESHOLD = 100.00;
+  const shippingFee = getShippingFee(total);
   const shippingInfo = document.getElementById('shippingInfo');
   let finalTotal = total;
 
-  if (total >= SHIPPING_THRESHOLD) {
+  if (shippingFee === 0) {
     shippingInfo.textContent = '✅ Livraison incluse';
     shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(22,101,52,.08);border-radius:10px;font-size:13px;color:#166534;font-weight:500;text-align:center;';
   } else {
-    finalTotal = total + SHIPPING_FEE;
-    summaryLines += `<div class="summary-row"><span>Livraison</span><span>${SHIPPING_FEE.toFixed(2)} €</span></div>`;
-    shippingInfo.textContent = '🚚 Livraison offerte dès 100 €';
+    finalTotal = total + shippingFee;
+    summaryLines += `<div class="summary-row"><span>Livraison</span><span>${shippingFee.toFixed(2)} €</span></div>`;
+    shippingInfo.textContent = getShippingZone().note;
     shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(192,132,200,.08);border-radius:10px;font-size:13px;color:var(--muted);font-weight:400;text-align:center;';
   }
 
@@ -739,12 +870,10 @@ async function checkout() {
   feedback.style.display = 'none';
 
   try {
-    const cartTotal = Object.entries(cart).reduce((t, [pid, qty]) => t + (PRODUCTS[pid]?.price || 0) * qty, 0);
-    const shippingFee = cartTotal >= 100 ? 0 : 5.99;
     const res = await fetch('/api/create-payment', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, deliveryCountry: sameAsBilling ? country : shipCountry, vatNumber: vatNumber || '', shippingFee, locale: 'fr', promoCode: appliedPromo ? appliedPromo.code : '' }),
+      body: JSON.stringify({ items, customerEmail: email, customerName: name, billingAddress, shippingAddress, deliveryCountry: sameAsBilling ? country : shipCountry, vatNumber: vatNumber || '', locale: 'fr', promoCode: appliedPromo ? appliedPromo.code : '' }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erreur de paiement');

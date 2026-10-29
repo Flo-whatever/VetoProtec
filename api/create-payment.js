@@ -1,5 +1,6 @@
 import pkg from '@mollie/api-client';
 import { validatePromo, computeBogoDiscount } from './_promo.js';
+import { computeShippingFee } from './_shipping.js';
 const { createMollieClient } = pkg;
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
@@ -30,7 +31,6 @@ export default async function handler(req, res) {
       shippingAddress,
       deliveryCountry,
       vatNumber,
-      shippingFee,
       locale,
       promoCode,
     } = req.body;
@@ -51,6 +51,13 @@ export default async function handler(req, res) {
       return `${product.name} x${qty}`;
     }).join(', ');
 
+    // Frais de port calculés côté serveur à partir du pays de livraison —
+    // on ne fait jamais confiance au montant envoyé par le navigateur.
+    const shipping = computeShippingFee(deliveryCountry, total);
+    if (shipping === null) {
+      return res.status(400).json({ error: `Online ordering is not available for this destination: ${deliveryCountry || 'unknown'}` });
+    }
+
     let discountAmount = 0;
     let appliedPromoCode = '';
     if (promoCode) {
@@ -66,7 +73,6 @@ export default async function handler(req, res) {
       appliedPromoCode = promoResult.code;
     }
 
-    const shipping = Number(shippingFee) || 0;
     const vatApplicable = locale === 'fr' && deliveryCountry === 'France';
     const vatAmount = vatApplicable ? (total - discountAmount + shipping) * VAT_RATE : 0;
     const grandTotal = total - discountAmount + shipping + vatAmount;
