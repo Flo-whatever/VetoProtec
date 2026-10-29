@@ -78,7 +78,9 @@
         <label>Produit acheté</label>
         <select id="newBogoBuyProduct">
           <option value="all">Tous les produits</option>
-          <option value="petholder">PetHolder</option>
+          <option value="petholder">PetHolder (Bleu)</option>
+          <option value="petholder-rose">PetHolder (Rose)</option>
+          <option value="petholder-vert">PetHolder (Vert)</option>
           <option value="petanesth">PetAnesth</option>
           <option value="petanesth-legacy">PetAnesth (ancien modele)</option>
           <option value="petties-rose">PetTies (Rose)</option>
@@ -90,7 +92,9 @@
         <label>Produit offert</label>
         <select id="newBogoGetProduct">
           <option value="same">Même produit</option>
-          <option value="petholder">PetHolder</option>
+          <option value="petholder">PetHolder (Bleu)</option>
+          <option value="petholder-rose">PetHolder (Rose)</option>
+          <option value="petholder-vert">PetHolder (Vert)</option>
           <option value="petanesth">PetAnesth</option>
           <option value="petanesth-legacy">PetAnesth (ancien modele)</option>
           <option value="petties-rose">PetTies (Rose)</option>
@@ -201,7 +205,7 @@ function renderPromos(promos) {
   empty.style.display = 'none';
   table.style.display = 'table';
 
-  const productLabels = { petholder: 'PetHolder', petanesth: 'PetAnesth', 'petanesth-legacy': 'PetAnesth (ancien modele)', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'tous produits' };
+  const productLabels = { petholder: 'PetHolder (Bleu)', 'petholder-rose': 'PetHolder (Rose)', 'petholder-vert': 'PetHolder (Vert)', petanesth: 'PetAnesth', 'petanesth-legacy': 'PetAnesth (ancien modele)', 'petties-rose': 'PetTies (Rose)', 'petties-bleu': 'PetTies (Bleu)', 'petties-vert': 'PetTies (Vert)', all: 'tous produits' };
 
   body.innerHTML = promos.map(p => {
     const exhausted = p.stock <= 0;

@@ -5,7 +5,9 @@ export default async function handler(req, res) {
     const { customerName, customerEmail, customerPhone, billingAddress, shippingAddress, vatNumber, items, country, promoCode } = req.body;
 
     const PRODUCTS = {
-      petholder: { name: 'PetHolder', price: 55.00 },
+      petholder: { name: 'PetHolder (Bleu)', price: 55.00 },
+      'petholder-rose': { name: 'PetHolder (Rose)', price: 55.00 },
+      'petholder-vert': { name: 'PetHolder (Vert)', price: 55.00 },
       petanesth: { name: 'PetAnesth', price: 119.00 },
       'petanesth-legacy': { name: 'PetAnesth (ancien modele)', price: 59.00 },
       'petties-rose': { name: 'PetTies (Rose)', price: 20.00 },

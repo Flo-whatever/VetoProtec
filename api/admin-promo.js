@@ -67,7 +67,7 @@ export default async function handler(req, res) {
         }
         record.discountPercent = pct;
       } else {
-        const validSingle = ['petholder', 'petanesth'];
+        const validSingle = ['petholder', 'petholder-rose', 'petholder-vert', 'petanesth'];
         const buyProduct = bogoBuyProduct;
         const getProduct = bogoGetProduct || 'same';
 
