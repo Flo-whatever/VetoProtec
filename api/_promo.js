@@ -62,6 +62,23 @@ export async function validatePromo(code) {
   return { valid: true, code: promo.code, kind: 'percent', discountPercent: promo.discountPercent };
 }
 
+// Remise dégressive PetTies, tous coloris confondus : -10 % dès 2 bobines,
+// -15 % dès 3. S'applique automatiquement, sans code. Doit rester aligné
+// avec computePettiesVolumeDiscount dans cart.html et en/cart.html.
+//   items: [{ productId, quantity }]
+//   products: { [productId]: { price } }
+export function computePettiesVolumeDiscount(items, products) {
+  let qty = 0;
+  let subtotal = 0;
+  for (const { productId, quantity } of items || []) {
+    if (!productId.startsWith('petties-') || !products[productId]) continue;
+    qty += Number(quantity);
+    subtotal += products[productId].price * Number(quantity);
+  }
+  const percent = qty >= 3 ? 15 : qty >= 2 ? 10 : 0;
+  return { qty, percent, amount: subtotal * percent / 100 };
+}
+
 // Calcule la réduction "X achetés, Y offerts" pour un panier donné.
 //   items: [{ productId, quantity }]
 //   products: { [productId]: { price } }

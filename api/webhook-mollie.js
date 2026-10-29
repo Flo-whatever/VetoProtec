@@ -97,6 +97,7 @@ export default async function handler(req, res) {
     const shippingFee = meta.shippingFee || 'included';
     const vat = meta.vat || 'N/A';
     const promoCode = meta.promoCode || '';
+    const pettiesDiscount = meta.pettiesDiscount || '';
 
     if (promoCode) {
       try {
@@ -150,6 +151,10 @@ export default async function handler(req, res) {
             <table style="width:100%;border-collapse:collapse">
               <tbody>${itemsHtml}</tbody>
               <tfoot>
+                ${pettiesDiscount ? `<tr>
+                  <td colspan="2">PetTies discount</td>
+                  <td style="text-align:right;color:#166534">${escapeHtml(pettiesDiscount)}</td>
+                </tr>` : ''}
                 <tr>
                   <td colspan="2"><strong>Total</strong></td>
                   <td style="text-align:right">${escapeHtml(amount)}</td>
@@ -179,6 +184,7 @@ export default async function handler(req, res) {
           <p><strong>Billing:</strong> ${escapeHtml(billingAddress)}</p>
           <p><strong>Shipping address:</strong> ${escapeHtml(shippingAddress)}</p>
           ${vatNumber ? `<p><strong>VAT:</strong> ${escapeHtml(vatNumber)}</p>` : ''}
+          ${pettiesDiscount ? `<p><strong>PetTies discount:</strong> ${escapeHtml(pettiesDiscount)}</p>` : ''}
           ${promoCode ? `<p><strong>Promo code:</strong> ${escapeHtml(promoCode)}</p>` : ''}
           <p><strong>Date:</strong> ${escapeHtml(date)}</p>
         </div>

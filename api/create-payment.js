@@ -1,5 +1,5 @@
 import pkg from '@mollie/api-client';
-import { validatePromo, computeBogoDiscount } from './_promo.js';
+import { validatePromo, computeBogoDiscount, computePettiesVolumeDiscount } from './_promo.js';
 import { computeShippingFee } from './_shipping.js';
 const { createMollieClient } = pkg;
 const mollie = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
@@ -60,6 +60,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: `Online ordering is not available for this destination: ${deliveryCountry || 'unknown'}` });
     }
 
+    const volume = computePettiesVolumeDiscount(items, PRODUCTS);
+
     let discountAmount = 0;
     let appliedPromoCode = '';
     if (promoCode) {
@@ -70,14 +72,14 @@ export default async function handler(req, res) {
       if (promoResult.kind === 'bogo') {
         discountAmount = computeBogoDiscount(items, PRODUCTS, promoResult);
       } else {
-        discountAmount = total * (promoResult.discountPercent / 100);
+        discountAmount = (total - volume.amount) * (promoResult.discountPercent / 100);
       }
       appliedPromoCode = promoResult.code;
     }
 
     const vatApplicable = locale === 'fr' && deliveryCountry === 'France';
-    const vatAmount = vatApplicable ? (total - discountAmount + shipping) * VAT_RATE : 0;
-    const grandTotal = total - discountAmount + shipping + vatAmount;
+    const vatAmount = vatApplicable ? (total - volume.amount - discountAmount + shipping) * VAT_RATE : 0;
+    const grandTotal = total - volume.amount - discountAmount + shipping + vatAmount;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.vetoprotec.fr';
     const localePrefix = locale === 'fr' ? '' : '/en';
@@ -87,7 +89,7 @@ export default async function handler(req, res) {
         currency: 'EUR',
         value: grandTotal.toFixed(2),
       },
-      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${vatApplicable ? ' + VAT 20%' : ''}${appliedPromoCode ? ` | promo ${appliedPromoCode}` : ''}${customerName ? ` | ${customerName}` : ''}`,
+      description: `VetoProtec — ${description}${shipping > 0 ? ' + shipping' : ' (shipping incl.)'}${volume.percent ? ` | PetTies -${volume.percent}%` : ''}${vatApplicable ? ' + VAT 20%' : ''}${appliedPromoCode ? ` | promo ${appliedPromoCode}` : ''}${customerName ? ` | ${customerName}` : ''}`,
       redirectUrl: `${baseUrl}${localePrefix}/confirmation.html`,
       cancelUrl: `${baseUrl}${localePrefix}/confirmation.html?status=cancelled`,
       webhookUrl: `${baseUrl}/api/webhook-mollie`,
@@ -101,6 +103,7 @@ export default async function handler(req, res) {
         vat: vatApplicable ? `${vatAmount.toFixed(2)} €` : 'N/A',
         items: JSON.stringify(items),
         promoCode: appliedPromoCode,
+        pettiesDiscount: volume.amount > 0 ? `-${volume.amount.toFixed(2)} € (PetTies x${volume.qty}, -${volume.percent}%)` : '',
       },
     });
 

@@ -463,6 +463,20 @@ function getShippingFee(subtotal) {
   return zone.freeFrom && subtotal >= zone.freeFrom ? 0 : zone.fee;
 }
 
+// PetTies volume discount, all colours combined: -10% from 2 rolls,
+// -15% from 3. Must stay in sync with api/_promo.js (server recomputes it).
+function computePettiesVolumeDiscount(cart) {
+  let qty = 0;
+  let subtotal = 0;
+  for (const [productId, q] of Object.entries(cart)) {
+    if (!productId.startsWith('petties-') || !PRODUCTS[productId]) continue;
+    qty += q;
+    subtotal += PRODUCTS[productId].price * q;
+  }
+  const percent = qty >= 3 ? 15 : qty >= 2 ? 10 : 0;
+  return { qty, percent, amount: subtotal * percent / 100 };
+}
+
 let appliedPromo = null; // { code, kind, discountPercent } or { code, kind, bogoBuyProduct, bogoGetProduct, bogoBuyQty, bogoGetQty }
 
 // Returns { productId: freeQty } — units free per product under the
@@ -779,10 +793,16 @@ function renderCart() {
     shippingInfo.style.cssText = 'margin-top:10px;padding:8px 12px;background:rgba(192,132,200,.08);border-radius:10px;font-size:13px;color:var(--muted);font-weight:400;text-align:center;';
   }
 
+  const volume = computePettiesVolumeDiscount(cart);
+  if (volume.amount > 0) {
+    finalTotal -= volume.amount;
+    summaryLines += `<div class="summary-row" style="color:#166534"><span>PetTies discount x${volume.qty} (-${volume.percent}%)</span><span>-${volume.amount.toFixed(2)} €</span></div>`;
+  }
+
   if (appliedPromo) {
     const discountAmount = appliedPromo.kind === 'bogo'
       ? computeBogoDiscount(cart, appliedPromo)
-      : total * (appliedPromo.discountPercent / 100);
+      : (total - volume.amount) * (appliedPromo.discountPercent / 100);
     if (discountAmount > 0) {
       finalTotal -= discountAmount;
       summaryLines += `<div class="summary-row" style="color:#166534"><span>${promoLabel(appliedPromo)}</span><span>-${discountAmount.toFixed(2)} €</span></div>`;
